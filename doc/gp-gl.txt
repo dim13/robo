@@ -1,3 +1,13 @@
+Description (not part of docu)
+
+[t]	EOT			ASCII 0x03
+a	Acceleration
+f	Force
+n	Pen?
+x,y	Coordinate		20 = 1mm
+∆	Delta			-x..x
+θ	Degree			0..3600
+
 Plots line
 
 D	Draw			Dx1,y1,x2,y2...xn,yn[t]
