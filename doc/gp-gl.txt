@@ -1,0 +1,93 @@
+Plots line
+
+D	Draw			Dx1,y1,x2,y2...xn,yn[t]
+E	Relative Draw		E∆x1,∆x1,∆x2,∆x2...∆xn,∆yn[t]
+M	Move			Mx,y,
+O	Relative Move		O∆x,∆y,
+MP	Move Polar		MPr,θ[t]
+DP	Drar Polar		DPr1,θ1,r2,θ2...rn,θn[t]
+EP	Relative Draw Polar	EP∆r,θ[t]
+OP	Relative Move Polar	EP∆r,∆θ[t]
+RP	Radius Plot		EPθ,l1,l2
+
+Character and symbol
+
+P	Print			Pc1,c2...cn[t]
+K	Kana (greek)		Kc1,c2...cn[t]
+N	Mark			Nn,
+SP	Select Point Mark	SPc[t]
+(	User Pattern		(n1,n2...nn[t]		Not Supported
+(P	User Program Pattern	(P[p,]∆x1,∆y1,[p,]∆x2,∆y2...[p,]∆xn,∆yn
+
+Circle and curve
+
+WP	3-Point Circle		WPx1,y1,x2,y2,x3,y3[,d][t]
+W	Circle			Wx0,y0,r1,r2,θ1,θ2[,d][t]
+]	Relative Circle		]r1,r2,θ1,θ2[,d][t]
+Y	Curve			Ya,x1,y1,x2,y2...xn,yn[t]
+_	Relative Curve		_a,∆x1,∆y1,∆x2,∆y2...∆xn,∆yn[t]
+)	Ellipse			)a,x0,y0,r1,r2,θ1,θ2,θ3
+BZ	Bezier Curve		BZa,x1,y1,x2,y2,x3,y3,x4,y4[,d][t]
+
+Line specification
+
+L	Line Type		Lp,
+B	Line Scale		Bl,
+
+Character and symbol specification
+
+$	Font			$n,(m,)
+S	Alpha Scale		Sn,(m,)
+Q	Alpha Space		Ql(k,)
+R	Alpha Rotate		Rθ,
+I	Alpha Italic		Ip,
+LP	Label Position		LPn[t]
+A	Alpha Reset		A
+RC	Replot Character	RCc,x1,y1,[P,]x2,y2,[P1]...xn,yn[t]
+
+Control
+
+H	Home			H
+^	Offset			^x,y,
+^P	Offset Polar		^Px,y[,θ[f][t]]
+J	New Pen			Jn,(m)			n=1..8
+!	Speed			!l[,n][t]		l=1..10,101..140 n=1..8
+*	Pen Acceleration&Force	*a,f[,n][t]		a=1..3 f=1..31 n=1..8
+FC	Cutter Offset		FCp,q[,n][t]
+FD	Blade Rotation Control	FDθ[t]
+\	Write Lower Left	\x,y,
+Z	Write Upper Right	Zx,y,
+/	Rotate			/x,y,θ,
+>	Clipping		>x1,y1...xn,yn[t]
+
+&	Factor			&p,q,r,
+SO	Set Origin		SOn
+T	Buzzer			Tn
+F	Chart Feed		Fl[t]
+
+Output coordinates
+
+G	Gin			G
+C	Call Gin		C
+?	Read Offset		?
+[	Read Lower Left		[
+U	Read Upper Right	U
+
+Interface control
+
+V	Read Status Word1	V
+@	Read Status Word2	@
+#	Read Status Word3	#
+=	Term			=t1,t2
+"	Error Mask		"m,
+:	Clear			:
+;	Interface Clear		;
+BS	Buffer Size		BSs1,s2,s3,s4		Not Supported
+
+Graph
+
+X	Axis			Xp,q,r[,t1,t2][t]
+%	Hatching		%n,x,y,d,θ[t]		n=1..3
+				%n,r1,r2,θ1,θ2,d[t]	n=11..13
+				%n,d,θ,x1,y1...xn,yn[t]	n=21..23
+
