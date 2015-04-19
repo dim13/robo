@@ -23,7 +23,16 @@ var (
 )
 
 func CC100(desc *usb.Descriptor) bool {
-	return desc.Vendor == graphtec && desc.Product == cc200_20
+	if desc.Vendor == graphtec {
+		switch desc.Product {
+		case cc200_20, cc300_20,
+			silhouette_sd_1,
+			silhouette_sd_2,
+			silhouette_portrait:
+			return true
+		}
+	}
+	return false
 }
 
 func NewDevice() (d Device) {
