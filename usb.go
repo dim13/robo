@@ -13,13 +13,17 @@ type Device struct {
 }
 
 var (
-	vendor  = usb.ID(0x0b4d)
-	product = usb.ID(0x110a)
-	debug   = 3
+	graphtec            = usb.ID(0x0b4d)
+	cc200_20            = usb.ID(0x110a)
+	cc300_20            = usb.ID(0x111a)
+	silhouette_sd_1     = usb.ID(0x111c)
+	silhouette_sd_2     = usb.ID(0x111d)
+	silhouette_portrait = usb.ID(0x1123)
+	debug               = 3
 )
 
 func CC100(desc *usb.Descriptor) bool {
-	return desc.Vendor == vendor && desc.Product == product
+	return desc.Vendor == graphtec && desc.Product == cc200_20
 }
 
 func NewDevice() (d Device) {
