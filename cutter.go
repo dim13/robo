@@ -56,6 +56,30 @@ func (c Cutter) EOT() {
 	c.WriteByte(0x03)
 }
 
+func (c Cutter) TestCut() {
+	defer c.EOT()
+	c.WriteString("FH")
+}
+
+type StepDirection int
+
+const (
+	stepFinish StepDirection = 1<<iota
+	StepDown
+	StepUp
+	StepLeft
+	StepRight
+)
+
+func (c Cutter) step(dir StepDirection) {
+	fmt.Fprintf(c, "\x1e\x00%c", dir)
+	c.Flush()
+}
+func (c Cutter) Step(dir StepDirection) {
+	c.step(dir)
+	c.step(stepFinish)
+}
+
 func (c Cutter) Home() {
 	defer c.EOT()
 	c.WriteString("H")
