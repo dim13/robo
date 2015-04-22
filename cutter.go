@@ -64,7 +64,7 @@ func (c Cutter) TestCut() {
 type StepDirection int
 
 const (
-	stepFinish StepDirection = 1 << iota >> 1
+	stepEnd StepDirection = 1 << iota >> 1
 	StepDown
 	StepUp
 	StepLeft
@@ -75,9 +75,10 @@ func (c Cutter) step(dir StepDirection) {
 	fmt.Fprintf(c, "\x1e\x00%c", dir)
 	c.Flush()
 }
+
 func (c Cutter) Step(dir StepDirection) {
 	c.step(dir)
-	c.step(stepFinish)
+	c.step(stepEnd)
 }
 
 func (c Cutter) Home() {
