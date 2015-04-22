@@ -64,7 +64,7 @@ func (c Cutter) TestCut() {
 type StepDirection int
 
 const (
-	stepFinish StepDirection = 1 << iota
+	stepFinish StepDirection = 1 << iota >> 1
 	StepDown
 	StepUp
 	StepLeft
