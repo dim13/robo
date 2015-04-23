@@ -146,6 +146,12 @@ func (c Cutter) WriteUpperRight(p Point) {
 	fmt.Fprint(c, "Z", p)
 }
 
+// CuttingArea ???
+func (c Cutter) CuttingArea(p Point) {
+	defer c.EOT()
+	fmt.Fprint(c, "FU", p)
+}
+
 func (c Cutter) readResponse() (string, error) {
 	ans, err := c.ReadString(0x03)
 	if err != nil {
@@ -159,6 +165,12 @@ func (c Cutter) Version() (string, error) {
 	c.WriteString("FG")
 	c.Flush()
 	return c.readResponse()
+}
+
+// MediaType (Meida ID)
+func (c Cutter) MediaType(n int) {
+	defer c.EOT()
+	fmt.Fprint(c, "FW", n)
 }
 
 func (c Cutter) ReadUpperRight() (string, error) {
@@ -178,7 +190,7 @@ func (c Cutter) Speed(n int) {
 func (c Cutter) Thickness(n int) {
 	if n >= 1 && n <= 30 {
 		defer c.EOT()
-		fmt.Fprint(c, "FX", n)
+		fmt.Fprint(c, "FX", n, ",0")
 	}
 }
 
@@ -186,25 +198,51 @@ func (c Cutter) Force(n int) {
 	c.Thickness(n)
 }
 
+func (c Cutter) UnknownFC(n int) {
+	defer c.EOT()
+	fmt.Fprint(c, "FC", n)
+}
+
+func (c Cutter) UnknownFE(n int) {
+	defer c.EOT()
+	fmt.Fprint(c, "FE", n)
+}
+
+func (c Cutter) UnknownTB71() (string, error) {
+	fmt.Fprint(c, "TB71")
+	c.EOT()
+	return c.readResponse()
+}
+
+func (c Cutter) UnknownFA() (string, error) {
+	fmt.Fprint(c, "FA")
+	c.EOT()
+	return c.readResponse()
+}
+
+func (c Cutter) UnknownTB51() {
+	defer c.EOT()
+	fmt.Fprint(c, "TB51,400")
+}
+
+// Initialize ???
 func (c Cutter) Initialize() {
-	c.WriteString("\x1b\x04") // Initialize ???
+	c.WriteString("\x1b\x04")
 	c.Flush()
 }
 
+// Status ???
 func (c Cutter) Status() (string, error) {
-	c.WriteString("\x1b\x05") // Status ???
+	c.WriteString("\x1b\x05")
 	c.Flush()
 	ans, err := c.readResponse()
-	if err != nil {
-		return "", err
-	}
 	switch ans {
 	case "0":
 		return "Ready", nil
 	case "1":
 		return "Moving", nil
 	default:
-		return "Unknown " + ans, nil
+		return "Unknown", err
 	}
 }
 
