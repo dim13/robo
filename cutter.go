@@ -71,7 +71,7 @@ const (
 )
 
 func (c Cutter) step(dir StepDirection) {
-	fmt.Fprintf(c, "\x1e\x00%c", dir)
+	fmt.Fprintf(c, "\x1b\x00%c", dir)
 	c.Flush()
 }
 
