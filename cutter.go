@@ -167,14 +167,23 @@ func (c Cutter) ReadUpperRight() (string, error) {
 	return c.readResponse()
 }
 
+// Speed 10..100 mm/s
 func (c Cutter) Speed(n int) {
-	defer c.EOT()
-	fmt.Fprint(c, "!", n)
+	if n >= 1 && n <= 10 {
+		defer c.EOT()
+		fmt.Fprint(c, "!", n)
+	}
+}
+
+func (c Cutter) Thickness(n int) {
+	if n >= 1 && n <= 30 {
+		defer c.EOT()
+		fmt.Fprint(c, "FX", n)
+	}
 }
 
 func (c Cutter) Force(n int) {
-	defer c.EOT()
-	fmt.Fprint(c, "FX", n)
+	c.Thickness(n)
 }
 
 func (c Cutter) Initialize() {
