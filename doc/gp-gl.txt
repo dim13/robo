@@ -4,7 +4,7 @@ Description (not part of docu)
 a	Acceleration
 f	Force
 n	Pen?
-x,y	Coordinate		20 = 1mm
+x,y	Coordinate		20 = 1mm, float value
 ∆	Delta			-x..x
 θ	Degree			0..3600
 
