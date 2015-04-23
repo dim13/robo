@@ -34,6 +34,13 @@ type Point struct {
 	Usable: 4000x5440 pt
 */
 
+type OnOff int
+
+const (
+	On OnOff = iota
+	Off
+)
+
 var (
 	A4     = Point{5440, 4000} // Portrait
 	Origin = Point{0, 0}
