@@ -33,13 +33,6 @@ type Point struct {
 	Usable: 4000x5440 pt
 */
 
-type OnOff int
-
-const (
-	On OnOff = iota
-	Off
-)
-
 var (
 	A4     = Point{5440, 4000} // Portrait
 	Origin = Point{0, 0}
@@ -97,6 +90,11 @@ func (c Cutter) CR() {
 func (c Cutter) Home() {
 	defer c.EOT()
 	c.WriteString("H")
+}
+
+func (c Cutter) SetOrigin() {
+	defer c.EOT()
+	c.WriteString("FJ")
 }
 
 func (c Cutter) Draw(p Point) {
@@ -216,4 +214,16 @@ const (
 func (c Cutter) Orientation(l Orientation) {
 	defer c.EOT()
 	fmt.Fprint(c, "FN", l)
+}
+
+type OnOff int
+
+const (
+	On OnOff = iota
+	Off
+)
+
+func (c Cutter) TrackEnhancing(state OnOff) {
+	c.EOT()
+	fmt.Fprint(c, "FY", state)
 }
