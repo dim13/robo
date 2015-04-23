@@ -192,14 +192,14 @@ func (c Cutter) Bezier(a int, p0, p1, p2, p3 Point) {
 	fmt.Fprintf(c, "BZ%v,%v,%v,%v,%v", a, p0, p1, p2, p3)
 }
 
-type Page int
+type Orientation int
 
 const (
-	Portrait Page = iota
+	Portrait Orientation = iota
 	Landscape
 )
 
-func (c Cutter) Orientation(l Page) {
+func (c Cutter) Orientation(l Orientation) {
 	defer c.EOT()
 	fmt.Fprint(c, "FN", l)
 }

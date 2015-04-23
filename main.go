@@ -34,10 +34,13 @@ func main() {
 	defer cu.Home()
 	defer cu.LineType(Solid)
 
+	/*
 	for i := 0; i < 9; i++ {
 		cu.LineType(LineStyle(i))
 		cu.Move(Point{100 * i, 0})
 		cu.Draw(Point{100 * i, 1000})
 	}
+	*/
+	cu.TestCut()
 
 }
