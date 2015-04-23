@@ -10,7 +10,7 @@ func main() {
 	p := pens["pen"]
 
 	v, _ := cu.Version()
-	fmt.Println("Version:", v)
+	fmt.Println("Craft ROBO Ver.", v)
 
 	cu.Orientation(Portrait)
 	cu.WriteUpperRight(A4)
@@ -20,11 +20,8 @@ func main() {
 	defer cu.Home()
 	defer cu.LineType(Solid)
 
-	cu.Orientation(Landscape)
 	cu.TestCut()
 	//cu.TestPattern()
-	cu.Move(Point{1000, 1000})
-	cu.Home()
 
 	/*
 		for i := 0; i < 9; i++ {
