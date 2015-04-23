@@ -3,7 +3,6 @@ package main
 import (
 	"bufio"
 	"fmt"
-	"log"
 )
 
 type Point struct {
@@ -88,6 +87,13 @@ func (c Cutter) Step(dir StepDirection) {
 	c.step(stepEnd)
 }
 
+// CR returns carret to home on same line
+func (c Cutter) CR() {
+	defer c.EOT()
+	c.WriteString("TT")
+}
+
+// Home retuns carret to home position
 func (c Cutter) Home() {
 	defer c.EOT()
 	c.WriteString("H")
@@ -142,24 +148,25 @@ func (c Cutter) WriteUpperRight(p Point) {
 	fmt.Fprint(c, "Z", p)
 }
 
-func (c Cutter) Version() {
-	c.WriteString("FG")
-	c.Flush()
+func (c Cutter) readResponse() (string, error) {
 	ans, err := c.ReadString(0x03)
 	if err != nil {
-		log.Println(err)
+		return "", err
 	}
-	log.Println(ans)
+	return ans[:len(ans)-1], nil
 }
 
-func (c Cutter) ReadUpperRight() {
+// Version requests hardware version
+func (c Cutter) Version() (string, error) {
+	c.WriteString("FG")
+	c.Flush()
+	return c.readResponse()
+}
+
+func (c Cutter) ReadUpperRight() (string, error) {
 	c.WriteString("U")
 	c.Flush()
-	ans, err := c.ReadString(0x03)
-	if err != nil {
-		log.Println(err)
-	}
-	log.Println(ans)
+	return c.readResponse()
 }
 
 func (c Cutter) Speed(n int) {
@@ -177,20 +184,20 @@ func (c Cutter) Initialize() {
 	c.Flush()
 }
 
-func (c Cutter) Status() {
+func (c Cutter) Status() (string, error) {
 	c.WriteString("\x1b\x05") // Status ???
 	c.Flush()
-	ans, err := c.ReadString(0x03)
+	ans, err := c.readResponse()
 	if err != nil {
-		log.Println(err)
+		return "", err
 	}
-	switch ans[:1] {
+	switch ans {
 	case "0":
-		log.Println("Ready")
+		return "Ready", nil
 	case "1":
-		log.Println("Moving")
+		return "Moving", nil
 	default:
-		log.Println("Unknown", ans)
+		return "Unknown " + ans, nil
 	}
 }
 
