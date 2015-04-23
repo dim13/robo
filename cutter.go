@@ -225,6 +225,20 @@ func (c Cutter) UnknownTB51() {
 	fmt.Fprint(c, "TB51,400")
 }
 
+// Updater Version ???
+func (c Cutter) UpdaterVersion() (string, error) {
+	c.WriteString("\x1b\x01")
+	c.Flush()
+	return c.readResponse()
+}
+
+func (c Cutter) Update() (bool, error) {
+	c.WriteString("CC1VERUP")
+	c.Flush()
+	ans, err := c.readResponse()
+	return ans == "\x00", err
+}
+
 // Initialize ???
 func (c Cutter) Initialize() {
 	c.WriteString("\x1b\x04")
