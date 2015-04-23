@@ -20,9 +20,9 @@ func main() {
 	defer cu.Home()
 	defer cu.LineType(Solid)
 
-	//cu.TestCut()
+	cu.TestCut()
 	//cu.TestPattern()
-	cu.EasterEgg()
+	//cu.EasterEgg()
 
 	/*
 		for i := 0; i < 9; i++ {

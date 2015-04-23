@@ -127,6 +127,11 @@ func (c Cutter) LineType(n LineStyle) {
 	fmt.Fprint(c, "L", n)
 }
 
+func (c Cutter) LineScale(n int) {
+	defer c.EOT()
+	fmt.Fprint(c, "B", n)
+}
+
 func (c Cutter) Factor(p, q, r int) {
 	defer c.EOT()
 	fmt.Fprintf(c, "&%v,%v,%v", p, q, r)
