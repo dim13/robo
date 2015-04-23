@@ -3,6 +3,7 @@ package main
 import (
 	"bufio"
 	"fmt"
+	"time"
 )
 
 type Point struct {
@@ -259,6 +260,19 @@ func (c Cutter) Status() (string, error) {
 		return "Moving", nil
 	default:
 		return "Unknown", err
+	}
+}
+
+func (c Cutter) Ready() bool {
+	c.WriteString("\x1b\x05")
+	c.Flush()
+	ans, _ := c.readResponse()
+	return ans == "0"
+}
+
+func (c Cutter) Wait() {
+	for !c.Ready() {
+		time.Sleep(100 * time.Millisecond)
 	}
 }
 
