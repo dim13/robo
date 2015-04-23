@@ -232,6 +232,8 @@ func (c Cutter) UpdaterVersion() (string, error) {
 	return c.readResponse()
 }
 
+// Update starts update sequence
+// Send raw S-Record data after
 func (c Cutter) Update() (bool, error) {
 	c.WriteString("CC1VERUP")
 	c.Flush()
