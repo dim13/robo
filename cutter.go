@@ -223,6 +223,8 @@ const (
 	Off
 )
 
+// TrackEnhancing moves paper back and forth for better traction
+// Not for thickness less then 19
 func (c Cutter) TrackEnhancing(state OnOff) {
 	c.EOT()
 	fmt.Fprint(c, "FY", state)
