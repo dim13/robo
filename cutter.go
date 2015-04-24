@@ -222,8 +222,8 @@ func (c Cutter) UnknownFE(n int) {
 	c.Emit()
 }
 
-func (c Cutter) UnknownTB71() (string, error) {
-	fmt.Fprint(c, "TB71")
+func (c Cutter) UnknownTB(n int) (string, error) {
+	fmt.Fprint(c, "TB", n)
 	c.Emit()
 	return c.readResponse()
 }
@@ -232,11 +232,6 @@ func (c Cutter) UnknownFA() (string, error) {
 	fmt.Fprint(c, "FA")
 	c.Emit()
 	return c.readResponse()
-}
-
-func (c Cutter) UnknownTB51() {
-	fmt.Fprint(c, "TB51,400")
-	c.Emit()
 }
 
 // Updater Version ???
