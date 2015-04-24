@@ -234,17 +234,17 @@ func (c Cutter) UnknownFA() (string, error) {
 	return c.readResponse()
 }
 
-// Updater Version ???
-func (c Cutter) UpdaterVersion() (string, error) {
+// VersionUpgrade
+func (c Cutter) VersionUpgrade() (string, error) {
 	c.WriteByte(ESC)
 	c.WriteByte(1)
 	c.Flush()
 	return c.readResponse()
 }
 
-// Update starts update sequence
+// Upgrade starts update sequence
 // Send raw S-Record data after
-func (c Cutter) Update() (bool, error) {
+func (c Cutter) Upgrade() (bool, error) {
 	c.WriteString("CC1VERUP")
 	c.Flush()
 	ans, err := c.readResponse()
