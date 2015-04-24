@@ -46,7 +46,7 @@ func NewDevice() (d Device) {
 		for _, dev := range devs {
 			dev.Close()
 		}
-		log.Fatal("wrong number of devices")
+		log.Fatal("Cannot find Craft ROBO")
 	}
 	return Device{ctx: ctx, dev: devs[0]}
 }

@@ -235,11 +235,11 @@ func (c Cutter) UnknownFA() (string, error) {
 }
 
 // VersionUpgrade
-func (c Cutter) VersionUpgrade() (string, error) {
+func (c Cutter) BootVersion() (string, error) {
 	c.WriteByte(ESC)
 	c.WriteByte(1)
 	c.Flush()
-	return c.readResponse()
+	return c.ReadString(' ')
 }
 
 // Upgrade starts update sequence
