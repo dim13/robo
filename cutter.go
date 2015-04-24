@@ -253,21 +253,6 @@ func (c Cutter) Initialize() {
 	c.Flush()
 }
 
-// Status ???
-func (c Cutter) Status() (string, error) {
-	c.WriteString("\x1b\x05")
-	c.Flush()
-	ans, err := c.readResponse()
-	switch ans {
-	case "0":
-		return "Ready", nil
-	case "1":
-		return "Moving", nil
-	default:
-		return "Unknown", err
-	}
-}
-
 func (c Cutter) Ready() bool {
 	c.WriteString("\x1b\x05")
 	c.Flush()
