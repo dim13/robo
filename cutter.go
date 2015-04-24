@@ -51,8 +51,14 @@ func NewCutter(io *bufio.ReadWriter) Cutter {
 	return Cutter{io}
 }
 
+const (
+	NUL = 0x00
+	ETX = 0x03 // End of Text
+	ESC = 0x1b
+)
+
 func (c Cutter) Emit() {
-	c.WriteByte(0x03) // send End Of Text
+	c.WriteByte(ETX)
 	c.Flush()
 }
 
@@ -61,7 +67,7 @@ func (c Cutter) TestCut() {
 	c.Emit()
 }
 
-type StepDirection int
+type StepDirection byte
 
 const (
 	stepEnd StepDirection = 1 << iota >> 1
@@ -72,7 +78,9 @@ const (
 )
 
 func (c Cutter) step(dir StepDirection) {
-	fmt.Fprintf(c, "\x1b\x00%c", dir)
+	c.WriteByte(ESC)
+	c.WriteByte(NUL)
+	c.WriteByte(byte(dir))
 	c.Flush()
 }
 
@@ -159,7 +167,7 @@ func (c Cutter) CuttingArea(p Point) {
 }
 
 func (c Cutter) readResponse() (string, error) {
-	ans, err := c.ReadString(0x03)
+	ans, err := c.ReadString(ETX)
 	if err != nil {
 		return "", err
 	}
@@ -233,7 +241,8 @@ func (c Cutter) UnknownTB51() {
 
 // Updater Version ???
 func (c Cutter) UpdaterVersion() (string, error) {
-	c.WriteString("\x1b\x01")
+	c.WriteByte(ESC)
+	c.WriteByte(1)
 	c.Flush()
 	return c.readResponse()
 }
@@ -244,17 +253,19 @@ func (c Cutter) Update() (bool, error) {
 	c.WriteString("CC1VERUP")
 	c.Flush()
 	ans, err := c.readResponse()
-	return ans == "\x00", err
+	return ans == string(NUL), err
 }
 
 // Initialize ???
 func (c Cutter) Initialize() {
-	c.WriteString("\x1b\x04")
+	c.WriteByte(ESC)
+	c.WriteByte(4)
 	c.Flush()
 }
 
 func (c Cutter) Ready() bool {
-	c.WriteString("\x1b\x05")
+	c.WriteByte(ESC)
+	c.WriteByte(5)
 	c.Flush()
 	ans, _ := c.readResponse()
 	return ans == "0"
