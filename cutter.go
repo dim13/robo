@@ -51,13 +51,13 @@ func NewCutter(io *bufio.ReadWriter) Cutter {
 	return Cutter{io}
 }
 
-func (c Cutter) EOT() {
+func (c Cutter) Emit() {
 	defer c.Flush()
-	c.WriteByte(0x03)
+	c.WriteByte(0x03) // send End Of Text
 }
 
 func (c Cutter) TestCut() {
-	defer c.EOT()
+	defer c.Emit()
 	c.WriteString("FH")
 }
 
@@ -83,28 +83,28 @@ func (c Cutter) Step(dir StepDirection) {
 
 // CR returns carret to home on same line
 func (c Cutter) CR() {
-	defer c.EOT()
+	defer c.Emit()
 	c.WriteString("TT")
 }
 
 // Home retuns carret to home position
 func (c Cutter) Home() {
-	defer c.EOT()
+	defer c.Emit()
 	c.WriteString("H")
 }
 
 func (c Cutter) SetOrigin() {
-	defer c.EOT()
+	defer c.Emit()
 	c.WriteString("FJ")
 }
 
 func (c Cutter) Draw(p Point) {
-	defer c.EOT()
+	defer c.Emit()
 	fmt.Fprint(c, "D", p)
 }
 
 func (c Cutter) Move(p Point) {
-	defer c.EOT()
+	defer c.Emit()
 	fmt.Fprint(c, "M", p)
 }
 
@@ -123,38 +123,38 @@ const (
 )
 
 func (c Cutter) LineType(n LineStyle) {
-	defer c.EOT()
+	defer c.Emit()
 	fmt.Fprint(c, "L", n)
 }
 
 func (c Cutter) LineScale(n int) {
-	defer c.EOT()
+	defer c.Emit()
 	fmt.Fprint(c, "B", n)
 }
 
 func (c Cutter) Factor(p, q, r int) {
-	defer c.EOT()
+	defer c.Emit()
 	fmt.Fprintf(c, "&%v,%v,%v", p, q, r)
 }
 
 func (c Cutter) Offset(p Point) {
-	defer c.EOT()
+	defer c.Emit()
 	fmt.Fprint(c, "^", p)
 }
 
 func (c Cutter) WriteLowerLeft(p Point) {
-	defer c.EOT()
+	defer c.Emit()
 	fmt.Fprint(c, "\\", p)
 }
 
 func (c Cutter) WriteUpperRight(p Point) {
-	defer c.EOT()
+	defer c.Emit()
 	fmt.Fprint(c, "Z", p)
 }
 
 // CuttingArea ???
 func (c Cutter) CuttingArea(p Point) {
-	defer c.EOT()
+	defer c.Emit()
 	fmt.Fprint(c, "FU", p)
 }
 
@@ -175,7 +175,7 @@ func (c Cutter) Version() (string, error) {
 
 // MediaType (Meida ID)
 func (c Cutter) MediaType(n int) {
-	defer c.EOT()
+	defer c.Emit()
 	fmt.Fprint(c, "FW", n)
 }
 
@@ -188,14 +188,14 @@ func (c Cutter) ReadUpperRight() (string, error) {
 // Speed 10..100 mm/s
 func (c Cutter) Speed(n int) {
 	if n >= 1 && n <= 10 {
-		defer c.EOT()
+		defer c.Emit()
 		fmt.Fprint(c, "!", n)
 	}
 }
 
 func (c Cutter) Thickness(n int) {
 	if n >= 1 && n <= 30 {
-		defer c.EOT()
+		defer c.Emit()
 		fmt.Fprint(c, "FX", n, ",0")
 	}
 }
@@ -205,29 +205,29 @@ func (c Cutter) Force(n int) {
 }
 
 func (c Cutter) UnknownFC(n int) {
-	defer c.EOT()
+	defer c.Emit()
 	fmt.Fprint(c, "FC", n)
 }
 
 func (c Cutter) UnknownFE(n int) {
-	defer c.EOT()
+	defer c.Emit()
 	fmt.Fprint(c, "FE", n)
 }
 
 func (c Cutter) UnknownTB71() (string, error) {
 	fmt.Fprint(c, "TB71")
-	c.EOT()
+	c.Emit()
 	return c.readResponse()
 }
 
 func (c Cutter) UnknownFA() (string, error) {
 	fmt.Fprint(c, "FA")
-	c.EOT()
+	c.Emit()
 	return c.readResponse()
 }
 
 func (c Cutter) UnknownTB51() {
-	defer c.EOT()
+	defer c.Emit()
 	fmt.Fprint(c, "TB51,400")
 }
 
@@ -267,7 +267,7 @@ func (c Cutter) Wait() {
 }
 
 func (c Cutter) Bezier(a int, p0, p1, p2, p3 Point) {
-	defer c.EOT()
+	defer c.Emit()
 	fmt.Fprintf(c, "BZ%v,%v,%v,%v,%v", a, p0, p1, p2, p3)
 }
 
@@ -279,7 +279,7 @@ const (
 )
 
 func (c Cutter) Orientation(l Orientation) {
-	defer c.EOT()
+	defer c.Emit()
 	fmt.Fprint(c, "FN", l)
 }
 
@@ -293,6 +293,6 @@ const (
 // TrackEnhancing moves paper back and forth for better traction
 // Not for thickness less then 19
 func (c Cutter) TrackEnhancing(state OnOff) {
-	c.EOT()
+	c.Emit()
 	fmt.Fprint(c, "FY", state)
 }

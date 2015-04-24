@@ -304,7 +304,7 @@ var easteregg = []string{
 func (c Cutter) EasterEgg() {
 	for _, l := range easteregg {
 		fmt.Fprint(c, l)
-		c.EOT()
+		c.Emit()
 		c.Wait()
 	}
 }
