@@ -52,13 +52,13 @@ func NewCutter(io *bufio.ReadWriter) Cutter {
 }
 
 func (c Cutter) Emit() {
-	defer c.Flush()
 	c.WriteByte(0x03) // send End Of Text
+	c.Flush()
 }
 
 func (c Cutter) TestCut() {
-	defer c.Emit()
 	c.WriteString("FH")
+	c.Emit()
 }
 
 type StepDirection int
@@ -83,29 +83,29 @@ func (c Cutter) Step(dir StepDirection) {
 
 // CR returns carret to home on same line
 func (c Cutter) CR() {
-	defer c.Emit()
 	c.WriteString("TT")
+	c.Emit()
 }
 
 // Home retuns carret to home position
 func (c Cutter) Home() {
-	defer c.Emit()
 	c.WriteString("H")
+	c.Emit()
 }
 
 func (c Cutter) SetOrigin() {
-	defer c.Emit()
 	c.WriteString("FJ")
+	c.Emit()
 }
 
 func (c Cutter) Draw(p Point) {
-	defer c.Emit()
 	fmt.Fprint(c, "D", p)
+	c.Emit()
 }
 
 func (c Cutter) Move(p Point) {
-	defer c.Emit()
 	fmt.Fprint(c, "M", p)
+	c.Emit()
 }
 
 type LineStyle int
@@ -123,39 +123,39 @@ const (
 )
 
 func (c Cutter) LineType(n LineStyle) {
-	defer c.Emit()
 	fmt.Fprint(c, "L", n)
+	c.Emit()
 }
 
 func (c Cutter) LineScale(n int) {
-	defer c.Emit()
 	fmt.Fprint(c, "B", n)
+	c.Emit()
 }
 
 func (c Cutter) Factor(p, q, r int) {
-	defer c.Emit()
 	fmt.Fprintf(c, "&%v,%v,%v", p, q, r)
+	c.Emit()
 }
 
 func (c Cutter) Offset(p Point) {
-	defer c.Emit()
 	fmt.Fprint(c, "^", p)
+	c.Emit()
 }
 
 func (c Cutter) WriteLowerLeft(p Point) {
-	defer c.Emit()
 	fmt.Fprint(c, "\\", p)
+	c.Emit()
 }
 
 func (c Cutter) WriteUpperRight(p Point) {
-	defer c.Emit()
 	fmt.Fprint(c, "Z", p)
+	c.Emit()
 }
 
 // CuttingArea ???
 func (c Cutter) CuttingArea(p Point) {
-	defer c.Emit()
 	fmt.Fprint(c, "FU", p)
+	c.Emit()
 }
 
 func (c Cutter) readResponse() (string, error) {
@@ -175,8 +175,8 @@ func (c Cutter) Version() (string, error) {
 
 // MediaType (Meida ID)
 func (c Cutter) MediaType(n int) {
-	defer c.Emit()
 	fmt.Fprint(c, "FW", n)
+	c.Emit()
 }
 
 func (c Cutter) ReadUpperRight() (string, error) {
@@ -188,15 +188,15 @@ func (c Cutter) ReadUpperRight() (string, error) {
 // Speed 10..100 mm/s
 func (c Cutter) Speed(n int) {
 	if n >= 1 && n <= 10 {
-		defer c.Emit()
 		fmt.Fprint(c, "!", n)
+		c.Emit()
 	}
 }
 
 func (c Cutter) Thickness(n int) {
 	if n >= 1 && n <= 30 {
-		defer c.Emit()
 		fmt.Fprint(c, "FX", n, ",0")
+		c.Emit()
 	}
 }
 
@@ -205,13 +205,13 @@ func (c Cutter) Force(n int) {
 }
 
 func (c Cutter) UnknownFC(n int) {
-	defer c.Emit()
 	fmt.Fprint(c, "FC", n)
+	c.Emit()
 }
 
 func (c Cutter) UnknownFE(n int) {
-	defer c.Emit()
 	fmt.Fprint(c, "FE", n)
+	c.Emit()
 }
 
 func (c Cutter) UnknownTB71() (string, error) {
@@ -227,8 +227,8 @@ func (c Cutter) UnknownFA() (string, error) {
 }
 
 func (c Cutter) UnknownTB51() {
-	defer c.Emit()
 	fmt.Fprint(c, "TB51,400")
+	c.Emit()
 }
 
 // Updater Version ???
@@ -267,8 +267,8 @@ func (c Cutter) Wait() {
 }
 
 func (c Cutter) Bezier(a int, p0, p1, p2, p3 Point) {
-	defer c.Emit()
 	fmt.Fprintf(c, "BZ%v,%v,%v,%v,%v", a, p0, p1, p2, p3)
+	c.Emit()
 }
 
 type Orientation int
@@ -279,8 +279,8 @@ const (
 )
 
 func (c Cutter) Orientation(l Orientation) {
-	defer c.Emit()
 	fmt.Fprint(c, "FN", l)
+	c.Emit()
 }
 
 type OnOff int
