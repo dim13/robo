@@ -57,7 +57,7 @@ func NewCutter(io *bufio.ReadWriter) Cutter {
 	v, _ := c.Version()
 	fmt.Println("Craft ROBO Ver.", v)
 
-	m := MediaMap[113]
+	m := MediaID[113]
 	c.MediaType(m.ID)
 	c.Speed(m.Speed)
 	c.Force(m.Thickness)

@@ -10,11 +10,11 @@ type Media struct {
 	FC        int    // FC ?
 }
 
-var MediaMap = make(map[int]Media)
+var MediaID = make(map[int]Media)
 
 func init() {
 	for _, m := range Medias {
-		MediaMap[m.ID] = m
+		MediaID[m.ID] = m
 	}
 }
 
