@@ -10,6 +10,14 @@ type Media struct {
 	FC        int    // FC ?
 }
 
+var MediaMap = make(map[int]Media)
+
+func init() {
+	for _, m := range Medias {
+		MediaMap[m.ID] = m
+	}
+}
+
 func (m Media) String() string {
 	return fmt.Sprintf("%v: Speed %2d, Thickness %2d %s",
 		m.ID, m.Speed, m.Thickness, m.Descr)

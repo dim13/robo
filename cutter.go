@@ -48,6 +48,26 @@ type Cutter struct {
 }
 
 func NewCutter(io *bufio.ReadWriter) Cutter {
+	c := Cutter{io}
+	c.Initialize()
+	if !c.Ready() {
+		fmt.Println("not ready")
+	}
+	c.CR() // Home
+	v, _ := c.Version()
+	fmt.Println("Craft ROBO Ver.", v)
+
+	m := MediaMap[113]
+	c.MediaType(m.ID)
+	c.Speed(m.Speed)
+	c.Force(m.Thickness)
+	c.UnknownFC(m.FC)
+	c.TrackEnhancing(On)
+	c.UnknownFE(0)
+	c.UnknownTB(71)
+	c.UnknownFA()
+	c.Orientation(Portrait)
+
 	return Cutter{io}
 }
 

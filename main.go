@@ -1,21 +1,10 @@
 package main
 
-import "fmt"
-
 func main() {
 	dev := NewDevice()
 	defer dev.Close()
 
 	cu := NewCutter(dev.Handle())
-	p := pens["pen"]
-
-	v, _ := cu.Version()
-	fmt.Println("Craft ROBO Ver.", v)
-
-	cu.Orientation(Portrait)
-	cu.WriteUpperRight(A4)
-	cu.Speed(p.Speed)
-	cu.Force(p.Force)
 
 	defer cu.Home()
 	defer cu.LineType(Solid)
