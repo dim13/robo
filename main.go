@@ -9,8 +9,6 @@ func main() {
 	cu := NewCutter(dev.Handle())
 	p := pens["pen"]
 
-	cu.Initialize()
-
 	v, _ := cu.Version()
 	fmt.Println("Craft ROBO Ver.", v)
 
@@ -22,12 +20,12 @@ func main() {
 	defer cu.Home()
 	defer cu.LineType(Solid)
 
-	//cu.TestCut()
+	cu.TestCut()
 	//cu.TestPattern()
 	//cu.EasterEgg()
 	//cu.DrawMarks()
-	cu.Move(Point{300, 300})
-	cu.SearchMarks()
+	//cu.Move(Point{300, 300})
+	//cu.SearchMarks()
 	//cu.Bezier(1, Point{0,0},Point{0,1000},Point{0,0},Point{1000,0})
 
 	/*
