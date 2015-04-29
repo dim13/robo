@@ -4,12 +4,12 @@ func main() {
 	dev := NewDevice()
 	defer dev.Close()
 
-	cu := NewCutter(dev.Handle())
+	cu := NewCutter(dev.Handle(), Portrait)
 
 	defer cu.Home()
 	defer cu.LineType(Solid)
 
-	cu.TestCut()
+	//cu.TestCut()
 	//cu.TestPattern()
 	//cu.EasterEgg()
 	//cu.DrawMarks()

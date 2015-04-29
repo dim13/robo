@@ -47,7 +47,7 @@ type Cutter struct {
 	*bufio.ReadWriter
 }
 
-func NewCutter(io *bufio.ReadWriter) Cutter {
+func NewCutter(io *bufio.ReadWriter, o Orientation) Cutter {
 	c := Cutter{io}
 	c.Initialize()
 	if !c.Ready() {
@@ -66,7 +66,7 @@ func NewCutter(io *bufio.ReadWriter) Cutter {
 	c.UnknownFE(0)
 	c.UnknownTB(71)
 	c.UnknownFA()
-	c.Orientation(Portrait)
+	c.Orientation(o)
 
 	return Cutter{io}
 }
