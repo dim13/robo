@@ -159,8 +159,8 @@ func (c Cutter) LineScale(n int) {
 	c.Emit()
 }
 
-func (c Cutter) Factor(p, q, r int) {
-	fmt.Fprintf(c, "&%v,%v,%v", p, q, r)
+func (c Cutter) Factor(n int) {
+	fmt.Fprintf(c, "&%v,%v,%v", n, n, n)
 	c.Emit()
 }
 
@@ -248,12 +248,12 @@ func parsePoint(s string) (p Point) {
 
 func (c Cutter) RegistrationMarksLength(n int) {
 	fmt.Fprint(c, "TB51,", n)
-	e.Emit()
+	c.Emit()
 }
 
 func (c Cutter) Calibrate() {
 	fmt.Fprint(c, "TB70")
-	e.Emit()
+	c.Emit()
 }
 
 // Sensor position
