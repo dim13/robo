@@ -64,8 +64,12 @@ func NewCutter(io *bufio.ReadWriter, o Orientation) Cutter {
 	c.UnknownFC(m.FC)
 	c.TrackEnhancing(On)
 	c.UnknownFE(0)
-	c.UnknownTB(71)
-	c.UnknownFA()
+
+	p := c.GetCalibration()
+	fmt.Println("Calibration", p)
+
+	p = c.UnknownFA()
+	fmt.Println("FA", p)
 	c.Orientation(o)
 
 	return Cutter{io}
@@ -237,16 +241,57 @@ func (c Cutter) UnknownFE(n int) {
 	c.Emit()
 }
 
+func parsePoint(s string) (p Point) {
+	fmt.Sscanf(s, "%v,%v", &p.X, &p.Y)
+	return
+}
+
+func (c Cutter) RegistrationMarksLength(n int) {
+	fmt.Fprint(c, "TB51,", n)
+	e.Emit()
+}
+
+func (c Cutter) Calibrate() {
+	fmt.Fprint(c, "TB70")
+	e.Emit()
+}
+
+// Sensor position
+func (c Cutter) GetCalibration() Point {
+	fmt.Fprint(c, "TB71")
+	c.Emit()
+	s, _ := c.readResponse()
+	return parsePoint(s)
+}
+
+func (c Cutter) SetCalibration(p Point) {
+	if p.X > 40 || p.Y > 40 || p.X < -40 || p.Y < -40 {
+		return
+	}
+	fmt.Fprint(c, "TB72,", p)
+	c.Emit()
+}
+
+// Arg: percent +/- 2.00% -> +/- 200
+func (c Cutter) DistanseCorrection(n int) {
+	if n > 200 || n < -200 {
+		return
+	}
+	fmt.Fprint(c, "FB", n, ",0")
+	c.Emit()
+}
+
 func (c Cutter) UnknownTB(n int) (string, error) {
 	fmt.Fprint(c, "TB", n)
 	c.Emit()
 	return c.readResponse()
 }
 
-func (c Cutter) UnknownFA() (string, error) {
+func (c Cutter) UnknownFA() Point {
 	fmt.Fprint(c, "FA")
 	c.Emit()
-	return c.readResponse()
+	s, _ := c.readResponse()
+	return parsePoint(s)
 }
 
 // VersionUpgrade
