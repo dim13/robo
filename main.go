@@ -7,7 +7,8 @@ func main() {
 	cu := NewCutter(dev.Handle(), Portrait)
 
 	defer cu.Home()
-	defer cu.LineType(Solid)
+	//defer cu.LineType(Solid)
+	//cu.Raw([]string{"L100,1,400,100"})
 
 	//cu.TestCut()
 	//cu.TestPattern()

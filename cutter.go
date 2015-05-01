@@ -90,23 +90,18 @@ func (c Cutter) TestCut() {
 type StepDirection byte
 
 const (
-	stepEnd StepDirection = 1 << iota >> 1
+	StepStop StepDirection = 1 << iota >> 1
 	StepDown
 	StepUp
-	StepLeft
 	StepRight
+	StepLeft
 )
 
-func (c Cutter) step(dir StepDirection) {
+func (c Cutter) Step(dir StepDirection) {
 	c.WriteByte(ESC)
 	c.WriteByte(NUL)
 	c.WriteByte(byte(dir))
 	c.Flush()
-}
-
-func (c Cutter) Step(dir StepDirection) {
-	c.step(dir)
-	c.step(stepEnd)
 }
 
 // CR returns carret to home on same line

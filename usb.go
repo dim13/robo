@@ -22,6 +22,12 @@ var (
 	debug               = 3
 )
 
+func init() {
+	// bump timeouts to one minute
+	usb.DefaultReadTimeout *= 60
+	usb.DefaultWriteTimeout *= 60
+}
+
 func CC100(desc *usb.Descriptor) bool {
 	if desc.Vendor == graphtec {
 		switch desc.Product {
@@ -48,7 +54,7 @@ func NewDevice() (d Device) {
 		}
 		log.Fatal("Cannot find Craft ROBO")
 	}
-	return Device{ctx: ctx, dev: devs[0]}
+	return Device{ctx, devs[0]}
 }
 
 func (d Device) Close() {
