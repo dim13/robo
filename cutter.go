@@ -14,6 +14,14 @@ func (p Point) Add(u Point) Point {
 	return Point{p.X + u.X, p.Y + u.Y}
 }
 
+func (p Point) AddX(u int) Point {
+	return Point{p.X + u, p.Y}
+}
+
+func (p Point) AddY(u int) Point {
+	return Point{p.X, p.Y + u}
+}
+
 type Polar struct {
 	R, Theta int
 }

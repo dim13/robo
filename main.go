@@ -18,5 +18,8 @@ func main() {
 	//c.DrawMarks(Point{}, Point{}, 0)
 	//c.WriteUpperRight(Point{4000,5440})
 	fmt.Println(c.SearchMarks(Point{5240, 3800}, 400))
+	//fmt.Println(c.UnknownFQ5())
 	//c.Bezier(1, Point{0,0},Point{0,1000},Point{0,0},Point{1000,0})
+	//c.DrawCircles()
+	c.DrawAtom()
 }

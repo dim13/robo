@@ -22,4 +22,8 @@ func (c Cutter) DrawCircles() {
 			Polar{100 * i, 0},
 			Polar{100 * i, 3600})
 	}
+	c.Move(Point{0, 1000})
+	c.Draw(Point{2000, 1000})
+	c.Move(Point{1000, 0})
+	c.Draw(Point{1000, 2000})
 }
