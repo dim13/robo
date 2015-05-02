@@ -25,6 +25,16 @@ package main
 	length 20 mm
 */
 
+/*	Landscape		Portrait
+	+- H -+			+- W -+
+	|x1  3|			|2  1x|
+
+	W ->			   |  H
+				   v
+	|2			     3|
+	+-			     -+
+*/
+
 func (c Cutter) DrawMarks() (string, error) {
 	c.Move(Point{600, 3800})
 	c.Draw(Point{200, 3800})
@@ -44,5 +54,7 @@ func (c Cutter) DrawMarks() (string, error) {
 func (c Cutter) SearchMarks() {
 	//cmd := []string{"TB99", "TB55,1", "TB123,3800,5240"}
 	cmd := []string{"TB99", "TB55,1", "TB23,3800,5240"}
-	c.Raw(cmd)
+	for _, s := range cmd {
+		c.Send(s)
+	}
 }

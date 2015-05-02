@@ -81,14 +81,14 @@ const (
 	ESC = 0x1b
 )
 
-func (c Cutter) Emit() {
-	c.WriteByte(ETX)
+func (c Cutter) Send(a ...interface{}) {
+	a = append(a, ETX)
+	fmt.Fprint(c, a...)
 	c.Flush()
 }
 
 func (c Cutter) TestCut() {
-	c.WriteString("FH")
-	c.Emit()
+	c.Send("FH")
 }
 
 type StepDirection byte
@@ -110,29 +110,24 @@ func (c Cutter) Step(dir StepDirection) {
 
 // CR returns carret to home on same line
 func (c Cutter) CR() {
-	c.WriteString("TT")
-	c.Emit()
+	c.Send("TT")
 }
 
 // Home retuns carret to home position
 func (c Cutter) Home() {
-	c.WriteString("H")
-	c.Emit()
+	c.Send("H")
 }
 
 func (c Cutter) SetOrigin() {
-	c.WriteString("FJ")
-	c.Emit()
+	c.Send("FJ")
 }
 
 func (c Cutter) Draw(p Point) {
-	fmt.Fprint(c, "D", p)
-	c.Emit()
+	c.Send("D", p)
 }
 
 func (c Cutter) Move(p Point) {
-	fmt.Fprint(c, "M", p)
-	c.Emit()
+	c.Send("M", p)
 }
 
 type LineStyle int
@@ -150,39 +145,32 @@ const (
 )
 
 func (c Cutter) LineType(n LineStyle) {
-	fmt.Fprint(c, "L", n)
-	c.Emit()
+	c.Send("L", n)
 }
 
 func (c Cutter) LineScale(n int) {
-	fmt.Fprint(c, "B", n)
-	c.Emit()
+	c.Send("B", n)
 }
 
 func (c Cutter) Factor(n int) {
-	fmt.Fprintf(c, "&%v,%v,%v", n, n, n)
-	c.Emit()
+	c.Send("&", n, ",", n, ",", n)
 }
 
 func (c Cutter) Offset(p Point) {
-	fmt.Fprint(c, "^", p)
-	c.Emit()
+	c.Send("^", p)
 }
 
 func (c Cutter) WriteLowerLeft(p Point) {
-	fmt.Fprint(c, "\\", p)
-	c.Emit()
+	c.Send("\\", p)
 }
 
 func (c Cutter) WriteUpperRight(p Point) {
-	fmt.Fprint(c, "Z", p)
-	c.Emit()
+	c.Send("Z", p)
 }
 
 // CuttingArea ???
 func (c Cutter) CuttingArea(p Point) {
-	fmt.Fprint(c, "FU", p)
-	c.Emit()
+	c.Send("FU", p)
 }
 
 func (c Cutter) readResponse() (string, error) {
@@ -202,8 +190,7 @@ func (c Cutter) Version() (string, error) {
 
 // MediaType (Meida ID)
 func (c Cutter) MediaType(n int) {
-	fmt.Fprint(c, "FW", n)
-	c.Emit()
+	c.Send("FW", n)
 }
 
 func (c Cutter) ReadUpperRight() (string, error) {
@@ -215,15 +202,13 @@ func (c Cutter) ReadUpperRight() (string, error) {
 // Speed 10..100 mm/s
 func (c Cutter) Speed(n int) {
 	if n >= 1 && n <= 10 {
-		fmt.Fprint(c, "!", n)
-		c.Emit()
+		c.Send("!", n)
 	}
 }
 
 func (c Cutter) Thickness(n int) {
 	if n >= 1 && n <= 30 {
-		fmt.Fprint(c, "FX", n, ",0")
-		c.Emit()
+		c.Send("FX", n, ",0")
 	}
 }
 
@@ -232,13 +217,11 @@ func (c Cutter) Force(n int) {
 }
 
 func (c Cutter) UnknownFC(n int) {
-	fmt.Fprint(c, "FC", n)
-	c.Emit()
+	c.Send("FC", n)
 }
 
 func (c Cutter) UnknownFE(n int) {
-	fmt.Fprint(c, "FE", n)
-	c.Emit()
+	c.Send("FE", n)
 }
 
 func parseDigit(s string) (n int) {
@@ -252,27 +235,23 @@ func parsePoint(s string) (p Point) {
 }
 
 func (c Cutter) RegistrationMarksLength(n int) {
-	fmt.Fprint(c, "TB51,", n)
-	c.Emit()
+	c.Send("TB51,", n)
 }
 
 func (c Cutter) Calibrate() {
-	fmt.Fprint(c, "TB70")
-	c.Emit()
+	c.Send("TB70")
 }
 
 // Sensor position
 func (c Cutter) GetCalibration() Point {
-	fmt.Fprint(c, "TB71")
-	c.Emit()
+	c.Send("TB71")
 	s, _ := c.readResponse()
 	return parsePoint(s)
 }
 
 // Emited after calibration
 func (c Cutter) UnknownFQ5() int {
-	fmt.Fprint(c, "FQ5")
-	c.Emit()
+	c.Send("FQ5")
 	s, _ := c.readResponse()
 	return parseDigit(s)
 }
@@ -281,8 +260,7 @@ func (c Cutter) SetCalibration(p Point) {
 	if p.X > 40 || p.Y > 40 || p.X < -40 || p.Y < -40 {
 		return
 	}
-	fmt.Fprint(c, "TB72,", p)
-	c.Emit()
+	c.Send("TB72,", p)
 }
 
 // Arg: percent +/- 2.00% -> +/- 200
@@ -290,19 +268,16 @@ func (c Cutter) DistanseCorrection(n int) {
 	if n > 200 || n < -200 {
 		return
 	}
-	fmt.Fprint(c, "FB", n, ",0")
-	c.Emit()
+	c.Send(c, "FB", n, ",0")
 }
 
 func (c Cutter) UnknownTB(n int) (string, error) {
-	fmt.Fprint(c, "TB", n)
-	c.Emit()
+	c.Send("TB", n)
 	return c.readResponse()
 }
 
 func (c Cutter) UnknownFA() Point {
-	fmt.Fprint(c, "FA")
-	c.Emit()
+	c.Send("FA")
 	s, _ := c.readResponse()
 	return parsePoint(s)
 }
@@ -346,8 +321,7 @@ func (c Cutter) Wait() {
 }
 
 func (c Cutter) Bezier(a int, p0, p1, p2, p3 Point) {
-	fmt.Fprintf(c, "BZ%v,%v,%v,%v,%v", a, p0, p1, p2, p3)
-	c.Emit()
+	c.Send("BZ", a, ",", p0, ",", p1, ",", p2, ",", p3)
 }
 
 type Orientation int
@@ -358,8 +332,7 @@ const (
 )
 
 func (c Cutter) Orientation(l Orientation) {
-	fmt.Fprint(c, "FN", l)
-	c.Emit()
+	c.Send("FN", l)
 }
 
 type OnOff int
@@ -372,6 +345,5 @@ const (
 // TrackEnhancing moves paper back and forth for better traction
 // Not for thickness less then 19
 func (c Cutter) TrackEnhancing(state OnOff) {
-	c.Emit()
-	fmt.Fprint(c, "FY", state)
+	c.Send("FY", state)
 }

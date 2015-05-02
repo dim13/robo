@@ -1,7 +1,5 @@
 package main
 
-import "fmt"
-
 // found in firmware V2.30
 var easteregg = []string{
 	`FU5440,4000`,
@@ -302,13 +300,8 @@ var easteregg = []string{
 }
 
 func (c Cutter) EasterEgg() {
-	c.Raw(easteregg)
-}
-
-func (c Cutter) Raw(s []string) {
-	for _, cmd := range s {
-		fmt.Fprint(c, cmd)
-		c.Emit()
+	for _, cmd := range easteregg {
+		c.Send(cmd)
 		c.Wait()
 	}
 }
