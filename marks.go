@@ -35,7 +35,7 @@ package main
 	+-			     -+
 */
 
-func (c Cutter) DrawMarks(offset, size Point) (string, error) {
+func (c Cutter) DrawMarks(offset, size Point, length int) {
 	c.Move(Point{600, 3800})
 	c.Draw(Point{200, 3800})
 	c.Draw(Point{200, 3400})
@@ -47,6 +47,4 @@ func (c Cutter) DrawMarks(offset, size Point) (string, error) {
 	c.Move(Point{4840, 200})
 	c.Draw(Point{5240, 200})
 	c.Draw(Point{5240, 600})
-
-	return c.readResponse()
 }

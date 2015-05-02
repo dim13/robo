@@ -352,14 +352,16 @@ func (c Cutter) TrackEnhancing(state OnOff) {
 	c.Send("FY", state)
 }
 
-func (c Cutter) SearchMarks(p Point) bool {
+func (c Cutter) SearchMarks(p Point, l int) bool {
+	c.RegMarkLen(l)
 	c.Send("TB99")
 	c.Send("TB55,1")
 	c.Send("TB123,", p)
 	return c.parseDigit() == 0
 }
 
-func (c Cutter) ManualSearchMarks(p Point) bool {
+func (c Cutter) ManualSearchMarks(p Point, l int) bool {
+	c.RegMarkLen(l)
 	c.Send("TB99")
 	c.Send("TB55,1")
 	c.Send("TB23,", p)
