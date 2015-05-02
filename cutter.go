@@ -87,10 +87,6 @@ func (c Cutter) Send(a ...interface{}) {
 	c.Flush()
 }
 
-func (c Cutter) TestCut() {
-	c.Send("FH")
-}
-
 type StepDirection byte
 
 const (
@@ -101,11 +97,20 @@ const (
 	StepLeft
 )
 
-func (c Cutter) Step(dir StepDirection) {
+func (c Cutter) Esc(bytes ...byte) {
 	c.WriteByte(ESC)
-	c.WriteByte(NUL)
-	c.WriteByte(byte(dir))
+	for _, b := range bytes {
+		c.WriteByte(b)
+	}
 	c.Flush()
+}
+
+func (c Cutter) Step(dir StepDirection) {
+	c.Esc(NUL, byte(dir))
+}
+
+func (c Cutter) TestCut() {
+	c.Send("FH")
 }
 
 // CR returns carret to home on same line
@@ -281,9 +286,7 @@ func (c Cutter) UnknownFA() Point {
 
 // VersionUpgrade
 func (c Cutter) BootVersion() (string, error) {
-	c.WriteByte(ESC)
-	c.WriteByte(1)
-	c.Flush()
+	c.Esc(1)
 	return c.ReadString(' ')
 }
 
@@ -297,15 +300,11 @@ func (c Cutter) Upgrade() (bool, error) {
 
 // Initialize ???
 func (c Cutter) Initialize() {
-	c.WriteByte(ESC)
-	c.WriteByte(4)
-	c.Flush()
+	c.Esc(4)
 }
 
 func (c Cutter) Ready() bool {
-	c.WriteByte(ESC)
-	c.WriteByte(5)
-	c.Flush()
+	c.Esc(5)
 	return c.parseDigit() == 0
 }
 
