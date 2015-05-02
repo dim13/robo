@@ -18,7 +18,7 @@ func (c Cutter) DrawLines() {
 
 func (c Cutter) DrawCircles() {
 	for i := 1; i < 10; i++ {
-		cu.Circle(Point{1000, 1000},
+		c.Circle(Point{1000, 1000},
 			Polar{100 * i, 0},
 			Polar{100 * i, 3600})
 	}
