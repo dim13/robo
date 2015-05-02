@@ -222,12 +222,14 @@ func (c Cutter) UnknownFE(n int) {
 	c.Send("FE", n)
 }
 
-func parseDigit(s string) (n int) {
+func (c Cutter) parseDigit() (n int) {
+	s, _ := c.readResponse()
 	fmt.Sscanf(s, "%v", &n)
 	return
 }
 
-func parsePoint(s string) (p Point) {
+func (c Cutter) parsePoint() (p Point) {
+	s, _ := c.readResponse()
 	fmt.Sscanf(s, "%v,%v", &p.X, &p.Y)
 	return
 }
@@ -243,15 +245,13 @@ func (c Cutter) Calibrate() {
 // Sensor position
 func (c Cutter) GetCalibration() Point {
 	c.Send("TB71")
-	s, _ := c.readResponse()
-	return parsePoint(s)
+	return c.parsePoint()
 }
 
 // Emited after calibration
 func (c Cutter) UnknownFQ5() int {
 	c.Send("FQ5")
-	s, _ := c.readResponse()
-	return parseDigit(s)
+	return c.parseDigit()
 }
 
 func (c Cutter) SetCalibration(p Point) {
@@ -276,8 +276,7 @@ func (c Cutter) UnknownTB(n int) (string, error) {
 
 func (c Cutter) UnknownFA() Point {
 	c.Send("FA")
-	s, _ := c.readResponse()
-	return parsePoint(s)
+	return c.parsePoint()
 }
 
 // VersionUpgrade
@@ -307,8 +306,7 @@ func (c Cutter) Ready() bool {
 	c.WriteByte(ESC)
 	c.WriteByte(5)
 	c.Flush()
-	ans, _ := c.readResponse()
-	return ans == "0"
+	return c.parseDigit() == 0
 }
 
 func (c Cutter) Wait() {
