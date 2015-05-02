@@ -28,8 +28,11 @@ func main() {
 
 	//cu.Move(Point{500,500})
 
-	cu.Ellipse(0, Point{3000, 1000},
-		Polar{500, 0}, Polar{200, 3600}, 2000)
+	cu.Circle(Point{2000, 2000}, Polar{100, 0}, Polar{100, 3600})
+	for i := 0; i < 3; i++ {
+		cu.Ellipse(0, Point{2000, 2000},
+			Polar{500, 0}, Polar{200, 3600}, 600*i)
+	}
 
 	/*
 		for i := 0; i < 9; i++ {
