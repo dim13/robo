@@ -241,6 +241,11 @@ func (c Cutter) UnknownFE(n int) {
 	c.Emit()
 }
 
+func parseDigit(s string) (n int) {
+	fmt.Sscanf(s, "%v", &n)
+	return
+}
+
 func parsePoint(s string) (p Point) {
 	fmt.Sscanf(s, "%v,%v", &p.X, &p.Y)
 	return
@@ -262,6 +267,14 @@ func (c Cutter) GetCalibration() Point {
 	c.Emit()
 	s, _ := c.readResponse()
 	return parsePoint(s)
+}
+
+// Emited after calibration
+func (c Cutter) UnknownFQ5() int {
+	fmt.Fprint(c, "FQ5")
+	c.Emit()
+	s, _ := c.readResponse()
+	return parseDigit(s)
 }
 
 func (c Cutter) SetCalibration(p Point) {
