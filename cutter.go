@@ -10,9 +10,11 @@ type Point struct {
 	X, Y int
 }
 
-func add(a, b Point) Point {
-	return Point{a.X + b.X, a.Y + b.Y}
+func (p Point) Add(u Point) Point {
+	return Point{p.X + u.X, p.Y + u.Y}
 }
+
+type Path []Point
 
 /*
 	A4 Cutting area
