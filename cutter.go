@@ -53,23 +53,23 @@ func NewCutter(io *bufio.ReadWriter, o Orientation) Cutter {
 	if !c.Ready() {
 		fmt.Println("not ready")
 	}
+
 	c.CR() // Home
 	v, _ := c.Version()
 	fmt.Println("Craft ROBO Ver.", v)
 
-	m := MediaID[113]
-	c.MediaType(m.ID)
-	c.Speed(m.Speed)
-	c.Force(m.Thickness)
-	c.UnknownFC(m.FC)
+	pen := MediaID[113]
+	c.MediaType(pen.ID)
+	c.Speed(pen.Speed)
+	c.Force(pen.Thickness)
+	c.UnknownFC(pen.FC)
+
 	c.TrackEnhancing(On)
 	c.UnknownFE(0)
 
-	p := c.GetCalibration()
-	fmt.Println("Calibration", p)
+	fmt.Println("Calibration", c.GetCalibration())
+	fmt.Println("FA", c.UnknownFA())
 
-	p = c.UnknownFA()
-	fmt.Println("FA", p)
 	c.Orientation(o)
 
 	return Cutter{io}
@@ -82,8 +82,8 @@ const (
 )
 
 func (c Cutter) Send(a ...interface{}) {
-	a = append(a, ETX)
 	fmt.Fprint(c, a...)
+	c.WriteByte(ETX)
 	c.Flush()
 }
 
@@ -183,8 +183,7 @@ func (c Cutter) readResponse() (string, error) {
 
 // Version requests hardware version
 func (c Cutter) Version() (string, error) {
-	c.WriteString("FG")
-	c.Flush()
+	c.Send("FG")
 	return c.readResponse()
 }
 
@@ -194,8 +193,7 @@ func (c Cutter) MediaType(n int) {
 }
 
 func (c Cutter) ReadUpperRight() (string, error) {
-	c.WriteString("U")
-	c.Flush()
+	c.Send("U")
 	return c.readResponse()
 }
 
@@ -293,8 +291,7 @@ func (c Cutter) BootVersion() (string, error) {
 // Upgrade starts update sequence
 // Send raw S-Record data after
 func (c Cutter) Upgrade() (bool, error) {
-	c.WriteString("CC1VERUP")
-	c.Flush()
+	c.Send("CC1VERUP")
 	ans, err := c.readResponse()
 	return ans == string(NUL), err
 }

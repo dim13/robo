@@ -10,7 +10,7 @@ func main() {
 	//defer cu.LineType(Solid)
 	//cu.Raw([]string{"L100,1,400,100"})
 
-	//cu.TestCut()
+	cu.TestCut()
 	//cu.TestPattern()
 	//cu.EasterEgg()
 	//cu.DrawMarks()
