@@ -52,11 +52,12 @@ func NewCutter(io *bufio.ReadWriter, o Orientation) Cutter {
 	c.Initialize()
 	if !c.Ready() {
 		fmt.Println("not ready")
+		time.Sleep(time.Second)
 	}
 
-	c.CR() // Home
+	c.GoHome() // Home
 	v, _ := c.Version()
-	fmt.Println("Craft ROBO Ver.", v)
+	fmt.Println(craftRobo, "Ver.", v)
 
 	pen := MediaID[113]
 	c.MediaType(pen.ID)
@@ -113,8 +114,8 @@ func (c Cutter) TestCut() {
 	c.Send("FH")
 }
 
-// CR returns carret to home on same line
-func (c Cutter) CR() {
+// GoHome returns carret to home on same line
+func (c Cutter) GoHome() {
 	c.Send("TT")
 }
 

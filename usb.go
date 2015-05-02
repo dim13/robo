@@ -13,6 +13,7 @@ type Device struct {
 }
 
 var (
+	craftRobo           = "Craft ROBO"
 	graphtec            = usb.ID(0x0b4d)
 	cc200_20            = usb.ID(0x110a)
 	cc300_20            = usb.ID(0x111a)
@@ -52,7 +53,7 @@ func NewDevice() (d Device) {
 		for _, dev := range devs {
 			dev.Close()
 		}
-		log.Fatal("Cannot find Craft ROBO")
+		log.Fatal("Cannot find ", craftRobo)
 	}
 	return Device{ctx, devs[0]}
 }
