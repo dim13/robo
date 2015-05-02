@@ -14,6 +14,10 @@ func (p Point) Add(u Point) Point {
 	return Point{p.X + u.X, p.Y + u.Y}
 }
 
+type Polar struct {
+	R, Theta int
+}
+
 type Path []Point
 
 /*
@@ -356,4 +360,10 @@ func (c Cutter) ManualSearchMarks(p Point) bool {
 	c.Send("TB55,1")
 	c.Send("TB23,", p)
 	return c.parseDigit() == 0
+}
+
+func (c Cutter) Circle(p Point, start, end Polar) {
+	c.Send("W", p, ",",
+		start.R, ",", end.R, ",",
+		start.Theta, ",", end.Theta)
 }
