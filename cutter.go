@@ -92,9 +92,13 @@ const (
 	ESC = 0x1b
 )
 
-func (c Cutter) Send(a ...interface{}) {
+func (c Cutter) Add(a ...interface{}) {
 	fmt.Fprint(c, a...)
 	c.WriteByte(ETX)
+}
+
+func (c Cutter) Send(a ...interface{}) {
+	c.Add(a...)
 	c.Flush()
 }
 
@@ -366,4 +370,18 @@ func (c Cutter) Circle(p Point, start, end Polar) {
 	c.Send("W", p, ",",
 		start.R, ",", end.R, ",",
 		start.Theta, ",", end.Theta)
+}
+
+// Not supported?
+func (c Cutter) Curve(a int, ph Path) {
+	c.Add("Y", a)
+	for _, p := range ph {
+		c.Add(",", p)
+	}
+	c.Flush()
+}
+
+func (c Cutter) Ellipse(a int, p Point, start, end Polar, theta int) {
+	c.Send(")", a, ",", p, ",", start.R, ",", end.R, ",",
+		start.Theta, ",", end.Theta, ",", theta)
 }

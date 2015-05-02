@@ -17,11 +17,19 @@ func main() {
 	//cu.Move(Point{300, 300})
 	//cu.SearchMarks()
 	//cu.Bezier(1, Point{0,0},Point{0,1000},Point{0,0},Point{1000,0})
-	for i := 1; i < 10; i++ {
-		cu.Circle(Point{1000, 1000},
-			Polar{100 * i, 0},
-			Polar{100 * i, 3600})
-	}
+
+	/*
+		for i := 1; i < 10; i++ {
+			cu.Circle(Point{1000, 1000},
+				Polar{100 * i, 0},
+				Polar{100 * i, 3600})
+		}
+	*/
+
+	//cu.Move(Point{500,500})
+
+	cu.Ellipse(0, Point{3000, 1000},
+		Polar{500, 0}, Polar{200, 3600}, 2000)
 
 	/*
 		for i := 0; i < 9; i++ {
