@@ -240,7 +240,7 @@ func (c Cutter) parsePoint() (p Point) {
 	return
 }
 
-func (c Cutter) RegistrationMarksLength(n int) {
+func (c Cutter) RegMarkLen(n int) {
 	c.Send("TB51,", n)
 }
 
@@ -254,7 +254,7 @@ func (c Cutter) GetCalibration() Point {
 	return c.parsePoint()
 }
 
-// Emited after calibration
+// Emited after auto calibration
 func (c Cutter) UnknownFQ5() int {
 	c.Send("FQ5")
 	return c.parseDigit()
@@ -275,18 +275,13 @@ func (c Cutter) DistanseCorrection(n int) {
 	c.Send(c, "FB", n, ",0")
 }
 
-func (c Cutter) UnknownTB(n int) (string, error) {
-	c.Send("TB", n)
-	return c.readResponse()
-}
-
 func (c Cutter) UnknownFA() Point {
 	c.Send("FA")
 	return c.parsePoint()
 }
 
 // VersionUpgrade
-func (c Cutter) BootVersion() (string, error) {
+func (c Cutter) BootUpgrade() (string, error) {
 	c.Esc(1)
 	return c.ReadString(' ')
 }
@@ -341,4 +336,16 @@ const (
 // Not for thickness less then 19
 func (c Cutter) TrackEnhancing(state OnOff) {
 	c.Send("FY", state)
+}
+
+func (c Cutter) SearchMarks(p Point) {
+	c.Send("TB99")
+	c.Send("TB55,1")
+	c.Send("TB123,", p)
+}
+
+func (c Cutter) ManualSearchMarks(p Point) {
+	c.Send("TB99")
+	c.Send("TB55,1")
+	c.Send("TB23,", p)
 }

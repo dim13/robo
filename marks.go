@@ -50,11 +50,3 @@ func (c Cutter) DrawMarks() (string, error) {
 
 	return c.readResponse()
 }
-
-func (c Cutter) SearchMarks() {
-	//cmd := []string{"TB99", "TB55,1", "TB123,3800,5240"}
-	cmd := []string{"TB99", "TB55,1", "TB23,3800,5240"}
-	for _, s := range cmd {
-		c.Send(s)
-	}
-}
