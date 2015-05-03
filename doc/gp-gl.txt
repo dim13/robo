@@ -18,16 +18,16 @@ MP	Move Polar		MPr,θ[t]
 DP	Drar Polar		DPr1,θ1,r2,θ2...rn,θn[t]
 EP	Relative Draw Polar	EP∆r,θ[t]
 OP	Relative Move Polar	EP∆r,∆θ[t]
-RP	Radius Plot		EPθ,l1,l2
+RP	Radius Plot		EPθ,l1,l2				nop
 
 Character and symbol
 
 P	Print			Pc1,c2...cn[t]
 K	Kana (greek)		Kc1,c2...cn[t]
-N	Mark			Nn,
-SP	Select Point Mark	SPc[t]
-(	User Pattern		(n1,n2...nn[t]		Not Supported
-(P	User Program Pattern	(P[p,]∆x1,∆y1,[p,]∆x2,∆y2...[p,]∆xn,∆yn
+N	Mark			Nn,					nop
+SP	Select Point Mark	SPc[t]					nop
+(	User Pattern		(n1,n2...nn[t]		Not Supported	nop
+(P	User Program Pattern	(P[p,]∆x1,∆y1,[p,]∆x2,∆y2...[p,]∆xn,∆yn	nop
 
 Circle and curve
 
@@ -47,13 +47,13 @@ B	Line Scale		Bl,
 Character and symbol specification
 
 $	Font			$n,(m,)
-S	Alpha Scale		Sn,(m,)
+S	Alpha Scale		Sn,(m,)					nop
 Q	Alpha Space		Ql(k,)
-R	Alpha Rotate		Rθ,
+R	Alpha Rotate		Rθ,					nop
 I	Alpha Italic		Ip,
 LP	Label Position		LPn[t]
-A	Alpha Reset		A
-RC	Replot Character	RCc,x1,y1,[P,]x2,y2,[P1]...xn,yn[t]
+A	Alpha Reset		A					nop
+RC	Replot Character	RCc,x1,y1,[P,]x2,y2,[P1]...xn,yn[t]	nop
 
 Control
 
@@ -72,7 +72,7 @@ Z	Write Upper Right	Zx,y,
 
 &	Factor			&p,q,r,
 SO	Set Origin		SOn
-T	Buzzer			Tn
+T	Buzzer			Tn					nop
 F	Chart Feed		Fl[t]
 
 Output coordinates
@@ -92,7 +92,7 @@ V	Read Status Word1	V
 "	Error Mask		"m,
 :	Clear			:
 ;	Interface Clear		;
-BS	Buffer Size		BSs1,s2,s3,s4		Not Supported
+BS	Buffer Size		BSs1,s2,s3,s4		Not Supported	nop
 
 Graph
 
