@@ -7,18 +7,18 @@ import (
 )
 
 type Point struct {
-	X, Y int
+	X, Y float64
 }
 
 func (p Point) Add(u Point) Point {
 	return Point{p.X + u.X, p.Y + u.Y}
 }
 
-func (p Point) AddX(u int) Point {
+func (p Point) AddX(u float64) Point {
 	return Point{p.X + u, p.Y}
 }
 
-func (p Point) AddY(u int) Point {
+func (p Point) AddY(u float64) Point {
 	return Point{p.X, p.Y + u}
 }
 
