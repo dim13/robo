@@ -23,7 +23,7 @@ func (p Point) AddY(u float64) Point {
 }
 
 type Polar struct {
-	R, Theta int
+	R, Theta float64
 }
 
 type Path []Point
@@ -391,7 +391,7 @@ func (c Cutter) Curve(a int, ph Path) {
 	c.Flush()
 }
 
-func (c Cutter) Ellipse(a int, p Point, start, end Polar, theta int) {
+func (c Cutter) Ellipse(a int, p Point, start, end Polar, theta float64) {
 	c.Send(")", a, ",", p, ",", start.R, ",", end.R, ",",
 		start.Theta, ",", end.Theta, ",", theta)
 }
