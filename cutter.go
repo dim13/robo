@@ -52,6 +52,10 @@ type Path []Point
 	Usable: 4000x5440 pt
 */
 
+type Triple struct {
+	U, V, W float64
+}
+
 var (
 	A4     = Point{5440, 4000} // Portrait
 	Origin = Point{0, 0}
@@ -59,6 +63,10 @@ var (
 
 func (p Point) String() string {
 	return fmt.Sprintf("%v,%v", p.X, p.Y)
+}
+
+func (t Triple) String() string {
+	return fmt.Sprintf("%v,%v,%v", t.U, t.V, t.W)
 }
 
 type Cutter struct {
@@ -146,8 +154,12 @@ func (c Cutter) Home() {
 	c.Send("H")
 }
 
-func (c Cutter) SetOrigin() {
+func (c Cutter) SetCurrentOrigin() {
 	c.Send("FJ")
+}
+
+func (c Cutter) SetOrigin(p Point) {
+	c.Send("SO", p)
 }
 
 func (c Cutter) Draw(p Point) {
@@ -180,8 +192,8 @@ func (c Cutter) LineScale(n int) {
 	c.Send("B", n)
 }
 
-func (c Cutter) Factor(n int) {
-	c.Send("&", n, ",", n, ",", n)
+func (c Cutter) Factor(t Triple) {
+	c.Send("&", t)
 }
 
 func (c Cutter) Offset(p Point) {
@@ -220,11 +232,6 @@ func (c Cutter) MediaType(n int) {
 	c.Send("FW", n)
 }
 
-func (c Cutter) ReadUpperRight() (string, error) {
-	c.Send("U")
-	return c.readResponse()
-}
-
 // Speed 10..100 mm/s
 func (c Cutter) Speed(n int) {
 	if n >= 1 && n <= 10 {
@@ -259,6 +266,12 @@ func (c Cutter) parseDigit() (n int) {
 func (c Cutter) parsePoint() (p Point) {
 	s, _ := c.readResponse()
 	fmt.Sscanf(s, "%v,%v", &p.X, &p.Y)
+	return
+}
+
+func (c Cutter) parseTriple() (t Triple) {
+	s, _ := c.readResponse()
+	fmt.Sscanf(s, "%v,%v,%v", &t.U, &t.V, &t.W)
 	return
 }
 
@@ -394,4 +407,29 @@ func (c Cutter) Curve(a int, ph Path) {
 func (c Cutter) Ellipse(a int, p Point, start, end Polar, theta float64) {
 	c.Send(")", a, ",", p, ",", start.R, ",", end.R, ",",
 		start.Theta, ",", end.Theta, ",", theta)
+}
+
+func (c Cutter) Gin() Triple {
+	c.Send("G")
+	return c.parseTriple()
+}
+
+func (c Cutter) CallGin() Triple {
+	c.Send("C")
+	return c.parseTriple()
+}
+
+func (c Cutter) ReadOffset() Point {
+	c.Send("?")
+	return c.parsePoint()
+}
+
+func (c Cutter) ReadLowerLeft() Point {
+	c.Send("[")
+	return c.parsePoint()
+}
+
+func (c Cutter) ReadUpperRight() Point {
+	c.Send("U")
+	return c.parsePoint()
 }

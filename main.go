@@ -1,5 +1,7 @@
 package main
 
+import "fmt"
+
 func main() {
 	dev := NewDevice()
 	defer dev.Close()
@@ -18,14 +20,12 @@ func main() {
 	//fmt.Println(c.UnknownFQ5())
 	//c.Bezier(1, Point{0,0},Point{0,1000},Point{0,0},Point{1000,0})
 	//c.DrawCircles()
-	if !c.SearchMarks(Point{5240, 3800}, 400) {
-		return
-	}
 
-	for _, path := range parsePage() {
-		c.Move(path[0])
-		for _, p := range path[1:] {
-			c.Draw(p)
-		}
-	}
+	fmt.Println("Gin", c.Gin())
+	fmt.Println("Call Gin", c.CallGin())
+
+	fmt.Println("Offset", c.ReadOffset())
+	fmt.Println("Upper Right", c.ReadUpperRight())
+	fmt.Println("Lower Left", c.ReadLowerLeft())
+
 }

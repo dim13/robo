@@ -1,7 +1,7 @@
 package main
 
 func (c Cutter) TestPattern() {
-	c.Factor(100)
+	c.Factor(Triple{100, 100, 100})
 	c.Offset(Origin)
 	c.WriteLowerLeft(Origin)
 
