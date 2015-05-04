@@ -81,7 +81,7 @@ func NewCutter(io *bufio.ReadWriter, o Orientation) Cutter {
 	c.MediaType(pen.ID)
 	c.Speed(pen.Speed)
 	c.Force(pen.Thickness)
-	c.UnknownFC(pen.FC)
+	c.CutterOffset(pen.Offset)
 
 	c.TrackEnhancing(On)
 	c.UnknownFE(0)
@@ -242,7 +242,7 @@ func (c Cutter) Force(n int) {
 	c.Thickness(n)
 }
 
-func (c Cutter) UnknownFC(n int) {
+func (c Cutter) CutterOffset(n int) {
 	c.Send("FC", n)
 }
 
