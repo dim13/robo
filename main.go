@@ -27,5 +27,6 @@ func main() {
 	fmt.Println("Offset", c.ReadOffset())
 	fmt.Println("Upper Right", c.ReadUpperRight())
 	fmt.Println("Lower Left", c.ReadLowerLeft())
+	fmt.Println(c.StatusWord())
 
 }

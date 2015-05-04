@@ -433,3 +433,8 @@ func (c Cutter) ReadUpperRight() Point {
 	c.Send("U")
 	return c.parsePoint()
 }
+
+func (c Cutter) StatusWord() (string, error) {
+	c.Send("@")
+	return c.readResponse()
+}
