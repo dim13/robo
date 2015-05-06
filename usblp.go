@@ -15,7 +15,7 @@ func NewLPDevice(path string) (LPDevice, error) {
 }
 
 func (d LPDevice) Close() {
-	d.Close()
+	d.File.Close()
 }
 
 func (d LPDevice) Handle() *bufio.ReadWriter {
