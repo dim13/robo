@@ -10,8 +10,6 @@ import (
 
 type Page []Path
 
-const scale = 24.5 * 20
-
 func truncate(f float64) float64 {
 	return float64(int(f*100)) / 100
 }
@@ -21,8 +19,8 @@ func parseLine(s string) (pa Path) {
 		for _, p := range strings.Split(s[10:], " to ") {
 			var po Point
 			fmt.Sscanf(p, "%v,%v", &po.Y, &po.X)
-			po.X = truncate(5440 - po.X*scale)
-			po.Y = truncate(po.Y * scale)
+			po.X = truncate(5440 - po.X*Inch)
+			po.Y = truncate(po.Y * Inch)
 			pa = append(pa, po)
 		}
 	}

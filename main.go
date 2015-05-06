@@ -36,4 +36,8 @@ func main() {
 	fmt.Println("Lower Left", c.ReadLowerLeft())
 	//fmt.Println(c.StatusWord())
 
+	if c.SearchMarks(Point{19 * CM, 18 * CM}, 2*CM) {
+		fmt.Println("Reg Marks ok")
+	}
+
 }
