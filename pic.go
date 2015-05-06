@@ -42,9 +42,9 @@ func parsePage() (pa Page) {
 
 func (c Cutter) DrawPic(cor Point) {
 	for _, path := range parsePage() {
-		c.Move(path[0].Add(cor))
+		c.Move(cor.Sub(path[0]))
 		for _, p := range path[1:] {
-			c.Draw(p.Add(cor))
+			c.Draw(cor.Sub(p))
 		}
 	}
 }

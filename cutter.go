@@ -14,6 +14,10 @@ func (p Point) Add(u Point) Point {
 	return Point{p.X + u.X, p.Y + u.Y}
 }
 
+func (p Point) Sub(u Point) Point {
+	return Point{p.X - u.X, p.Y - u.Y}
+}
+
 func (p Point) AddX(u float64) Point {
 	return Point{p.X + u, p.Y}
 }
