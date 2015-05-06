@@ -164,8 +164,8 @@ func (c Cutter) SetCurrentOrigin() {
 	c.Send("FJ")
 }
 
-func (c Cutter) SetOrigin(p Point) {
-	c.Send("SO", p)
+func (c Cutter) SetOrigin(n int) {
+	c.Send("SO", n)
 }
 
 func (c Cutter) Draw(p Point) {
