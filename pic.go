@@ -19,8 +19,8 @@ func parseLine(s string) (pa Path) {
 		for _, p := range strings.Split(s[10:], " to ") {
 			var po Point
 			fmt.Sscanf(p, "%v,%v", &po.Y, &po.X)
-			po.X = truncate(5440 - po.X*Inch)
-			po.Y = truncate(po.Y * Inch)
+			po.X = truncate(5440 - po.X*IN)
+			po.Y = truncate(po.Y * IN)
 			pa = append(pa, po)
 		}
 	}
