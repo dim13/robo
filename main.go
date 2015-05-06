@@ -43,12 +43,7 @@ func main() {
 
 	if c.SearchMarks(Point{19 * CM, 18 * CM}) {
 		fmt.Println("Reg Marks ok")
-
-		fmt.Println("Offset", c.ReadOffset())
-		fmt.Println("Upper Right", c.ReadUpperRight())
-		fmt.Println("Lower Left", c.ReadLowerLeft())
-
-		c.DrawCircles()
+		c.DrawPic()
 	}
 
 }

@@ -29,15 +29,6 @@ func (c Cutter) DrawCircles() {
 	}
 }
 
-func (c Cutter) DrawPic() {
-	for _, path := range parsePage() {
-		c.Move(path[0])
-		for _, p := range path[1:] {
-			c.Draw(p)
-		}
-	}
-}
-
 func (c Cutter) MustMarks(p Point) {
 	if !c.SearchMarks(p) {
 		log.Fatal("marks not found")

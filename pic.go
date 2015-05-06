@@ -39,3 +39,12 @@ func parsePage() (pa Page) {
 	}
 	return pa
 }
+
+func (c Cutter) DrawPic() {
+	for _, path := range parsePage() {
+		c.Move(path[0])
+		for _, p := range path[1:] {
+			c.Draw(p)
+		}
+	}
+}
