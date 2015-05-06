@@ -10,17 +10,13 @@ import (
 
 type Page []Path
 
-func truncate(f float64) float64 {
-	return float64(int(f*100)) / 100
-}
-
 func parseLine(s string) (pa Path) {
 	if strings.HasPrefix(s, "line from ") {
 		for _, p := range strings.Split(s[10:], " to ") {
 			var po Point
 			fmt.Sscanf(p, "%v,%v", &po.Y, &po.X)
-			po.X = truncate(po.X * IN)
-			po.Y = truncate(po.Y * IN)
+			po.X = po.X * IN
+			po.Y = po.Y * IN
 			pa = append(pa, po)
 		}
 	}

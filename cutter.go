@@ -6,32 +6,6 @@ import (
 	"time"
 )
 
-type Point struct {
-	X, Y float64
-}
-
-func (p Point) Add(u Point) Point {
-	return Point{p.X + u.X, p.Y + u.Y}
-}
-
-func (p Point) Sub(u Point) Point {
-	return Point{p.X - u.X, p.Y - u.Y}
-}
-
-func (p Point) AddX(u float64) Point {
-	return Point{p.X + u, p.Y}
-}
-
-func (p Point) AddY(u float64) Point {
-	return Point{p.X, p.Y + u}
-}
-
-type Polar struct {
-	R, Theta float64
-}
-
-type Path []Point
-
 /*
 	A4 Cutting area
 
@@ -56,28 +30,16 @@ type Path []Point
 	Usable: 4000x5440 pt
 */
 
-type Triple struct {
-	U, V, W float64
-}
-
 var (
 	A4     = Point{272 * MM, 200 * MM} // Portrait
 	Origin = Point{0, 0}
 )
 
-func (p Point) String() string {
-	return fmt.Sprintf("%v,%v", p.X, p.Y)
-}
-
-func (t Triple) String() string {
-	return fmt.Sprintf("%v,%v,%v", t.U, t.V, t.W)
-}
-
 type Cutter struct {
 	*bufio.ReadWriter
 }
 
-func NewCutter(io *bufio.ReadWriter, o Orientation, rmlen float64) Cutter {
+func NewCutter(io *bufio.ReadWriter, o Orientation, rmlen Unit) Cutter {
 	c := Cutter{io}
 	c.Initialize()
 	if !c.Ready() {
@@ -281,7 +243,7 @@ func (c Cutter) parseTriple() (t Triple) {
 	return
 }
 
-func (c Cutter) RegMarkLen(n float64) {
+func (c Cutter) RegMarkLen(n Unit) {
 	c.Send("TB51,", n)
 }
 
@@ -408,7 +370,7 @@ func (c Cutter) Curve(a int, ph Path) {
 	c.Flush()
 }
 
-func (c Cutter) Ellipse(a int, p Point, start, end Polar, theta float64) {
+func (c Cutter) Ellipse(a int, p Point, start, end Polar, theta Unit) {
 	c.Send(")", a, ",", p, ",", start.R, ",", end.R, ",",
 		start.Theta, ",", end.Theta, ",", theta)
 }
