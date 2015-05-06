@@ -225,22 +225,19 @@ func (c Cutter) UnknownFE(n int) {
 	c.Send("FE", n)
 }
 
-func (c Cutter) parseDigit() (n int) {
+func (c Cutter) parseDigit() Unit {
 	s, _ := c.readResponse()
-	fmt.Sscanf(s, "%v", &n)
-	return
+	return ScanUnit(s)
 }
 
-func (c Cutter) parsePoint() (p Point) {
+func (c Cutter) parsePoint() Point {
 	s, _ := c.readResponse()
-	fmt.Sscanf(s, "%v,%v", &p.X, &p.Y)
-	return
+	return ScanPoint(s)
 }
 
-func (c Cutter) parseTriple() (t Triple) {
+func (c Cutter) parseTriple() Triple {
 	s, _ := c.readResponse()
-	fmt.Sscanf(s, "%v,%v,%v", &t.U, &t.V, &t.W)
-	return
+	return ScanTriple(s)
 }
 
 func (c Cutter) RegMarkLen(n Unit) {
@@ -258,7 +255,7 @@ func (c Cutter) GetCalibration() Point {
 }
 
 // Emited after auto calibration
-func (c Cutter) UnknownFQ5() int {
+func (c Cutter) UnknownFQ5() Unit {
 	c.Send("FQ5")
 	return c.parseDigit()
 }
