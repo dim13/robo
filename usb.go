@@ -2,6 +2,7 @@ package main
 
 import (
 	"bufio"
+	"errors"
 	"log"
 
 	"github.com/kylelemons/gousb/usb"
@@ -42,7 +43,7 @@ func CC100(desc *usb.Descriptor) bool {
 	return false
 }
 
-func NewDevice() (d Device) {
+func NewDevice() (Device, error) {
 	ctx := usb.NewContext()
 	ctx.Debug(debug)
 	devs, err := ctx.ListDevices(CC100)
@@ -53,9 +54,9 @@ func NewDevice() (d Device) {
 		for _, dev := range devs {
 			dev.Close()
 		}
-		log.Fatal("Cannot find ", craftRobo)
+		return Device{}, errors.New("Cannot find " + craftRobo)
 	}
-	return Device{ctx, devs[0]}
+	return Device{ctx, devs[0]}, nil
 }
 
 func (d Device) Close() {
