@@ -16,6 +16,11 @@ func (u Unit) String() string {
 	return fmt.Sprintf("%.2f", u)
 }
 
+func ScanUnit(s string) (u Unit) {
+	fmt.Sscanf(s, "%v", &u)
+	return
+}
+
 type Point struct {
 	X, Y Unit
 }
@@ -24,12 +29,22 @@ func (p Point) String() string {
 	return fmt.Sprintf("%v,%v", p.X, p.Y)
 }
 
+func ScanPoint(s string) (p Point) {
+	fmt.Sscanf(s, "%v,%v", &p.X, &p.Y)
+	return
+}
+
 type Triple struct {
 	U, V, W Unit
 }
 
 func (t Triple) String() string {
 	return fmt.Sprintf("%v,%v,%v", t.U, t.V, t.W)
+}
+
+func ScanTriple(s string) (t Triple) {
+	fmt.Sscanf(s, "%v,%v,%v", &t.U, &t.V, &t.W)
+	return
 }
 
 type Polar struct {
