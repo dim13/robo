@@ -57,7 +57,7 @@ type Triple struct {
 }
 
 var (
-	A4     = Point{5440, 4000} // Portrait
+	A4     = Point{272 * MM, 200 * MM} // Portrait
 	Origin = Point{0, 0}
 )
 
@@ -73,7 +73,7 @@ type Cutter struct {
 	*bufio.ReadWriter
 }
 
-func NewCutter(io *bufio.ReadWriter, o Orientation) Cutter {
+func NewCutter(io *bufio.ReadWriter, o Orientation, rmlen float64) Cutter {
 	c := Cutter{io}
 	c.Initialize()
 	if !c.Ready() {
@@ -96,7 +96,9 @@ func NewCutter(io *bufio.ReadWriter, o Orientation) Cutter {
 
 	fmt.Println("Calibration", c.GetCalibration())
 	fmt.Println("FA", c.UnknownFA())
-
+	if rmlen > 0 {
+		c.RegMarkLen(rmlen)
+	}
 	c.Orientation(o)
 
 	return Cutter{io}
@@ -275,7 +277,7 @@ func (c Cutter) parseTriple() (t Triple) {
 	return
 }
 
-func (c Cutter) RegMarkLen(n int) {
+func (c Cutter) RegMarkLen(n float64) {
 	c.Send("TB51,", n)
 }
 
@@ -373,16 +375,14 @@ func (c Cutter) TrackEnhancing(state OnOff) {
 	c.Send("FY", state)
 }
 
-func (c Cutter) SearchMarks(p Point, l int) bool {
-	c.RegMarkLen(l)
+func (c Cutter) SearchMarks(p Point) bool {
 	c.Send("TB99")
 	c.Send("TB55,1")
 	c.Send("TB123,", p)
 	return c.parseDigit() == 0
 }
 
-func (c Cutter) ManualSearchMarks(p Point, l int) bool {
-	c.RegMarkLen(l)
+func (c Cutter) ManualSearchMarks(p Point) bool {
 	c.Send("TB99")
 	c.Send("TB55,1")
 	c.Send("TB23,", p)

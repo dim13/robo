@@ -8,6 +8,11 @@ import (
 	"github.com/kylelemons/gousb/usb"
 )
 
+type Devicer interface {
+	Close()
+	Handle() *bufio.ReadWriter
+}
+
 type Device struct {
 	ctx *usb.Context
 	dev *usb.Device
@@ -30,7 +35,7 @@ func init() {
 	usb.DefaultWriteTimeout *= 60
 }
 
-func CC100(desc *usb.Descriptor) bool {
+func cc100(desc *usb.Descriptor) bool {
 	if desc.Vendor == graphtec {
 		switch desc.Product {
 		case cc200_20, cc300_20,
@@ -43,10 +48,10 @@ func CC100(desc *usb.Descriptor) bool {
 	return false
 }
 
-func NewDevice() (Device, error) {
+func NewDevice() (Devicer, error) {
 	ctx := usb.NewContext()
 	ctx.Debug(debug)
-	devs, err := ctx.ListDevices(CC100)
+	devs, err := ctx.ListDevices(cc100)
 	if err != nil {
 		log.Fatal(err)
 	}

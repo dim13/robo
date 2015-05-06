@@ -21,8 +21,8 @@ func (c Cutter) DrawLines() {
 }
 
 func (c Cutter) DrawCircles() {
-	base := Point{3000, 2000}
-	for i := 1; i < 10; i++ {
+	base := Point{1000, 1000}
+	for i := 1; i <= 3; i++ {
 		c.Circle(base,
 			Polar{100 * float64(i), 0},
 			Polar{100 * float64(i), 3600})
@@ -39,7 +39,7 @@ func (c Cutter) DrawPic() {
 }
 
 func (c Cutter) MustMarks(p Point) {
-	if !c.SearchMarks(p, 400) {
+	if !c.SearchMarks(p) {
 		log.Fatal("marks not found")
 	}
 }
