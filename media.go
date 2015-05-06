@@ -2,14 +2,14 @@ package main
 
 import "fmt"
 
-// Offset: depends on blade, 0 for pens
+// Overcut: depends on blade, 0 for pens
 
 type Media struct {
 	Descr     string // Description
 	ID        int    // FW111
 	Speed     int    // !10
 	Thickness int    // FX10,0
-	Offset    int    // FC ?
+	Overcut   int    // FC ?
 }
 
 var MediaID = make(map[int]Media)
@@ -31,62 +31,62 @@ var Medias = []Media{
 		ID:        100,
 		Speed:     10,
 		Thickness: 27,
-		Offset:    18,
+		Overcut:   18,
 	},
 	Media{
 		Descr:     "Card with Craft Paper Backing",
 		ID:        101,
 		Speed:     10,
 		Thickness: 27,
-		Offset:    18,
+		Overcut:   18,
 	},
 	Media{
 		Descr:     "Vinyl Sticker",
 		ID:        102,
 		Speed:     10,
 		Thickness: 10,
-		Offset:    18,
+		Overcut:   18,
 	},
 	Media{
 		Descr:     "Film Labels",
 		ID:        106,
 		Speed:     10,
 		Thickness: 14,
-		Offset:    18,
+		Overcut:   18,
 	},
 	Media{
 		Descr:     "Magnetic Sheet",
 		ID:        107,
 		Speed:     10,
 		Thickness: 12,
-		Offset:    18,
+		Overcut:   18,
 	},
 	Media{
 		Descr:     "Thick Media",
 		ID:        111,
 		Speed:     10,
 		Thickness: 27,
-		Offset:    18,
+		Overcut:   18,
 	},
 	Media{
 		Descr:     "Thin Media",
 		ID:        112,
 		Speed:     10,
 		Thickness: 2,
-		Offset:    18,
+		Overcut:   18,
 	},
 	Media{
 		Descr:     "Pen",
 		ID:        113,
 		Speed:     10,
 		Thickness: 10,
-		Offset:    0,
+		Overcut:   0,
 	},
 	Media{
 		Descr:     "Custom",
 		ID:        300,
 		Speed:     10,
 		Thickness: 10,
-		Offset:    18,
+		Overcut:   18,
 	},
 }
