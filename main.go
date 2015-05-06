@@ -41,6 +41,6 @@ func main() {
 	//fmt.Println("Call Gin", c.CallGin())
 
 	//c.MustMarks(Point{19 * CM, 18 * CM})
-	c.DrawPic()
+	c.DrawPic(Point{-11 * IN, 0})
 
 }
