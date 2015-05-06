@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"log"
 	"runtime"
 )
@@ -41,9 +40,7 @@ func main() {
 	//fmt.Println("Gin", c.Gin())
 	//fmt.Println("Call Gin", c.CallGin())
 
-	if c.SearchMarks(Point{19 * CM, 18 * CM}) {
-		fmt.Println("Reg Marks ok")
-		c.DrawPic()
-	}
+	//c.MustMarks(Point{19 * CM, 18 * CM})
+	c.DrawPic()
 
 }
