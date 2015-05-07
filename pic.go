@@ -14,7 +14,7 @@ func parseLine(s string) (pa Path) {
 	if strings.HasPrefix(s, "line from ") {
 		for _, p := range strings.Split(s[10:], " to ") {
 			var po Point
-			fmt.Sscanf(p, "%v,%v", &po.Y, &po.X)
+			fmt.Sscanf(p, "%v,%v", &po.X, &po.Y)
 			po.X = po.X * IN
 			po.Y = po.Y * IN
 			pa = append(pa, po)
@@ -36,11 +36,12 @@ func parsePage() (pa Page) {
 	return pa
 }
 
-func (c Cutter) DrawPic(cor Point) {
+func (c Cutter) DrawPic() {
+	c.Orientation(Landscape)
 	for _, path := range parsePage() {
-		c.Move(cor.Sub(path[0]))
+		c.Move(path[0])
 		for _, p := range path[1:] {
-			c.Draw(cor.Sub(p))
+			c.Draw(p)
 		}
 	}
 }
