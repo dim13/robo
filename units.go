@@ -5,8 +5,9 @@ import "fmt"
 const (
 	MM = Unit(20.0)
 	CM = 10 * MM
-	DM = 10 * CM
+	M  = 100 * CM
 	IN = 25.4 * MM
+	FT = 12 * IN
 	PT = IN / 72
 )
 

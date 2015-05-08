@@ -49,7 +49,7 @@ FY		Track Enhancment
 TB50,0	...	Landcape ?
 TB50,1	...	Portrait ?
 TB51,n		Registration Marks Length
-TB55,1	...
+TB55,1	...	Type 2 reg marks ???
 TB70		Calibrate
 TB71		Get Calibration
 TB72,p		Set Calibration
