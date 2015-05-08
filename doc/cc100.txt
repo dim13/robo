@@ -1,0 +1,70 @@
+Legend
+
+n int
+p Point (x, y)
+t Tripple (u, v, w)
+
+Commands
+
+H		Home
+Dp		Draw
+Mp		Move
+Ln		Line Type
+Bn		Line Scale ?
+&t		Factor
+^p		Offset
+\p		Set Lower Left
+Zp		Set Upper Right
+!n		Speed
+
+TT		Home/CR
+SOn		Set Origin
+
+FA		Unknown
+FBn,0		Distance Correction
+FC		Overcut/Cutter Offset
+FD	...
+FE		unknown
+FF	...
+FG		Version
+FH		Test Cut
+FI	...
+FJ		Set Current Origin
+FK	...
+FL	...
+FM1	...
+FNn		Orientation
+FOp	...
+FP	...
+FQ5		unknown
+FR	...
+FS	...
+FT	...
+FUp		Cutting Area ?
+FV	...
+FW		Media Type
+FX		Thickness/Force
+FY	...
+
+TB50,0	...	Landcape ?
+TB50,1	...	Portrait ?
+TB51,n		Registration Marks Length
+TB55,1	...
+TB70		Calibrate
+TB71		Get Calibration
+TB72,p		Set Calibration
+TB99		reset Registration Marks?
+TB23,p		Search Marks Manual
+TB123,p		Search Marks Automatic
+
+BZp,p,p,p	Bezier Curve
+Wp,p,p,p,p	Circle
+Ya,p..		Curve
+)a,p,p,p,p	Ellipse
+
+G		Gin?
+C		CallGin
+?		Read Offset
+[		Read Lower Left
+U		Read Upper Right
+@		Status Word?
