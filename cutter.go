@@ -150,6 +150,9 @@ const (
 	DashLongDot
 	DashDoubleDot
 	DashLongDoubleDot
+	Custom1 // 2 args ? --a-- b --a--
+	Custom2 // 3 args ? --a-- b -c- b -c- b --a--
+	Custom3 // 3 args ? --a-- b -c- b --a--
 )
 
 func (c Cutter) LineType(n LineStyle) {
