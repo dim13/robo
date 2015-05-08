@@ -23,7 +23,7 @@ SOn		Set Origin
 FA		Unknown
 FBn,0		Distance Correction
 FC		Overcut/Cutter Offset
-FD	...
+FD		Blade Rotation Control
 FE		unknown
 FF	...
 FG		Version
@@ -35,16 +35,16 @@ FL	...
 FM1	...
 FNn		Orientation
 FOp	...
-FP	...
+FP	...	Programm/Update Firmware ?
 FQ5		unknown
-FR	...
-FS	...
+FR	...	Same as ZP ?
+FS	...	Same as F, Chart Feed ?
 FT	...
 FUp		Cutting Area ?
 FV	...
 FW		Media Type
 FX		Thickness/Force
-FY	...
+FY		Track Enhancment
 
 TB50,0	...	Landcape ?
 TB50,1	...	Portrait ?
@@ -57,6 +57,7 @@ TB99		reset Registration Marks?
 TB23,p		Search Marks Manual
 TB123,p		Search Marks Automatic
 
+BSn		Buffer Size / nop
 BZp,p,p,p	Bezier Curve
 Wp,p,p,p,p	Circle
 Ya,p..		Curve
