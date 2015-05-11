@@ -17,7 +17,7 @@ func (u Unit) String() string {
 	return fmt.Sprintf("%.2f", u)
 }
 
-func scanUnit(s string) (u Unit) {
+func NewUnit(s string) (u Unit) {
 	fmt.Sscanf(s, "%v", &u)
 	return
 }
@@ -30,7 +30,7 @@ func (p Point) String() string {
 	return fmt.Sprintf("%v,%v", p.X, p.Y)
 }
 
-func scanPoint(s string) (p Point) {
+func NewPoint(s string) (p Point) {
 	fmt.Sscanf(s, "%v,%v", &p.X, &p.Y)
 	return
 }
@@ -43,7 +43,7 @@ func (t Triple) String() string {
 	return fmt.Sprintf("%v,%v,%v", t.U, t.V, t.W)
 }
 
-func scanTriple(s string) (t Triple) {
+func NewTriple(s string) (t Triple) {
 	fmt.Sscanf(s, "%v,%v,%v", &t.U, &t.V, &t.W)
 	return
 }

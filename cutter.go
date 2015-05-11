@@ -235,17 +235,17 @@ func (c Cutter) returnString() string {
 
 func (c Cutter) returnUnit() Unit {
 	s, _ := c.GetResponse()
-	return scanUnit(s)
+	return NewUnit(s)
 }
 
 func (c Cutter) returnPoint() Point {
 	s, _ := c.GetResponse()
-	return scanPoint(s)
+	return NewPoint(s)
 }
 
 func (c Cutter) returnTriple() Triple {
 	s, _ := c.GetResponse()
-	return scanTriple(s)
+	return NewTriple(s)
 }
 
 func (c Cutter) RegMarkLen(n Unit) {
