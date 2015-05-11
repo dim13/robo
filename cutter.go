@@ -298,6 +298,11 @@ func (c Cutter) Upgrade() (bool, error) {
 	return ans == string(NUL), err
 }
 
+// Educated Guss, not tested
+func (c Cutter) EnableDebug() {
+	c.Send("FPGRFCC1")
+}
+
 // Initialize ???
 func (c Cutter) Initialize() {
 	c.Esc(4)
