@@ -1,15 +1,19 @@
 package main
 
 import (
+	"flag"
 	"log"
 	"runtime"
 )
 
+var (
+	dev Devicer
+	err error
+	cmd = flag.String("cmd", "", "command")
+)
+
 func main() {
-	var (
-		dev Devicer
-		err error
-	)
+	flag.Parse()
 
 	if runtime.GOOS == "linux" {
 		dev, err = NewLPDevice("/dev/usb/lp0")
@@ -41,6 +45,11 @@ func main() {
 	//fmt.Println("Call Gin", c.CallGin())
 
 	//c.MustMarks(Point{19 * CM, 18 * CM})
-	c.DrawPic()
+	if *cmd != "" {
+		c.Send(*cmd)
+		log.Println(c.returnString())
+	} else {
+		c.DrawPic()
+	}
 
 }

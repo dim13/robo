@@ -112,6 +112,10 @@ func (c Cutter) TestCut() {
 	c.Send("FH")
 }
 
+func (c Cutter) TestCut2() {
+	c.Send("FI")
+}
+
 // GoHome returns carret to home on same line
 func (c Cutter) GoHome() {
 	c.Send("TT")
