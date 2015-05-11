@@ -184,12 +184,12 @@ func (c Cutter) CuttingArea(p Point) {
 	c.Send("FU", p)
 }
 
-func (c Cutter) GetResponse() (string, error) {
+func (c Cutter) Response() string {
 	ans, err := c.ReadString(ETX)
 	if err != nil {
-		return "", err
+		panic(err)
 	}
-	return ans[:len(ans)-1], nil
+	return ans[:len(ans)-1]
 }
 
 // Version requests hardware version
@@ -229,23 +229,19 @@ func (c Cutter) UnknownFE(n int) {
 }
 
 func (c Cutter) returnString() string {
-	s, _ := c.GetResponse()
-	return s
+	return c.Response()
 }
 
 func (c Cutter) returnUnit() Unit {
-	s, _ := c.GetResponse()
-	return NewUnit(s)
+	return NewUnit(c.Response())
 }
 
 func (c Cutter) returnPoint() Point {
-	s, _ := c.GetResponse()
-	return NewPoint(s)
+	return NewPoint(c.Response())
 }
 
 func (c Cutter) returnTriple() Triple {
-	s, _ := c.GetResponse()
-	return NewTriple(s)
+	return NewTriple(c.Response())
 }
 
 func (c Cutter) RegMarkLen(n Unit) {
