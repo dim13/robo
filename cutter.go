@@ -233,19 +233,19 @@ func (c Cutter) returnString() string {
 	return s
 }
 
-func (c Cutter) ReadUnit() Unit {
+func (c Cutter) returnUnit() Unit {
 	s, _ := c.GetResponse()
-	return ScanUnit(s)
+	return scanUnit(s)
 }
 
 func (c Cutter) returnPoint() Point {
 	s, _ := c.GetResponse()
-	return ScanPoint(s)
+	return scanPoint(s)
 }
 
 func (c Cutter) returnTriple() Triple {
 	s, _ := c.GetResponse()
-	return ScanTriple(s)
+	return scanTriple(s)
 }
 
 func (c Cutter) RegMarkLen(n Unit) {
@@ -265,7 +265,7 @@ func (c Cutter) GetCalibration() Point {
 // Emited after auto calibration
 func (c Cutter) UnknownFQ5() Unit {
 	c.Send("FQ5")
-	return c.ReadUnit()
+	return c.returnUnit()
 }
 
 func (c Cutter) SetCalibration(p Point) {
@@ -313,7 +313,7 @@ func (c Cutter) Initialize() {
 
 func (c Cutter) Ready() bool {
 	c.Esc(5)
-	return c.ReadUnit() == 0
+	return c.returnUnit() == 0
 }
 
 func (c Cutter) Wait() {
@@ -354,14 +354,14 @@ func (c Cutter) SearchMarks(p Point) bool {
 	c.Send("TB99")
 	c.Send("TB55,1")
 	c.Send("TB123,", p)
-	return c.ReadUnit() == 0
+	return c.returnUnit() == 0
 }
 
 func (c Cutter) ManualSearchMarks(p Point) bool {
 	c.Send("TB99")
 	c.Send("TB55,1")
 	c.Send("TB23,", p)
-	return c.ReadUnit() == 0
+	return c.returnUnit() == 0
 }
 
 func (c Cutter) Circle(p Point, start, end Polar) {
