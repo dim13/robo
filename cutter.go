@@ -233,7 +233,16 @@ func (c Cutter) UnknownFE(n int) {
 }
 
 func (c Cutter) returnString() string {
-	return c.Response()
+	ch := make(chan string, 1)
+	go func() {
+		ch <- c.Response()
+	}()
+	select {
+	case s := <-ch:
+		return s
+	case <-time.After(time.Second):
+		return "no response"
+	}
 }
 
 func (c Cutter) returnUnit() Unit {
@@ -303,7 +312,7 @@ func (c Cutter) Upgrade() bool {
 
 // Educated Guss, not tested
 func (c Cutter) EnableDebug() {
-	c.Send("FPGRFCC1")
+	c.Send("FP,GRFCC1")
 }
 
 // Initialize ???
