@@ -20,8 +20,8 @@ Zp		Set Upper Right
 TT		Home/CR
 SOn		Set Origin
 
-FA		Unknown
-FBn,0		Distance Correction
+FA	...	Read Distance Correction ?
+FBn,0		Set Distance Correction
 FC		Overcut/Cutter Offset
 FD		Blade Rotation Control
 FE		unknown
