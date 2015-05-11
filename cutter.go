@@ -60,7 +60,7 @@ func NewCutter(io *bufio.ReadWriter, o Orientation, rmlen Unit) Cutter {
 	c.UnknownFE(0)
 
 	fmt.Println("Calibration", c.GetCalibration())
-	fmt.Println("FA", c.UnknownFA())
+	fmt.Println("Correction", c.DistanceCorrection())
 	if rmlen > 0 {
 		c.RegMarkLen(rmlen)
 	}
@@ -276,14 +276,14 @@ func (c Cutter) SetCalibration(p Point) {
 }
 
 // Arg: percent +/- 2.00% -> +/- 200
-func (c Cutter) DistanseCorrection(n int) {
+func (c Cutter) SetDistanseCorrection(n int) {
 	if n > 200 || n < -200 {
 		return
 	}
 	c.Send(c, "FB", n, ",0")
 }
 
-func (c Cutter) UnknownFA() Point {
+func (c Cutter) DistanceCorrection() Point {
 	c.Send("FA")
 	return c.returnPoint()
 }
