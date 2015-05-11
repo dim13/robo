@@ -48,8 +48,7 @@ func NewCutter(io *bufio.ReadWriter, o Orientation, rmlen Unit) Cutter {
 	}
 
 	c.GoHome() // Home
-	v, _ := c.Version()
-	fmt.Println(craftRobo, "Ver.", v)
+	fmt.Println(craftRobo, "Ver.", c.Version())
 
 	pen := MediaID[113]
 	c.MediaType(pen.ID)
@@ -185,7 +184,7 @@ func (c Cutter) CuttingArea(p Point) {
 	c.Send("FU", p)
 }
 
-func (c Cutter) readResponse() (string, error) {
+func (c Cutter) GetResponse() (string, error) {
 	ans, err := c.ReadString(ETX)
 	if err != nil {
 		return "", err
@@ -194,9 +193,9 @@ func (c Cutter) readResponse() (string, error) {
 }
 
 // Version requests hardware version
-func (c Cutter) Version() (string, error) {
+func (c Cutter) Version() string {
 	c.Send("FG")
-	return c.readResponse()
+	return c.returnString()
 }
 
 // MediaType (Meida ID)
@@ -229,18 +228,23 @@ func (c Cutter) UnknownFE(n int) {
 	c.Send("FE", n)
 }
 
-func (c Cutter) parseUnit() Unit {
-	s, _ := c.readResponse()
+func (c Cutter) returnString() string {
+	s, _ := c.GetResponse()
+	return s
+}
+
+func (c Cutter) ReadUnit() Unit {
+	s, _ := c.GetResponse()
 	return ScanUnit(s)
 }
 
-func (c Cutter) parsePoint() Point {
-	s, _ := c.readResponse()
+func (c Cutter) returnPoint() Point {
+	s, _ := c.GetResponse()
 	return ScanPoint(s)
 }
 
-func (c Cutter) parseTriple() Triple {
-	s, _ := c.readResponse()
+func (c Cutter) returnTriple() Triple {
+	s, _ := c.GetResponse()
 	return ScanTriple(s)
 }
 
@@ -255,13 +259,13 @@ func (c Cutter) Calibrate() {
 // Sensor position
 func (c Cutter) GetCalibration() Point {
 	c.Send("TB71")
-	return c.parsePoint()
+	return c.returnPoint()
 }
 
 // Emited after auto calibration
 func (c Cutter) UnknownFQ5() Unit {
 	c.Send("FQ5")
-	return c.parseUnit()
+	return c.ReadUnit()
 }
 
 func (c Cutter) SetCalibration(p Point) {
@@ -281,7 +285,7 @@ func (c Cutter) DistanseCorrection(n int) {
 
 func (c Cutter) UnknownFA() Point {
 	c.Send("FA")
-	return c.parsePoint()
+	return c.returnPoint()
 }
 
 // VersionUpgrade
@@ -292,10 +296,9 @@ func (c Cutter) BootUpgrade() (string, error) {
 
 // Upgrade starts update sequence
 // Send raw S-Record data after
-func (c Cutter) Upgrade() (bool, error) {
+func (c Cutter) Upgrade() bool {
 	c.Send("CC1VERUP")
-	ans, err := c.readResponse()
-	return ans == string(NUL), err
+	return c.returnString() == string(NUL)
 }
 
 // Educated Guss, not tested
@@ -310,7 +313,7 @@ func (c Cutter) Initialize() {
 
 func (c Cutter) Ready() bool {
 	c.Esc(5)
-	return c.parseUnit() == 0
+	return c.ReadUnit() == 0
 }
 
 func (c Cutter) Wait() {
@@ -351,14 +354,14 @@ func (c Cutter) SearchMarks(p Point) bool {
 	c.Send("TB99")
 	c.Send("TB55,1")
 	c.Send("TB123,", p)
-	return c.parseUnit() == 0
+	return c.ReadUnit() == 0
 }
 
 func (c Cutter) ManualSearchMarks(p Point) bool {
 	c.Send("TB99")
 	c.Send("TB55,1")
 	c.Send("TB23,", p)
-	return c.parseUnit() == 0
+	return c.ReadUnit() == 0
 }
 
 func (c Cutter) Circle(p Point, start, end Polar) {
@@ -383,30 +386,30 @@ func (c Cutter) Ellipse(a int, p Point, start, end Polar, theta Unit) {
 
 func (c Cutter) Gin() Triple {
 	c.Send("G")
-	return c.parseTriple()
+	return c.returnTriple()
 }
 
 func (c Cutter) CallGin() Triple {
 	c.Send("C")
-	return c.parseTriple()
+	return c.returnTriple()
 }
 
 func (c Cutter) ReadOffset() Point {
 	c.Send("?")
-	return c.parsePoint()
+	return c.returnPoint()
 }
 
 func (c Cutter) ReadLowerLeft() Point {
 	c.Send("[")
-	return c.parsePoint()
+	return c.returnPoint()
 }
 
 func (c Cutter) ReadUpperRight() Point {
 	c.Send("U")
-	return c.parsePoint()
+	return c.returnPoint()
 }
 
-func (c Cutter) StatusWord() (string, error) {
+func (c Cutter) StatusWord() string {
 	c.Send("@")
-	return c.readResponse()
+	return c.returnString()
 }
