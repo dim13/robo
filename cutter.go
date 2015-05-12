@@ -404,7 +404,14 @@ func (c Cutter) ManualSearchMarks(p Point) bool {
 	return c.returnUnit() == 0
 }
 
-func (c Cutter) Curve(a int, pts ...Point) {
+type PenPosition int
+
+const (
+	PenUp = iota
+	PenDown
+)
+
+func (c Cutter) Curve(a PenPosition, pts ...Point) {
 	c.Add("Y", a, ",")
 	for _, p := range pts {
 		c.Add(p, ",")
@@ -412,7 +419,7 @@ func (c Cutter) Curve(a int, pts ...Point) {
 	c.EOT()
 }
 
-func (c Cutter) CurveRelative(a int, pts ...Point) {
+func (c Cutter) CurveRelative(a PenPosition, pts ...Point) {
 	c.Add("_", a, ",")
 	for _, p := range pts {
 		c.Add(p, ",")
@@ -435,12 +442,12 @@ func (c Cutter) Circle3P(p1, p2, p3 Point) {
 	c.Send("WP", p1, ",", p2, ",", p3)
 }
 
-func (c Cutter) Ellipse(a int, p Point, start, end Polar, theta Unit) {
+func (c Cutter) Ellipse(a PenPosition, p Point, start, end Polar, theta Unit) {
 	c.Send(")", a, ",", p, ",", start.R, ",", end.R, ",",
 		start.Theta, ",", end.Theta, ",", theta)
 }
 
-func (c Cutter) Bezier(a int, p0, p1, p2, p3 Point) {
+func (c Cutter) Bezier(a PenPosition, p0, p1, p2, p3 Point) {
 	c.Send("BZ", a, ",", p0, ",", p1, ",", p2, ",", p3)
 }
 
