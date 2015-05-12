@@ -359,9 +359,17 @@ func (c Cutter) TrackEnhancing(state OnOff) {
 	c.Send("FY", state)
 }
 
-func (c Cutter) SearchMarks(p Point) bool {
+type MarksType int
+
+// probably wrong
+const (
+	Type1 MarksType = iota
+	Type2
+)
+
+func (c Cutter) SearchMarks(p Point, typ MarksType) bool {
 	c.Send("TB99")
-	c.Send("TB55,1")
+	c.Send("TB55,", typ)
 	c.Send("TB123,", p)
 	return c.returnUnit() == 0
 }

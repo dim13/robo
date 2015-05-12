@@ -27,8 +27,8 @@ func (c Cutter) DrawCircles() {
 	}
 }
 
-func (c Cutter) MustMarks(p Point) {
-	if !c.SearchMarks(p) {
+func (c Cutter) MustMarks(p Point, typ MarksType) {
+	if !c.SearchMarks(p, typ) {
 		log.Fatal("marks not found")
 	}
 }
