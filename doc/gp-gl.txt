@@ -14,10 +14,10 @@ D	Draw			Dx1,y1,x2,y2...xn,yn[t]
 E	Relative Draw		E∆x1,∆x1,∆x2,∆x2...∆xn,∆yn[t]
 M	Move			Mx,y,
 O	Relative Move		O∆x,∆y,
-MP	Move Polar		MPr,θ[t]
-DP	Drar Polar		DPr1,θ1,r2,θ2...rn,θn[t]
-EP	Relative Draw Polar	EP∆r,θ[t]
-OP	Relative Move Polar	EP∆r,∆θ[t]
+MP	Move Polar		MPr,θ[t]				nop
+DP	Drar Polar		DPr1,θ1,r2,θ2...rn,θn[t]		nop
+EP	Relative Draw Polar	EP∆r,θ[t]				nop
+OP	Relative Move Polar	EP∆r,∆θ[t]				nop
 RP	Radius Plot		EPθ,l1,l2				nop
 
 Character and symbol

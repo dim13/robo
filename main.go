@@ -44,7 +44,7 @@ func main() {
 	//fmt.Println("Gin", c.Gin())
 	//fmt.Println("Call Gin", c.CallGin())
 
-	c.MustMarks(Point{18 * CM, 19 * CM}, Type2)
+	//c.MustMarks(Point{18 * CM, 19 * CM}, Type2)
 	if *cmd != "" {
 		c.Send(*cmd)
 		log.Println(c.returnString())
