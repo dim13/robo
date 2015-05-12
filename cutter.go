@@ -9,9 +9,9 @@ import (
 /*
 	A4 Cutting area
 
-	5mm	y	5mm
+	10mm	y	10mm
 	+-----------------+
-	|  		  | 5mm
+	|  		  | 10mm
 	| +-------------+ |
 	| |		| |
 	. .		. . x
@@ -78,12 +78,16 @@ const (
 
 func (c Cutter) Add(a ...interface{}) {
 	fmt.Fprint(c, a...)
+}
+
+func (c Cutter) EOT() {
 	c.WriteByte(ETX)
+	c.Flush()
 }
 
 func (c Cutter) Send(a ...interface{}) {
 	c.Add(a...)
-	c.Flush()
+	c.EOT()
 }
 
 type StepDirection byte
@@ -134,12 +138,28 @@ func (c Cutter) SetOrigin(n int) {
 	c.Send("SO", n)
 }
 
-func (c Cutter) Draw(p Point) {
-	c.Send("D", p)
+func (c Cutter) Draw(pts ...Point) {
+	c.Add("D")
+	for _, p := range pts {
+		c.Add(p, ",")
+	}
+	c.EOT()
+}
+
+func (c Cutter) DrawRelative(pts ...Point) {
+	c.Add("E")
+	for _, p := range pts {
+		c.Add(p, ",")
+	}
+	c.EOT()
 }
 
 func (c Cutter) Move(p Point) {
 	c.Send("M", p)
+}
+
+func (c Cutter) MoveRelative(p Point) {
+	c.Send("O", p)
 }
 
 type LineStyle int
@@ -331,10 +351,6 @@ func (c Cutter) Wait() {
 	}
 }
 
-func (c Cutter) Bezier(a int, p0, p1, p2, p3 Point) {
-	c.Send("BZ", a, ",", p0, ",", p1, ",", p2, ",", p3)
-}
-
 type Orientation int
 
 const (
@@ -381,24 +397,44 @@ func (c Cutter) ManualSearchMarks(p Point) bool {
 	return c.returnUnit() == 0
 }
 
+func (c Cutter) Curve(a int, pts ...Point) {
+	c.Add("Y", a, ",")
+	for _, p := range pts {
+		c.Add(p, ",")
+	}
+	c.EOT()
+}
+
+func (c Cutter) CurveRelative(a int, pts ...Point) {
+	c.Add("_", a, ",")
+	for _, p := range pts {
+		c.Add(p, ",")
+	}
+	c.EOT()
+}
+
 func (c Cutter) Circle(p Point, start, end Polar) {
 	c.Send("W", p, ",",
 		start.R, ",", end.R, ",",
 		start.Theta, ",", end.Theta)
 }
 
-// Not supported?
-func (c Cutter) Curve(a int, ph Path) {
-	c.Add("Y", a)
-	for _, p := range ph {
-		c.Add(",", p)
-	}
-	c.Flush()
+func (c Cutter) CircleRelative(start, end Polar) {
+	c.Send("]", start.R, ",", end.R, ",",
+		start.Theta, ",", end.Theta)
+}
+
+func (c Cutter) Circle3P(p1, p2, p3 Point) {
+	c.Send("WP", p1, ",", p2, ",", p3)
 }
 
 func (c Cutter) Ellipse(a int, p Point, start, end Polar, theta Unit) {
 	c.Send(")", a, ",", p, ",", start.R, ",", end.R, ",",
 		start.Theta, ",", end.Theta, ",", theta)
+}
+
+func (c Cutter) Bezier(a int, p0, p1, p2, p3 Point) {
+	c.Send("BZ", a, ",", p0, ",", p1, ",", p2, ",", p3)
 }
 
 func (c Cutter) Gin() Triple {
