@@ -174,13 +174,20 @@ const (
 	DashLongDot
 	DashDoubleDot
 	DashLongDoubleDot
-	Custom1 // 2 args ? --a-- b --a--
+)
+
+const (
+	Custom1 LineStyle = iota + 100 // 2 args ? --a-- b --a--
 	Custom2 // 3 args ? --a-- b -c- b -c- b --a--
 	Custom3 // 3 args ? --a-- b -c- b --a--
 )
 
 func (c Cutter) LineType(n LineStyle) {
 	c.Send("L", n)
+}
+
+func (c Cutter) LineTypeCustom(down, up Unit) {
+	c.Send("L100,1", down, ",", up)
 }
 
 func (c Cutter) LineScale(n int) {
