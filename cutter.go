@@ -60,7 +60,7 @@ func NewCutter(io *bufio.ReadWriter, o Orientation, rmlen Unit) Cutter {
 	c.UnknownFE(0)
 
 	fmt.Println("Calibration", c.GetCalibration())
-	fmt.Println("Correction", c.DistanceCorrection())
+	fmt.Println("Correction ", c.DistanceCorrection())
 	if rmlen > 0 {
 		c.RegMarkLen(rmlen)
 	}
