@@ -39,5 +39,7 @@ func main() {
 	mode := cipher.NewCBCDecrypter(block, zero)
 	mode.CryptBlocks(data, data)
 
-	fmt.Print(string(data))
+	size := len(data)
+	size -= int(data[size-1:][0])
+	fmt.Print(string(data[:size]))
 }
