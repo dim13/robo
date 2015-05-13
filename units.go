@@ -14,7 +14,11 @@ const (
 type Unit float64
 
 func (u Unit) String() string {
-	return fmt.Sprintf("%.2f", u)
+	if u == Unit(int(u)) {
+		return fmt.Sprintf("%d", u)
+	} else {
+		return fmt.Sprintf("%.2f", u)
+	}
 }
 
 func NewUnit(s string) (u Unit) {
