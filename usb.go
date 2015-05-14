@@ -31,8 +31,8 @@ var (
 
 func init() {
 	// bump timeouts
-	usb.DefaultReadTimeout *= 120
-	usb.DefaultWriteTimeout *= 120
+	usb.DefaultReadTimeout *= 60
+	usb.DefaultWriteTimeout *= 300
 }
 
 func cc100(desc *usb.Descriptor) bool {
