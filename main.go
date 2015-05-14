@@ -47,7 +47,7 @@ func main() {
 	//c.MustMarks(Point{18 * CM, 19 * CM}, Type2)
 	if *cmd != "" {
 		c.Send(*cmd)
-		log.Println(c.returnString())
+		//log.Println(c.returnString())
 	} else {
 		c.DrawPic()
 	}

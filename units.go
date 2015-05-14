@@ -15,7 +15,7 @@ type Unit float64
 
 func (u Unit) String() string {
 	if u == Unit(int(u)) {
-		return fmt.Sprintf("%d", u)
+		return fmt.Sprintf("%d", int(u))
 	} else {
 		return fmt.Sprintf("%.2f", u)
 	}
