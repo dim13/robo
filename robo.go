@@ -114,7 +114,13 @@ func Home(c *bufio.Writer)      { send(c, "H") }
 func Origin(c *bufio.Writer)    { send(c, "FJ") }
 func Calibrate(c *bufio.Writer) { send(c, "TB70") }
 
-func Calibration(c *bufio.ReadWriter) Point {
-	send(c.Writer, "TB71")
+func point(c *bufio.ReadWriter, cmd string) Point {
+	send(c.Writer, cmd)
 	return NewPoint(recv(c.Reader))
 }
+
+func Calibration(c *bufio.ReadWriter) Point { return point(c, "TB71") }
+func Offset(c *bufio.ReadWriter) Point      { return point(c, "?") }
+func LowerLeft(c *bufio.ReadWriter) Point   { return point(c, "[") }
+func UpperRight(c *bufio.ReadWriter) Point  { return point(c, "U") }
+func StatusWord(c *bufio.ReadWriter) Point  { return point(c, "@") }
