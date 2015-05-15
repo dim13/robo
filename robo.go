@@ -55,6 +55,12 @@ func (ph Path) DrawRelative(c *bufio.Writer)         { ph.send(c, "E") }
 func (ph Path) Curve(c *bufio.Writer, a int)         { ph.send(c, "Y", a, ",") }
 func (ph Path) CurveRelative(c *bufio.Writer, a int) { ph.send(c, "_", a, ",") }
 
+func (ph Path) Bezier(c *bufio.Writer, a int)  { ph[0:4].send(c, "BZ", a, ",") }
+func (ph Path) Circle(c *bufio.Writer)         { ph[0:3].send(c, "W") }
+func (ph Path) CircleRelative(c *bufio.Writer) { ph[0:2].send(c, "]") }
+func (ph Path) Circle3P(c *bufio.Writer)       { ph[0:3].send(c, "]") }
+func (ph Path) Ellipse(c *bufio.Writer)        { ph[0:4].send(c, "]") }
+
 func (u Unit) send(c *bufio.Writer, a ...interface{}) {
 	fmt.Fprint(c, a[0], u)
 	for _, arg := range a[1:] {
