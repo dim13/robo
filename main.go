@@ -29,9 +29,9 @@ func main() {
 
 	handle := dev.Handle()
 
-	c := NewCutter(handle, Portrait, 0)
+	//c := NewCutter(handle, Portrait, 0)
 
-	defer c.Home()
+	defer Home(handle.Writer)
 	//defer c.LineType(Solid)
 	//c.Raw([]string{"L100,1,400,100"})
 
@@ -47,11 +47,7 @@ func main() {
 	//fmt.Println("Call Gin", c.CallGin())
 
 	//c.MustMarks(Point{18 * CM, 19 * CM}, Type2)
-	if *cmd != "" {
-		c.Send(*cmd)
-		//log.Println(c.returnString())
-	} else {
-		PrintStdin(handle.Writer)
-		//DrawPic(handle.Writer)
-	}
+
+	PrintStdin(handle.Writer)
+	//DrawPic(handle.Writer)
 }

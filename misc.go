@@ -1,5 +1,6 @@
 package main
 
+/*
 import "log"
 
 func (c Cutter) DrawAtom() {
@@ -32,3 +33,4 @@ func (c Cutter) MustMarks(p Point, typ MarksType) {
 		log.Fatal("marks not found")
 	}
 }
+*/

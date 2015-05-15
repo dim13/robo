@@ -143,3 +143,20 @@ func (t Triple) send(c *bufio.Writer, cmd string) {
 }
 
 func (t Triple) Factor(c *bufio.Writer) { t.send(c, "&") }
+
+func Initialize(c *bufio.ReadWriter, mid int) {
+	Init(c.Writer)
+	if !Ready(c) {
+		fmt.Println("not ready")
+	}
+	GoHome(c.Writer)
+	fmt.Println(craftRobo, "Ver.", Version(c))
+
+	/*
+		pen := MediaID[mid]
+		pen.ID.Media(c.Writer)
+		pen.Speed.Speed(c.Writer)
+		pen.Force.Force(c.Writer)
+		pen.Overcut.Overcut(c.Writer)
+	*/
+}

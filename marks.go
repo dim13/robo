@@ -1,5 +1,7 @@
 package main
 
+import "bufio"
+
 /*	Landscape		Portrait
 	+- H -+			+- W -+
 	|x1  3|			|2  1x|
@@ -30,16 +32,16 @@ package main
 	+-
 */
 
-func (c Cutter) DrawMarks(offset, size Point, length int) {
-	c.Move(Point{600, 3800})
-	c.Draw(Point{200, 3800})
-	c.Draw(Point{200, 3400})
+func DrawMarks(c *bufio.Writer, offset, size Point, length int) {
+	Point{600, 3800}.Move(c)
+	Point{200, 3800}.Draw(c)
+	Point{200, 3400}.Draw(c)
 
-	c.Move(Point{200, 600})
-	c.Draw(Point{200, 200})
-	c.Draw(Point{600, 200})
+	Point{200, 600}.Move(c)
+	Point{200, 200}.Draw(c)
+	Point{600, 200}.Draw(c)
 
-	c.Move(Point{4840, 200})
-	c.Draw(Point{5240, 200})
-	c.Draw(Point{5240, 600})
+	Point{4840, 200}.Move(c)
+	Point{5240, 200}.Draw(c)
+	Point{5240, 600}.Draw(c)
 }
