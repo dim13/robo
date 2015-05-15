@@ -8,11 +8,6 @@ import (
 	"github.com/kylelemons/gousb/usb"
 )
 
-type Devicer interface {
-	Close()
-	Handle() *bufio.ReadWriter
-}
-
 type USB struct {
 	ctx *usb.Context
 	dev *usb.Device
