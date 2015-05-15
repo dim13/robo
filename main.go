@@ -27,7 +27,9 @@ func main() {
 
 	defer dev.Close()
 
-	c := NewCutter(dev.Handle(), Portrait, 0)
+	handle := dev.Handle()
+
+	c := NewCutter(handle, Portrait, 0)
 
 	defer c.Home()
 	//defer c.LineType(Solid)
@@ -49,16 +51,7 @@ func main() {
 		c.Send(*cmd)
 		//log.Println(c.returnString())
 	} else {
-//		c.PrintStdin()
-		//c.DrawPic()
+		PrintStdin(handle.Writer)
+		//DrawPic(handle.Writer)
 	}
-	//Point{100, 200}.Move(c.Writer)
-	//Point{100, 1000}.Draw(c.Writer)
-	Path{
-		Point{1000, 1000},
-		Point{1000, 2000},
-		Point{2000, 1000},
-		Point{2000, 2000},
-	}.Curve(c.Writer, 1)
-	log.Println(Version(c.ReadWriter))
 }

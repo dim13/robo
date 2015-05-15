@@ -36,12 +36,10 @@ func parsePage() (pa Page) {
 	return pa
 }
 
-func (c Cutter) DrawPic() {
-	c.Orientation(Landscape)
-	for _, path := range parsePage() {
-		c.Move(path[0])
-		for _, p := range path[1:] {
-			c.Draw(p)
-		}
+func DrawPic(c *bufio.Writer) {
+	Landscape.Orientation(c)
+	for _, p := range parsePage() {
+		p[0].Move(c)
+		p[1:].Draw(c)
 	}
 }
