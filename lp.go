@@ -5,20 +5,20 @@ import (
 	"os"
 )
 
-type LPDevice struct {
+type LP struct {
 	*os.File
 }
 
-func NewLPDevice(path string) (Devicer, error) {
+func NewLP(path string) (Devicer, error) {
 	f, err := os.OpenFile(path, os.O_RDWR, 0666)
-	return LPDevice{f}, err
+	return LP{f}, err
 }
 
-func (d LPDevice) Close() {
+func (d LP) Close() {
 	d.File.Close()
 }
 
-func (d LPDevice) Handle() *bufio.ReadWriter {
+func (d LP) Handle() *bufio.ReadWriter {
 	r := bufio.NewReader(d.File)
 	w := bufio.NewWriter(d.File)
 	return bufio.NewReadWriter(r, w)

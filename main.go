@@ -16,9 +16,9 @@ func main() {
 	flag.Parse()
 
 	if runtime.GOOS == "linux" {
-		dev, err = NewLPDevice("/dev/usb/lp0")
+		dev, err = NewLP("/dev/usb/lp0")
 	} else {
-		dev, err = NewDevice()
+		dev, err = NewUSB()
 	}
 
 	if err != nil {

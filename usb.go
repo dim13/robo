@@ -13,7 +13,7 @@ type Devicer interface {
 	Handle() *bufio.ReadWriter
 }
 
-type Device struct {
+type USB struct {
 	ctx *usb.Context
 	dev *usb.Device
 }
@@ -48,7 +48,7 @@ func cc100(desc *usb.Descriptor) bool {
 	return false
 }
 
-func NewDevice() (Devicer, error) {
+func NewUSB() (USB, error) {
 	ctx := usb.NewContext()
 	ctx.Debug(debug)
 	devs, err := ctx.ListDevices(cc100)
@@ -59,17 +59,17 @@ func NewDevice() (Devicer, error) {
 		for _, dev := range devs {
 			dev.Close()
 		}
-		return Device{}, errors.New("Cannot find " + craftRobo)
+		return USB{}, errors.New("Cannot find " + craftRobo)
 	}
-	return Device{ctx, devs[0]}, nil
+	return USB{ctx, devs[0]}, nil
 }
 
-func (d Device) Close() {
+func (d USB) Close() {
 	d.dev.Close()
 	d.ctx.Close()
 }
 
-func (d Device) Handle() *bufio.ReadWriter {
+func (d USB) Handle() *bufio.ReadWriter {
 	var (
 		r *bufio.Reader
 		w *bufio.Writer
