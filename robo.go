@@ -119,8 +119,26 @@ func point(c *bufio.ReadWriter, cmd string) Point {
 	return NewPoint(recv(c.Reader))
 }
 
-func Calibration(c *bufio.ReadWriter) Point { return point(c, "TB71") }
-func Offset(c *bufio.ReadWriter) Point      { return point(c, "?") }
-func LowerLeft(c *bufio.ReadWriter) Point   { return point(c, "[") }
-func UpperRight(c *bufio.ReadWriter) Point  { return point(c, "U") }
-func StatusWord(c *bufio.ReadWriter) Point  { return point(c, "@") }
+func Calibration(c *bufio.ReadWriter) Point        { return point(c, "TB71") }
+func Offset(c *bufio.ReadWriter) Point             { return point(c, "?") }
+func LowerLeft(c *bufio.ReadWriter) Point          { return point(c, "[") }
+func UpperRight(c *bufio.ReadWriter) Point         { return point(c, "U") }
+func StatusWord(c *bufio.ReadWriter) Point         { return point(c, "@") }
+func DistanceCorrection(c *bufio.ReadWriter) Point { return point(c, "FA") }
+
+func (o Orientation) Orientation(c *bufio.Writer) { send(c, "FN", o) }
+
+func triple(c *bufio.ReadWriter, cmd string) Triple {
+	send(c.Writer, cmd)
+	return NewTriple(recv(c.Reader))
+}
+
+func Gin(c *bufio.ReadWriter) Triple { return triple(c, "G") }
+func CallGin(c *bufio.ReadWriter) Triple { return triple(c, "C") }
+
+func (t Triple) send(c *bufio.Writer, cmd string) {
+	fmt.Fprint(c, cmd, t)
+	etx(c)
+}
+
+func (t Triple) Factor(c *bufio.Writer) { t.send(c, "&") }
