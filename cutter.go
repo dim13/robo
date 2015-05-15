@@ -270,15 +270,15 @@ func (c Cutter) returnString() string {
 }
 
 func (c Cutter) returnUnit() Unit {
-	return NewUnit(c.Response())
+	return parseUnit(c.Response())
 }
 
 func (c Cutter) returnPoint() Point {
-	return NewPoint(c.Response())
+	return parsePoint(c.Response())
 }
 
 func (c Cutter) returnTriple() Triple {
-	return NewTriple(c.Response())
+	return parseTriple(c.Response())
 }
 
 func (c Cutter) RegMarkLen(n Unit) {

@@ -87,7 +87,7 @@ func Init(c *bufio.Writer) { esc(c, 4) }
 
 func Ready(c *bufio.ReadWriter) bool {
 	esc(c.Writer, 5)
-	return NewUnit(recv(c.Reader)) == 0
+	return parseUnit(recv(c.Reader)) == 0
 }
 
 func recv(c *bufio.Reader) string {
@@ -115,7 +115,7 @@ func Calibrate(c *bufio.Writer) { send(c, "TB70") }
 
 func point(c *bufio.ReadWriter, cmd string) Point {
 	send(c.Writer, cmd)
-	return NewPoint(recv(c.Reader))
+	return parsePoint(recv(c.Reader))
 }
 
 func Calibration(c *bufio.ReadWriter) Point        { return point(c, "TB71") }
@@ -131,7 +131,7 @@ func (p Point) LineStyle(c *bufio.Writer)         { p.send(c, "L100,1,") }
 
 func triple(c *bufio.ReadWriter, cmd string) Triple {
 	send(c.Writer, cmd)
-	return NewTriple(recv(c.Reader))
+	return parseTriple(recv(c.Reader))
 }
 
 func Gin(c *bufio.ReadWriter) Triple     { return triple(c, "G") }
