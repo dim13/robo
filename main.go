@@ -49,6 +49,7 @@ func main() {
 	//c.MustMarks(Point{18 * CM, 19 * CM}, Type2)
 
 	Initialize(handle, 113, Portrait)
+	A4.UpperRight(handle.Writer)
 	PrintStdin(handle.Writer)
 	//DrawPic(handle.Writer)
 }

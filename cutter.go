@@ -30,8 +30,6 @@ import (
 	Usable: 4000x5440 pt
 */
 
-var A4 = Point{272 * MM, 200 * MM} // Portrait
-
 type Cutter struct {
 	*bufio.ReadWriter
 }
@@ -158,20 +156,6 @@ func (c Cutter) Move(p Point) {
 func (c Cutter) MoveRelative(p Point) {
 	c.Send("O", p)
 }
-
-type LineStyle int
-
-const (
-	Solid LineStyle = iota
-	Dots
-	ShortDash
-	Dash
-	LongDash
-	DashDot
-	DashLongDot
-	DashDoubleDot
-	DashLongDoubleDot
-)
 
 const (
 	Custom1 LineStyle = iota + 100 // 2 args ? --a-- b --a--
@@ -354,13 +338,6 @@ func (c Cutter) Wait() {
 		time.Sleep(100 * time.Millisecond)
 	}
 }
-
-type Orientation int
-
-const (
-	Portrait Orientation = iota
-	Landscape
-)
 
 func (c Cutter) Orientation(l Orientation) {
 	c.Send("FN", l)

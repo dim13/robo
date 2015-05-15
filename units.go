@@ -11,6 +11,8 @@ const (
 	PT = IN / 72
 )
 
+var A4 = Point{272 * MM, 200 * MM}
+
 type Unit float64
 
 func (u Unit) String() string {

@@ -127,9 +127,31 @@ func UpperRight(c *bufio.ReadWriter) Point         { return point(c, "U") }
 func StatusWord(c *bufio.ReadWriter) Point         { return point(c, "@") }
 func DistanceCorrection(c *bufio.ReadWriter) Point { return point(c, "FA") }
 
+type Orientation int
+
+const (
+	Portrait Orientation = iota
+	Landscape
+)
+
 func (o Orientation) Orientation(c *bufio.Writer) { send(c, "FN", o) }
-func (l LineStyle) LineStyle(c *bufio.Writer)     { send(c, "L", l) }
-func (p Point) LineStyle(c *bufio.Writer)         { p.send(c, "L100,1,") }
+
+type LineStyle int
+
+const (
+	Solid LineStyle = iota
+	Dots
+	ShortDash
+	Dash
+	LongDash
+	DashDot
+	DashLongDot
+	DashDoubleDot
+	DashLongDoubleDot
+)
+
+func (l LineStyle) LineStyle(c *bufio.Writer) { send(c, "L", l) }
+func (p Point) LineStyle(c *bufio.Writer)     { p.send(c, "L100,1,") }
 
 func triple(c *bufio.ReadWriter, cmd string) Triple {
 	send(c.Writer, cmd)
