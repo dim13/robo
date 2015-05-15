@@ -2,8 +2,8 @@ package main
 
 func (c Cutter) TestPattern() {
 	c.Factor(Triple{100, 100, 100})
-	c.Offset(Origin)
-	c.WriteLowerLeft(Origin)
+	c.Offset(Point{0, 0})
+	c.WriteLowerLeft(Point{0, 0})
 
 	c.Move(Point{510, 637})
 	c.Bezier(1, Point{510, 637}, Point{439, 637},
@@ -27,5 +27,5 @@ func (c Cutter) TestPattern() {
 	c.Move(Point{510, 1018})
 	c.Draw(Point{510, 2})
 
-	c.Move(Origin)
+	c.Move(Point{0, 0})
 }

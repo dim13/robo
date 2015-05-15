@@ -108,3 +108,13 @@ func Version(c *bufio.ReadWriter) string {
 	send(c.Writer, "FG")
 	return recv(c.Reader)
 }
+
+func GoHome(c *bufio.Writer)    { send(c, "TT") }
+func Home(c *bufio.Writer)      { send(c, "H") }
+func Origin(c *bufio.Writer)    { send(c, "FJ") }
+func Calibrate(c *bufio.Writer) { send(c, "TB70") }
+
+func Calibration(c *bufio.ReadWriter) Point {
+	send(c.Writer, "TB71")
+	return NewPoint(recv(c.Reader))
+}

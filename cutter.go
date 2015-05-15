@@ -30,10 +30,7 @@ import (
 	Usable: 4000x5440 pt
 */
 
-var (
-	A4     = Point{272 * MM, 200 * MM} // Portrait
-	Origin = Point{0, 0}
-)
+var A4 = Point{272 * MM, 200 * MM} // Portrait
 
 type Cutter struct {
 	*bufio.ReadWriter
@@ -178,8 +175,8 @@ const (
 
 const (
 	Custom1 LineStyle = iota + 100 // 2 args ? --a-- b --a--
-	Custom2 // 3 args ? --a-- b -c- b -c- b --a--
-	Custom3 // 3 args ? --a-- b -c- b --a--
+	Custom2                        // 3 args ? --a-- b -c- b -c- b --a--
+	Custom3                        // 3 args ? --a-- b -c- b --a--
 )
 
 func (c Cutter) LineType(n LineStyle) {
