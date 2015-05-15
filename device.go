@@ -2,7 +2,7 @@ package main
 
 import "bufio"
 
-type Devicer interface {
+type Device interface {
 	Close()
 	Handle() *bufio.ReadWriter
 }

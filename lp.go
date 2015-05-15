@@ -9,7 +9,7 @@ type LP struct {
 	*os.File
 }
 
-func NewLP(path string) (Devicer, error) {
+func NewLP(path string) (LP, error) {
 	f, err := os.OpenFile(path, os.O_RDWR, 0666)
 	return LP{f}, err
 }

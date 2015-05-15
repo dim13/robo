@@ -7,7 +7,7 @@ import (
 )
 
 var (
-	dev Devicer
+	dev Device
 	err error
 	cmd = flag.String("cmd", "", "command")
 )
