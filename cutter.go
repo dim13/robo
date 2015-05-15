@@ -50,7 +50,7 @@ func NewCutter(io *bufio.ReadWriter, o Orientation, rmlen Unit) Cutter {
 	pen := MediaID[113]
 	c.MediaType(pen.ID)
 	c.Speed(pen.Speed)
-	c.Force(pen.Thickness)
+	c.Force(pen.Force)
 	c.Overcut(pen.Overcut)
 
 	c.TrackEnhancing(On)

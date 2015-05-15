@@ -48,6 +48,7 @@ func main() {
 
 	//c.MustMarks(Point{18 * CM, 19 * CM}, Type2)
 
+	Initialize(handle, 113, Portrait)
 	PrintStdin(handle.Writer)
 	//DrawPic(handle.Writer)
 }

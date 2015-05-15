@@ -74,6 +74,8 @@ func (u Unit) Force(c *bufio.Writer)              { u.send(c, "FX") }
 func (u Unit) Overcut(c *bufio.Writer)            { u.send(c, "FC") }
 func (u Unit) UnknownFE(c *bufio.Writer)          { u.send(c, "FE") }
 func (u Unit) DistanceCorrection(c *bufio.Writer) { u.send(c, "FB", ",0") }
+func (u Unit) TrackEnhancing(c *bufio.Writer)     { u.send(c, "FY") }
+func (u Unit) RegMarkLen(c *bufio.Writer)         { u.send(c, "TB55,") }
 
 func esc(c *bufio.Writer, bytes ...byte) {
 	c.WriteByte(ESC)
@@ -144,7 +146,7 @@ func (t Triple) send(c *bufio.Writer, cmd string) {
 
 func (t Triple) Factor(c *bufio.Writer) { t.send(c, "&") }
 
-func Initialize(c *bufio.ReadWriter, mid int) {
+func Initialize(c *bufio.ReadWriter, mid int, o Orientation) {
 	Init(c.Writer)
 	if !Ready(c) {
 		fmt.Println("not ready")
@@ -152,11 +154,12 @@ func Initialize(c *bufio.ReadWriter, mid int) {
 	GoHome(c.Writer)
 	fmt.Println(craftRobo, "Ver.", Version(c))
 
-	/*
-		pen := MediaID[mid]
-		pen.ID.Media(c.Writer)
-		pen.Speed.Speed(c.Writer)
-		pen.Force.Force(c.Writer)
-		pen.Overcut.Overcut(c.Writer)
-	*/
+	if pen, ok := MediaID[mid]; ok {
+		pen.Apply(c.Writer)
+	}
+
+	Unit(0).TrackEnhancing(c.Writer)
+	Unit(0).UnknownFE(c.Writer)
+	Unit(400).RegMarkLen(c.Writer)
+	o.Orientation(c.Writer)
 }
