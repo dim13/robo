@@ -67,7 +67,6 @@ func (u Unit) send(c *bufio.Writer, a ...interface{}) {
 }
 
 func (u Unit) Origin(c *bufio.Writer)             { u.send(c, "SO") }
-func (u Unit) LineType(c *bufio.Writer)           { u.send(c, "L") }
 func (u Unit) LineScale(c *bufio.Writer)          { u.send(c, "B") }
 func (u Unit) Media(c *bufio.Writer)              { u.send(c, "FW") }
 func (u Unit) Speed(c *bufio.Writer)              { u.send(c, "!") }
@@ -127,6 +126,8 @@ func StatusWord(c *bufio.ReadWriter) Point         { return point(c, "@") }
 func DistanceCorrection(c *bufio.ReadWriter) Point { return point(c, "FA") }
 
 func (o Orientation) Orientation(c *bufio.Writer) { send(c, "FN", o) }
+func (l LineStyle) LineStyle(c *bufio.Writer)     { send(c, "L", l) }
+func (p Point) LineStyle(c *bufio.Writer)         { p.send(c, "L100,1,") }
 
 func triple(c *bufio.ReadWriter, cmd string) Triple {
 	send(c.Writer, cmd)
