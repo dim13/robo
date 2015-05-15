@@ -5,6 +5,13 @@ import (
 	"fmt"
 )
 
+const (
+	NUL = 0x00
+	ETX = 0x03 // End of Text
+	ESC = 0x1B // Escape
+	FS  = 0x1C // File Separator
+)
+
 func etx(c *bufio.Writer) {
 	c.WriteByte(ETX)
 	c.Flush()
@@ -28,22 +35,12 @@ func (p Point) UpperRight(c *bufio.Writer)   { p.send(c, "Z") }
 func (p Point) CuttingArea(c *bufio.Writer)  { p.send(c, "FU") }
 func (p Point) Calibration(c *bufio.Writer)  { p.send(c, "TB72,") }
 
-/*
 func (p Point) SearchMarks(c *bufio.ReadWriter) bool {
-	send(c, "TB99")
-	send(c, "TB55,1")
-	send(c, "TB123,", p)
-	return true // == 0
+	send(c.Writer, "TB99")
+	send(c.Writer, "TB55,1")
+	send(c.Writer, "TB123,", p)
+	return parseUnit(recv(c.Reader)) == 0
 }
-
-func (ph Path) send(c *bufio.Writer, cmd string) {
-	defer etx(c)
-	fmt.Fprint(c, "D")
-	for _, p := range ph {
-		fmt.Fprint(c, p, ",")
-	}
-}
-*/
 
 func (ph Path) send(c *bufio.Writer, a ...interface{}) {
 	fmt.Fprint(c, a...)
@@ -75,7 +72,7 @@ func (u Unit) Overcut(c *bufio.Writer)            { u.send(c, "FC") }
 func (u Unit) UnknownFE(c *bufio.Writer)          { u.send(c, "FE") }
 func (u Unit) DistanceCorrection(c *bufio.Writer) { u.send(c, "FB", ",0") }
 func (u Unit) TrackEnhancing(c *bufio.Writer)     { u.send(c, "FY") }
-func (u Unit) RegMarkLen(c *bufio.Writer)         { u.send(c, "TB55,") }
+func (u Unit) RegMarkLen(c *bufio.Writer)         { u.send(c, "TB51,") }
 
 func esc(c *bufio.Writer, bytes ...byte) {
 	c.WriteByte(ESC)
@@ -114,6 +111,8 @@ func GoHome(c *bufio.Writer)    { send(c, "TT") }
 func Home(c *bufio.Writer)      { send(c, "H") }
 func Origin(c *bufio.Writer)    { send(c, "FJ") }
 func Calibrate(c *bufio.Writer) { send(c, "TB70") }
+func TestCut(c *bufio.Writer)   { send(c, "FH") }
+func TestLoop(c *bufio.Writer)  { send(c, "FI") }
 
 func point(c *bufio.ReadWriter, cmd string) Point {
 	send(c.Writer, cmd)

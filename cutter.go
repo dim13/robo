@@ -64,13 +64,6 @@ func NewCutter(io *bufio.ReadWriter, o Orientation, rmlen Unit) Cutter {
 	return Cutter{io}
 }
 
-const (
-	NUL = 0x00
-	ETX = 0x03 // End of Text
-	ESC = 0x1B // Escape
-	FS  = 0x1C // File Separator
-)
-
 func (c Cutter) Add(a ...interface{}) {
 	fmt.Fprint(c, a...)
 }
