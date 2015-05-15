@@ -1,4 +1,4 @@
-package main
+package robo
 
 func (c Cutter) TestPattern() {
 	c.Factor(Triple{100, 100, 100})

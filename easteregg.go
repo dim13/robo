@@ -1,4 +1,4 @@
-package main
+package robo
 
 // found in firmware V2.30
 var easteregg = []string{
