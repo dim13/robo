@@ -133,7 +133,7 @@ func triple(c *bufio.ReadWriter, cmd string) Triple {
 	return NewTriple(recv(c.Reader))
 }
 
-func Gin(c *bufio.ReadWriter) Triple { return triple(c, "G") }
+func Gin(c *bufio.ReadWriter) Triple     { return triple(c, "G") }
 func CallGin(c *bufio.ReadWriter) Triple { return triple(c, "C") }
 
 func (t Triple) send(c *bufio.Writer, cmd string) {
