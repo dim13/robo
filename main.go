@@ -49,7 +49,16 @@ func main() {
 		c.Send(*cmd)
 		//log.Println(c.returnString())
 	} else {
-		c.DrawPic()
+//		c.PrintStdin()
+		//c.DrawPic()
 	}
-
+	//Point{100, 200}.Move(c.Writer)
+	//Point{100, 1000}.Draw(c.Writer)
+	Path{
+		Point{1000, 1000},
+		Point{1000, 2000},
+		Point{2000, 1000},
+		Point{2000, 2000},
+	}.Curve(c.Writer, 1)
+	log.Println(Version(c.ReadWriter))
 }
