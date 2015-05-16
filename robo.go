@@ -190,6 +190,7 @@ func Initialize(c *bufio.ReadWriter, mid int, o Orientation) {
 	if !Ready(c) {
 		fmt.Println("not ready")
 	}
+
 	GoHome(c.Writer)
 	fmt.Println(craftRobo, "Ver.", Version(c))
 
@@ -199,6 +200,10 @@ func Initialize(c *bufio.ReadWriter, mid int, o Orientation) {
 
 	Unit(0).TrackEnhancing(c.Writer)
 	Unit(0).UnknownFE(c.Writer)
+
+	fmt.Println("Calibration", Calibration(c))
+	fmt.Println("Correction ", DistanceCorrection(c))
+
 	Unit(400).RegMarkLen(c.Writer)
 	o.Orientation(c.Writer)
 }
