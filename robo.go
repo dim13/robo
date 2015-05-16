@@ -126,11 +126,6 @@ func Raw(c *bufio.Writer, a ...interface{}) {
 	}
 }
 
-func Version(c *bufio.ReadWriter) string {
-	send(c.Writer, "FG")
-	return recv(c.Reader)
-}
-
 func GoHome(c *bufio.Writer)    { send(c, "TT") }
 func Home(c *bufio.Writer)      { send(c, "H") }
 func Origin(c *bufio.Writer)    { send(c, "FJ") }
@@ -147,8 +142,15 @@ func Calibration(c *bufio.ReadWriter) Point        { return point(c, "TB71") }
 func Offset(c *bufio.ReadWriter) Point             { return point(c, "?") }
 func LowerLeft(c *bufio.ReadWriter) Point          { return point(c, "[") }
 func UpperRight(c *bufio.ReadWriter) Point         { return point(c, "U") }
-func StatusWord(c *bufio.ReadWriter) Point         { return point(c, "@") }
 func DistanceCorrection(c *bufio.ReadWriter) Point { return point(c, "FA") }
+
+func str(c *bufio.ReadWriter, cmd string) string {
+	send(c.Writer, cmd)
+	return recv(c.Reader)
+}
+
+func Version(c *bufio.ReadWriter) string    { return str(c, "FG") }
+func StatusWord(c *bufio.ReadWriter) string { return str(c, "@") }
 
 type Orientation int
 

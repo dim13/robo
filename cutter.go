@@ -6,30 +6,6 @@ import (
 	"time"
 )
 
-/*
-	A4 Cutting area
-
-	10mm	y	10mm
-	+-----------------+
-	|  		  | 10mm
-	| +-------------+ |
-	| |		| |
-	. .		. . x
-	. .		. .
-	. .		. .
-	| |		| |
-	| +-------------+ |
-	|  		  |
-	|  		  | 20mm
-	+-----------------+
-
-	Default size: 20000,  4000
-	1000 pt == 50 mm
-
-	A4: 210x297 mm => 4200x5940
-	Usable: 4000x5440 pt
-*/
-
 type Cutter struct {
 	*bufio.ReadWriter
 }
