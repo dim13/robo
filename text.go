@@ -21,7 +21,7 @@ func PrintStdin(c *bufio.Writer) {
 	scanner := bufio.NewScanner(os.Stdin)
 	for scanner.Scan() {
 		off = font.Print(c, scanner.Text(), off)
-		off.X += 100
+		off.X += 96
 		off.Y = 0
 	}
 	if err := scanner.Err(); err != nil {
@@ -34,7 +34,7 @@ func (f Font) Print(c *bufio.Writer, s string, off Point) Point {
 		gl, ok := f[ch]
 		if ok {
 			if off.Y+gl.W >= 4000 {
-				off.X += 100
+				off.X += 96
 				off.Y = 0
 			}
 			off.Offset(c)
