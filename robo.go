@@ -42,6 +42,13 @@ func (p Point) SearchMarks(c *bufio.ReadWriter) bool {
 	return parseUnit(recv(c.Reader)) == 0
 }
 
+func (p Point) SearchMarksManual(c *bufio.ReadWriter) bool {
+	send(c.Writer, "TB99")
+	send(c.Writer, "TB55,1")
+	send(c.Writer, "TB23,", p)
+	return parseUnit(recv(c.Reader)) == 0
+}
+
 func (ph Path) send(c *bufio.Writer, a ...interface{}) {
 	fmt.Fprint(c, a...)
 	for _, p := range ph {
@@ -195,3 +202,15 @@ func Initialize(c *bufio.ReadWriter, mid int, o Orientation) {
 	Unit(400).RegMarkLen(c.Writer)
 	o.Orientation(c.Writer)
 }
+
+type StepDirection byte
+
+const (
+	StepStop StepDirection = 1 << iota >> 1
+	StepDown
+	StepUp
+	StepRight
+	StepLeft
+)
+
+func (s StepDirection) Step(c *bufio.Writer) { esc(c, NUL, byte(s)) }

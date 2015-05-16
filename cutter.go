@@ -78,16 +78,6 @@ func (c Cutter) Send(a ...interface{}) {
 	c.EOT()
 }
 
-type StepDirection byte
-
-const (
-	StepStop StepDirection = 1 << iota >> 1
-	StepDown
-	StepUp
-	StepRight
-	StepLeft
-)
-
 func (c Cutter) Esc(bytes ...byte) {
 	c.WriteByte(ESC)
 	for _, b := range bytes {
