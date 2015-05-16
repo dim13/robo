@@ -52,7 +52,7 @@ TB51,n		Registration Marks Length
 TB55,1	...	Type 2 reg marks ???
 TB70		Calibrate
 TB71		Get Calibration
-TB72,p		Set Calibration
+TB72,p		Set Calibration		40,40..-40,-40
 TB99		reset Registration Marks?
 TB23,p		Search Marks Manual
 TB123,p		Search Marks Automatic
