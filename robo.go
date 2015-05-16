@@ -227,3 +227,13 @@ const (
 )
 
 func (d Direction) Step(c *bufio.Writer) { esc(c, NUL, byte(d)) }
+
+// Untested
+func BootUpgrade(c *bufio.ReadWriter) string {
+	esc(c, 1)
+	return c.ReadString(' ')
+}
+func UpdateFirmware(c *bufio.ReadWriter) bool {
+	return str(c, "CC1VERUP") == string(NUL)
+}
+func EnableDebug(c *bufio.Writer) { send(c, "FP,GRFCC1") }
