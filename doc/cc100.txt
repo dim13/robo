@@ -69,3 +69,8 @@ C		CallGin
 [		Read Lower Left
 U		Read Upper Right
 @		Status Word?
+
+Custom Line Styles
+L100,1,a,b	--a-- b --a--
+???		--a-- b -c- b -c- b --a--
+???		--a-- b -c- b --a--
