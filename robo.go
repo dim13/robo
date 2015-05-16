@@ -107,6 +107,11 @@ func Ready(c *bufio.ReadWriter) bool {
 	return parseUnit(recv(c.Reader)) == 0
 }
 
+func (u Unit) UnknownFQ(c *bufio.ReadWriter) Unit {
+	u.send(c.Writer, "FQ", u)
+	return parseUnit(recv(c.Reader))
+}
+
 func recv(c *bufio.Reader) string {
 	ans, err := c.ReadString(ETX)
 	if err != nil {
@@ -230,8 +235,9 @@ func (d Direction) Step(c *bufio.Writer) { esc(c, NUL, byte(d)) }
 
 // Untested
 func BootUpgrade(c *bufio.ReadWriter) string {
-	esc(c, 1)
-	return c.ReadString(' ')
+	esc(c.Writer, 1)
+	s, _ := c.ReadString(' ')
+	return s
 }
 func UpdateFirmware(c *bufio.ReadWriter) bool {
 	return str(c, "CC1VERUP") == string(NUL)
