@@ -39,8 +39,7 @@ func (f Font) Print(c *bufio.Writer, s string, off Point) Point {
 			}
 			off.Offset(c)
 			for _, p := range gl.S {
-				p[0].Move(c)
-				p[1:].Draw(c)
+				p.Line(c)
 			}
 			off.Y += gl.W
 		}

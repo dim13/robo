@@ -61,6 +61,11 @@ func (ph Path) Circle3P(c *bufio.Writer)       { ph[0:3].send(c, "WP") }
 func (ph Path) CircleRelative(c *bufio.Writer) { ph[0:2].send(c, "]") }
 func (ph Path) Ellipse(c *bufio.Writer)        { ph[0:4].send(c, ")") }
 
+func (ph Path) Line(c *bufio.Writer) {
+	ph[0].Move(c)
+	ph[1:].Draw(c)
+}
+
 func (u Unit) send(c *bufio.Writer, a ...interface{}) {
 	fmt.Fprint(c, a[0], u)
 	for _, arg := range a[1:] {

@@ -39,7 +39,6 @@ func parsePage() (pa Page) {
 func DrawPic(c *bufio.Writer) {
 	Landscape.Orientation(c)
 	for _, p := range parsePage() {
-		p[0].Move(c)
-		p[1:].Draw(c)
+		p.Line(c)
 	}
 }
