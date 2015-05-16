@@ -42,6 +42,8 @@ func (f Font) Print(c *bufio.Writer, s string, off Point) Point {
 				p.Line(c)
 			}
 			off.Y += gl.W
+		} else if ch == '\t' {
+			off.Y += f[' '].W * 8
 		}
 	}
 	return off
