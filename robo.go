@@ -49,6 +49,17 @@ func (p Point) SearchMarksManual(c *bufio.ReadWriter) bool {
 	return parseUnit(recv(c.Reader)) == 0
 }
 
+func (p Point) Scale(f Unit) Point {
+	return Point{p.X * f, p.Y * f}
+}
+
+func (ph Path) Scale(f Unit) (ret Path) {
+	for _, p := range ph {
+		ret = append(ret, p.Scale(f))
+	}
+	return
+}
+
 func (ph Path) send(c *bufio.Writer, a ...interface{}) {
 	fmt.Fprint(c, a...)
 	for _, p := range ph {
