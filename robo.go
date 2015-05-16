@@ -203,14 +203,14 @@ func Initialize(c *bufio.ReadWriter, mid int, o Orientation) {
 	o.Orientation(c.Writer)
 }
 
-type StepDirection byte
+type Direction byte
 
 const (
-	StepStop StepDirection = 1 << iota >> 1
-	StepDown
-	StepUp
-	StepRight
-	StepLeft
+	Stop Direction = 1 << iota >> 1
+	Down
+	Up
+	Right
+	Left
 )
 
-func (s StepDirection) Step(c *bufio.Writer) { esc(c, NUL, byte(s)) }
+func (d Direction) Step(c *bufio.Writer) { esc(c, NUL, byte(d)) }

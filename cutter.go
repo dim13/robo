@@ -86,9 +86,9 @@ func (c Cutter) Esc(bytes ...byte) {
 	c.Flush()
 }
 
-func (c Cutter) Step(dir StepDirection) {
-	c.Esc(NUL, byte(dir))
-}
+//func (c Cutter) Step(dir StepDirection) {
+//	c.Esc(NUL, byte(dir))
+//}
 
 func (c Cutter) TestCut() {
 	c.Send("FH")
