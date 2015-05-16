@@ -11,6 +11,6 @@ func main() {
 
 	robo.Initialize(handle, 113, robo.Portrait)
 	robo.A4.UpperRight(handle.Writer)
+	robo.Triple{100, 100, 100}.Factor(handle.Writer)
 	robo.PrintStdin(handle.Writer)
-	//robo.DrawPic(handle.Writer)
 }
