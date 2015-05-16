@@ -120,6 +120,12 @@ func send(c *bufio.Writer, a ...interface{}) {
 	etx(c)
 }
 
+func Raw(c *bufio.Writer, a ...interface{}) {
+	for _, cmd := range a {
+		send(c, cmd)
+	}
+}
+
 func Version(c *bufio.ReadWriter) string {
 	send(c.Writer, "FG")
 	return recv(c.Reader)
