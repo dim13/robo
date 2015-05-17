@@ -172,7 +172,10 @@ const (
 	Landscape
 )
 
-func (o Orientation) Orientation(c *bufio.Writer) { send(c, "FN", o) }
+func (o Orientation) Orientation(c *bufio.Writer) {
+	orientation = o
+	send(c, "FN", o)
+}
 
 type LineStyle int
 
