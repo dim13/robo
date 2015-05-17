@@ -35,17 +35,14 @@ func (p Point) UpperRight(c *bufio.Writer)   { p.send(c, "Z") }
 func (p Point) CuttingArea(c *bufio.Writer)  { p.send(c, "FU") }
 func (p Point) Calibration(c *bufio.Writer)  { p.send(c, "TB72,") }
 
-func (p Point) SearchMarks(c *bufio.ReadWriter) bool {
+func (p Point) SearchMarks(c *bufio.ReadWriter, auto bool) bool {
 	send(c.Writer, "TB99")
 	send(c.Writer, "TB55,1")
-	send(c.Writer, "TB123,", p)
-	return parseUnit(recv(c.Reader)) == 0
-}
-
-func (p Point) SearchMarksManual(c *bufio.ReadWriter) bool {
-	send(c.Writer, "TB99")
-	send(c.Writer, "TB55,1")
-	send(c.Writer, "TB23,", p)
+	if auto {
+		send(c.Writer, "TB123,", p)
+	} else {
+		send(c.Writer, "TB23,", p)
+	}
 	return parseUnit(recv(c.Reader)) == 0
 }
 
