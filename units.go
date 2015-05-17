@@ -54,24 +54,4 @@ func parseTriple(s string) (t Triple) {
 	return
 }
 
-type Polar struct {
-	R, Theta Unit
-}
-
 type Path []Point
-
-func (p Point) Add(u Point) Point {
-	return Point{p.X + u.X, p.Y + u.Y}
-}
-
-func (p Point) Sub(u Point) Point {
-	return Point{p.X - u.X, p.Y - u.Y}
-}
-
-func (p Point) AddX(u Unit) Point {
-	return Point{p.X + u, p.Y}
-}
-
-func (p Point) AddY(u Unit) Point {
-	return Point{p.X, p.Y + u}
-}
