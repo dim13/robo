@@ -34,12 +34,14 @@ type Point struct {
 
 var orientation = Portrait
 
-func (p Point) String() string {
-	if orientation == Portrait {
-		return fmt.Sprintf("%v,%v", p.X, p.Y)
-	} else {
-		return fmt.Sprintf("%v,%v", p.Y, p.X)
+func (p Point) String() (s string) {
+	switch orientation {
+	case Portrait:
+		s = fmt.Sprintf("%v,%v", p.X, p.Y)
+	case Landscape:
+		s = fmt.Sprintf("%v,%v", p.Y, p.X)
 	}
+	return
 }
 
 func parsePoint(s string) (p Point) {
