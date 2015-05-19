@@ -19,7 +19,7 @@ func (u Unit) String() string {
 	if u == Unit(int(u)) {
 		return fmt.Sprint(int(u))
 	} else {
-		return fmt.Sprintf("%.2f", u)
+		return fmt.Sprintf("%.3f", u)
 	}
 }
 
