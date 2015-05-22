@@ -45,7 +45,9 @@ func (f Font) putchar(c *bufio.Writer, s string, scale Unit, off *Point) {
 			}
 			off.Y += gl.W * scale
 		} else if ch == '\t' {
-			off.Y += f[' '].W * 8 * scale
+			tab := 8 * f['W'].W * scale // widest char
+			pos := int(off.Y / tab)
+			off.Y = Unit(pos+1) * tab
 		}
 	}
 	off.X += height * scale
