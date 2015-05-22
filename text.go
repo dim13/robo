@@ -2,8 +2,8 @@ package robo
 
 import (
 	"bufio"
+	"io"
 	"log"
-	"os"
 )
 
 type Font map[rune]Glyph
@@ -15,19 +15,19 @@ type Glyph struct {
 
 type Set []Path
 
-func PrintStdin(c *bufio.Writer, scale Unit) {
+func Print(c *bufio.Writer, in io.Reader, scale Unit) {
 	var off Point
 
-	scanner := bufio.NewScanner(os.Stdin)
+	scanner := bufio.NewScanner(in)
 	for scanner.Scan() {
-		font.printChar(c, scanner.Text(), scale, &off)
+		font.putchar(c, scanner.Text(), scale, &off)
 	}
 	if err := scanner.Err(); err != nil {
 		log.Fatal(err)
 	}
 }
 
-func (f Font) printChar(c *bufio.Writer, s string, scale Unit, off *Point) {
+func (f Font) putchar(c *bufio.Writer, s string, scale Unit, off *Point) {
 	for _, ch := range s {
 		gl, ok := f[ch]
 		if ok {
