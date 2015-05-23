@@ -1,28 +1,29 @@
 package robo
 
-import (
-	"bufio"
-	"log"
-	"runtime"
-)
+import "bufio"
 
 type Device interface {
 	Close()
 	Handle() *bufio.ReadWriter
 }
 
+var devices = []string{
+	"/dev/usb/lp0", // Linux
+	"/dev/ulpt0",   // OpenBSD
+}
+
 func NewDevice() (dev Device) {
 	var err error
 
-	if runtime.GOOS == "linux" {
-		dev, err = NewLP("/dev/usb/lp0")
-	} else {
-		dev, err = NewUSB()
+	for _, d := range devices {
+		if dev, err = NewLP(d); err == nil {
+			return
+		}
 	}
 
-	if err != nil {
-		log.Fatal(err)
+	if dev, err = NewUSB(); err == nil {
+		return
 	}
 
-	return
+	panic(err)
 }
