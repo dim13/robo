@@ -14,7 +14,6 @@ type USB struct {
 }
 
 var (
-	craftRobo           = "Craft ROBO"
 	graphtec            = usb.ID(0x0b4d)
 	cc200_20            = usb.ID(0x110a)
 	cc300_20            = usb.ID(0x111a)
@@ -54,7 +53,7 @@ func NewUSB() (USB, error) {
 		for _, dev := range devs {
 			dev.Close()
 		}
-		return USB{}, errors.New("Cannot find " + craftRobo)
+		return USB{}, errors.New("Cannot find Craft ROBO")
 	}
 	return USB{ctx, devs[0]}, nil
 }

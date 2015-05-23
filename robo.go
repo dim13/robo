@@ -216,7 +216,7 @@ func Initialize(c *bufio.ReadWriter, mid int, o Orientation) {
 	}
 
 	GoHome(c.Writer)
-	fmt.Println(craftRobo, "Ver.", Version(c))
+	fmt.Println("Craft ROBO Ver.", Version(c))
 
 	if pen, ok := MediaID[mid]; ok {
 		pen.Apply(c.Writer)
