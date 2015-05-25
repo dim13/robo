@@ -37,11 +37,8 @@ func (f Font) putchar(c *bufio.Writer, s string, scale Unit, off *Point) {
 			}
 			off.Offset(c)
 			for _, p := range gl.S {
-				if scale > 10 {
-					p.Scale(scale).Curve(c, 0)
-				} else {
-					p.Scale(scale).Line(c)
-				}
+				p.Scale(scale).Line(c)
+				//p.Scale(scale).Curve(c, 0)
 			}
 			off.Y += gl.W * scale
 		} else if ch == '\t' {
