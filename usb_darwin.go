@@ -15,10 +15,11 @@ type USB struct {
 
 var (
 	graphtec            = usb.ID(0x0b4d)
-	cc200_20            = usb.ID(0x110a)
-	cc300_20            = usb.ID(0x111a)
-	silhouette_sd_1     = usb.ID(0x111c)
-	silhouette_sd_2     = usb.ID(0x111d)
+	craftrobo           = usb.ID(0x110a)
+	craftrobolite       = usb.ID(0x111a)
+	silhouette          = usb.ID(0x111c)
+	silhouette_sd       = usb.ID(0x111d)
+	silhouette_cameo    = usb.ID(0x1121)
 	silhouette_portrait = usb.ID(0x1123)
 	debug               = 3
 )
@@ -29,13 +30,12 @@ func init() {
 	usb.DefaultWriteTimeout *= 300
 }
 
-func cc100(desc *usb.Descriptor) bool {
+func match(desc *usb.Descriptor) bool {
 	if desc.Vendor == graphtec {
 		switch desc.Product {
-		case cc200_20, cc300_20,
-			silhouette_sd_1,
-			silhouette_sd_2,
-			silhouette_portrait:
+		case craftrobo, craftrobolite,
+			silhouette, silhouette_sd,
+			silhouette_cameo, silhouette_portrait:
 			return true
 		}
 	}
@@ -45,7 +45,7 @@ func cc100(desc *usb.Descriptor) bool {
 func NewUSB() (USB, error) {
 	ctx := usb.NewContext()
 	ctx.Debug(debug)
-	devs, err := ctx.ListDevices(cc100)
+	devs, err := ctx.ListDevices(match)
 	if err != nil {
 		log.Fatal(err)
 	}
