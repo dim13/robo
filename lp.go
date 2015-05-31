@@ -3,6 +3,7 @@ package robo
 import (
 	"bufio"
 	"os"
+	"syscall"
 )
 
 type LP struct {
@@ -16,6 +17,11 @@ func NewLP(path string) (LP, error) {
 
 func (d LP) Close() {
 	d.File.Close()
+}
+
+func (d LP) SetNonblock() {
+	fd := d.File.Fd()
+	syscall.SetNonblock(int(fd), true)
 }
 
 func (d LP) Handle() *bufio.ReadWriter {
