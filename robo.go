@@ -128,15 +128,17 @@ func recv(c *bufio.Reader) string {
 	return ans[:len(ans)-1]
 }
 
+func Recv(c *bufio.Reader) string {
+	return recv(c)
+}
+
 func send(c *bufio.Writer, a ...interface{}) {
 	fmt.Fprint(c, a...)
 	etx(c)
 }
 
-func Raw(c *bufio.Writer, a ...interface{}) {
-	for _, cmd := range a {
-		send(c, cmd)
-	}
+func Send(c *bufio.Writer, a interface{}) {
+	send(c, a)
 }
 
 func GoHome(c *bufio.Writer)    { send(c, "TT") }

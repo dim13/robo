@@ -324,5 +324,7 @@ var easteregg = []string{
 }
 
 func EasterEgg(c *bufio.Writer) {
-	Raw(c, easteregg)
+	for _, cmd := range easteregg {
+		Send(c, cmd)
+	}
 }
