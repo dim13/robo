@@ -1,0 +1,19 @@
+Index: conf.h
+===================================================================
+RCS file: /cvs/src/sys/sys/conf.h,v
+retrieving revision 1.131
+diff -u -p -u -r1.131 conf.h
+--- conf.h	11 Dec 2014 19:44:16 -0000	1.131
++++ conf.h	28 May 2015 09:00:56 -0000
+@@ -361,9 +361,9 @@ extern struct cdevsw cdevsw[];
+ 	(dev_type_stop((*))) enodev, 0, selfalse, \
+ 	(dev_type_mmap((*))) enodev }
+ 
+-/* open, close, write */
++/* open, close, read, write */
+ #define cdev_ulpt_init(c,n) { \
+-	dev_init(c,n,open), dev_init(c,n,close), (dev_type_read((*))) enodev, \
++	dev_init(c,n,open), dev_init(c,n,close), dev_init(c,n,read), \
+ 	dev_init(c,n,write), (dev_type_ioctl((*))) enodev, \
+ 	(dev_type_stop((*))) enodev, 0, selfalse, (dev_type_mmap((*))) enodev }
+ 

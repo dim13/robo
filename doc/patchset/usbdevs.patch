@@ -1,0 +1,30 @@
+Index: usbdevs
+===================================================================
+RCS file: /cvs/src/sys/dev/usb/usbdevs,v
+retrieving revision 1.645
+diff -u -p -u -r1.645 usbdevs
+--- usbdevs	16 Feb 2015 14:51:44 -0000	1.645
++++ usbdevs	28 May 2015 08:37:03 -0000
+@@ -406,6 +406,7 @@ vendor ASUS		0x0b05	ASUS
+ vendor OCT		0x0b39	Omnidirectional Control Technology
+ vendor TEKRAM		0x0b3b	Tekram Technology
+ vendor HAL		0x0b41	HAL Corporation
++vendor GRAPHTEC		0x0b4d	Graphtec
+ vendor NEC2		0x0b62	NEC
+ vendor ATI2		0x0b6f	ATI
+ vendor KURUSUGAWA	0x0b7e	Kurusugawa Electronics
+@@ -2065,6 +2066,14 @@ product HAGIWARA FG		0x0005  FlashGate
+ 
+ /* HAL Corporation products */
+ product HAL IMR001		0x0011	Crossam2+USB IR commander
++
++/* Graphtec products */
++product GRAPHTEC CC200		0x110a	Craft ROBO CC200-20
++product GRAPHTEC CC300		0x111a	Craft ROBO CC300-20
++product GRAPHTEC SILHOUETTE1	0x111c	Silhouette SD 1
++product GRAPHTEC SILHOUETTE2	0x111d	Silhouette SD 2
++product GRAPHTEC SILHOUETTEC	0x1121	Silhouette Cameo
++product GRAPHTEC SILHOUETTEP	0x1123	Silhouette Portrait
+ 
+ /* Handspring, Inc. */
+ product HANDSPRING VISOR	0x0100	Handspring Visor

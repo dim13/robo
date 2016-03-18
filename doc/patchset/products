@@ -1,0 +1,6 @@
+product GRAPHTEC CC200		0x110a	CraftROBO CC100/CC200
+product GRAPHTEC CC300		0x111a	CraftROBO Lite CC300
+product GRAPHTEC CC330		0x111c	Silhouette
+product GRAPHTEC CC330L		0x111d	Silhouette SD
+product GRAPHTEC CAMEO		0x1121	Silhouette Cameo
+product GRAPHTEC PORTRAIT	0x1123	Silhouette Portrait

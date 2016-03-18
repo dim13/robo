@@ -1,0 +1,419 @@
+<CuttingParmsRanges>	
+	<Product>Cutting Master Version 2.00</Product>		
+	<Type>MediaSettings</Type>	
+	<Version>000</Version>	
+	<device name="CE3000-40">		
+		<Quality min="0" max="1"/>		
+		<Force min="0" max="31"/>		
+		<Condition min="1" max="8"/>		
+		<Speed min="0" max="40"/>	
+	</device>		
+	<device name="CE3000-60">		
+		<Quality min="0" max="3"/>		
+		<Force min="0" max="31"/>		
+		<Condition min="1" max="8"/>		
+		<Speed min="0" max="60"/>	
+	</device>		
+	<device name="CE3000-120">		
+		<Quality min="0" max="2"/>		
+		<Force min="0" max="38"/>		
+		<Condition min="1" max="8"/>		
+		<Speed min="0" max="60"/>	
+	</device>		
+	<device name="CE3000Mk2-40">		
+		<Quality min="0" max="1"/>		
+		<Force min="0" max="31"/>		
+		<Condition min="1" max="8"/>		
+		<Speed min="0" max="40"/>	
+	</device>		
+	<device name="CE3000Mk2-60">		
+		<Quality min="0" max="3"/>		
+		<Force min="0" max="31"/>		
+		<Condition min="1" max="8"/>		
+		<Speed min="0" max="60"/>	
+	</device>		
+	<device name="CE3000Mk2-120">		
+		<Quality min="0" max="2"/>		
+		<Force min="0" max="38"/>		
+		<Condition min="1" max="8"/>		
+		<Speed min="0" max="60"/>	
+	</device>		
+	<device name="CE5000-60">		
+		<Quality min="0" max="3"/>		
+		<Force min="0" max="31"/>		
+		<Condition min="1" max="8"/>		
+		<Speed min="0" max="60"/>	
+	</device>		
+	<device name="CE5000-120">		
+		<Quality min="0" max="2"/>		
+		<Force min="0" max="38"/>		
+		<Condition min="1" max="8"/>		
+		<Speed min="0" max="60"/>	
+	</device>		
+	<device name="CE5000-40-CRP">		
+		<Quality min="0" max="3"/>		
+		<Force min="0" max="31"/>		
+		<Condition min="1" max="8"/>		
+		<Speed min="0" max="60"/>	
+	</device>		
+	<device name="FC5100-75">		
+		<Quality min="0" max="8"/>		
+		<Force min="0" max="40"/>		
+		<Condition min="1" max="8"/>		
+		<Speed min="0" max="100"/>	
+	</device>		
+	<device name="FC5100-100">	
+		<Quality min="0" max="8"/>		
+		<Force min="0" max="40"/>		
+		<Condition min="1" max="8"/>		
+		<Speed min="0" max="100"/>	
+	</device>		
+	<device name="FC5100-130">		
+		<Quality min="0" max="8"/>		
+		<Force min="0" max="40"/>		
+		<Condition min="1" max="8"/>		
+		<Speed min="0" max="100"/>	
+	</device>		
+	<device name="FC5100-150">		
+		<Quality min="0" max="8"/>		
+		<Force min="0" max="40"/>		
+		<Condition min="1" max="8"/>		
+		<Speed min="0" max="100"/>	
+	</device>		
+	<device name="FC7000-60">		
+		<Quality min="0" max="8"/>		
+		<Force min="0" max="48"/>		
+		<Condition min="1" max="8"/>		
+		<Speed min="0" max="105"/>	
+	</device>    	
+	<device name="FC7000-75">		
+		<Quality min="0" max="8"/>		
+		<Force min="0" max="48"/>		
+		<Condition min="1" max="8"/>		
+		<Speed min="0" max="105"/>	
+	</device>		
+	<device name="FC7000-100">		
+		<Quality min="0" max="8"/>		
+		<Force min="0" max="48"/>		
+		<Condition min="1" max="8"/>		
+		<Speed min="0" max="105"/>	
+	</device>		
+	<device name="FC7000-130">		
+		<Quality min="0" max="8"/>		
+		<Force min="0" max="48"/>		
+		<Condition min="1" max="8"/>		
+		<Speed min="0" max="105"/>	
+	</device>		
+	<device name="FC7000-160">		
+		<Quality min="0" max="8"/>		
+		<Force min="0" max="48"/>		
+		<Condition min="1" max="8"/>		
+		<Speed min="0" max="105"/>	
+	</device>		
+	<device name="FC8000-60">		
+	<Quality min="0" max="8"/>		
+	<Force min="0" max="48"/>		
+	<Condition min="1" max="8"/>		
+	<Speed min="0" max="105"/>	
+	</device>    	
+	<device name="FC8000-75">		
+	<Quality min="0" max="8"/>		
+	<Force min="0" max="48"/>		
+	<Condition min="1" max="8"/>		
+	<Speed min="0" max="105"/>	
+	</device>		
+	<device name="FC8000-100">		
+	<Quality min="0" max="8"/>		
+	<Force min="0" max="48"/>		
+	<Condition min="1" max="8"/>		
+	<Speed min="0" max="105"/>	
+	</device>		
+	<device name="FC8000-130">		
+	<Quality min="0" max="8"/>		
+	<Force min="0" max="48"/>		
+	<Condition min="1" max="8"/>		
+	<Speed min="0" max="105"/>	
+	</device>		
+	<device name="FC8000-160">		
+	<Quality min="0" max="8"/>		
+	<Force min="0" max="48"/>		
+	<Condition min="1" max="8"/>		
+	<Speed min="0" max="105"/>	
+	</device>		
+	<device name="FC8600-60">		
+	<Quality min="0" max="8"/>		
+	<Force min="0" max="48"/>		
+	<Condition min="1" max="8"/>		
+	<Speed min="0" max="105"/>	
+	</device>    	
+	<device name="FC8600-75">		
+	<Quality min="0" max="8"/>		
+	<Force min="0" max="48"/>		
+	<Condition min="1" max="8"/>		
+	<Speed min="0" max="105"/>	
+	</device>		
+	<device name="FC8600-100">		
+	<Quality min="0" max="8"/>		
+	<Force min="0" max="48"/>		
+	<Condition min="1" max="8"/>		
+	<Speed min="0" max="105"/>	
+	</device>		
+	<device name="FC8600-130">		
+	<Quality min="0" max="8"/>		
+	<Force min="0" max="48"/>		
+	<Condition min="1" max="8"/>		
+	<Speed min="0" max="105"/>	
+	</device>		
+	<device name="FC8600-160">		
+	<Quality min="0" max="8"/>		
+	<Force min="0" max="48"/>		
+	<Condition min="1" max="8"/>		
+	<Speed min="0" max="105"/>	
+	</device>
+	<device name="CraftROBO-Pro CE3000-40-CRP">		
+	<Quality min="0" max="3"/>		
+	<Force min="0" max="31"/>		
+	<Condition min="1" max="8"/>		
+	<Speed min="0" max="60"/>	
+	</device>		
+	<device name="CraftROBO cc100-20">		
+	<Quality min="0" max="0"/>		
+	<Force min="1" max="30"/>		
+	<Condition min="0" max="0"/>		
+	<Speed min="0" max="10"/>	
+	</device>		
+	<device name="CraftROBO cc200-20">		
+	<Quality min="0" max="0"/>		
+	<Force min="1" max="33"/>		
+	<Condition min="0" max="0"/>		
+	<Speed min="0" max="10"/>	
+	</device>		
+	<device name="FC612">		
+	<Quality min="0" max="6"/>		
+	<Force min="0" max="40"/>		
+	<Condition min="1" max="8"/>		
+	<Speed min="0" max="40"/>	
+	</device>		
+	<device name="FC3600">		
+	<Quality min="0" max="6"/>		
+	<Force min="0" max="100"/>		
+	<Condition min="1" max="4"/>		
+	<Speed min="0" max="30"/>	
+	</device>		
+	<device name="FC4200-50">		
+	<Quality min="0" max="6"/>		
+	<Force min="0" max="48"/>		
+	<Condition min="1" max="4"/>		
+	<Speed min="0" max="65"/>	
+	</device>		
+	<device name="FC4200-60">		
+	<Quality min="0" max="6"/>		
+	<Force min="0" max="48"/>		
+	<Condition min="1" max="4"/>		
+	<Speed min="0" max="65"/>	
+	</device>		
+	<device name="FC223X-60">		
+	<Quality min="0" max="6"/>		
+	<Force min="0" max="40"/>		
+	<Condition min="1" max="4"/>		
+	<Speed min="0" max="30"/>	
+	</device>		
+	<device name="FC223X-90">		
+	<Quality min="0" max="6"/>		
+	<Force min="0" max="40"/>		
+	<Condition min="1" max="4"/>		
+	<Speed min="0" max="30"/>	
+	</device>		
+	<device name="FC2240-60">		
+	<Quality min="0" max="6"/>		
+	<Force min="0" max="80"/>		
+	<Condition min="1" max="8"/>		
+	<Speed min="0" max="41"/>	
+	</device>		
+	<device name="FC2240-120">		
+	<Quality min="0" max="6"/>		
+	<Force min="0" max="80"/>		
+	<Condition min="1" max="8"/>		
+	<Speed min="0" max="41"/>	
+	</device>		
+	<device name="FC2240-180">		
+	<Quality min="0" max="6"/>		
+	<Force min="0" max="80"/>		
+	<Condition min="1" max="8"/>		
+	<Speed min="0" max="41"/>	
+	</device>		
+	<device name="FC2250-60">		
+	<Quality min="0" max="6"/>		
+	<Force min="0" max="80"/>		
+	<Condition min="1" max="8"/>		
+	<Speed min="0" max="40"/>	
+	</device>		
+	<device name="FC2250-120">		
+		<Quality min="0" max="6"/>		
+		<Force min="0" max="80"/>		
+		<Condition min="1" max="8"/>		
+		<Speed min="0" max="40"/>	
+	</device>		
+	<device name="FC2250-180">		
+		<Quality min="0" max="6"/>		
+		<Force min="0" max="80"/>		
+		<Condition min="1" max="8"/>		
+		<Speed min="0" max="40"/>	
+	</device>		
+	<device name="FC5100A-100">		
+		<Quality min="0" max="8"/>		
+		<Force min="0" max="100"/>		
+		<Condition min="1" max="8"/>		
+		<Speed min="0" max="100"/>	
+	</device>		
+	<device name="FC5100A-130">		
+		<Quality min="0" max="8"/>		
+		<Force min="0" max="100"/>		
+		<Condition min="1" max="8"/>		
+		<Speed min="0" max="100"/>	
+	</device>		
+	<device name="FC5100A-150">		
+		<Quality min="0" max="8"/>		
+		<Force min="0" max="100"/>		
+		<Condition min="1" max="8"/>		
+		<Speed min="0" max="100"/>	
+	</device>		
+	<device name="FC5100A-75">		
+		<Quality min="0" max="8"/>		
+		<Force min="0" max="100"/>		
+		<Condition min="1" max="8"/>		
+		<Speed min="0" max="100"/>	
+	</device>		
+	<device name="CE3000-40-CRP">		
+		<Quality min="0" max="1"/>		
+		<Force min="0" max="31"/>		
+		<Condition min="1" max="8"/>		
+		<Speed min="0" max="40"/>	
+	</device>		
+	<device name="CE3000Mk2-40-CRP">		
+		<Quality min="0" max="1"/>		
+		<Force min="0" max="31"/>		
+		<Condition min="1" max="8"/>		
+		<Speed min="0" max="40"/>	
+	</device>						
+	<device name="FC7100-60">		
+		<Quality min="0" max="8"/>		
+		<Force min="0" max="48"/>		
+		<Condition min="1" max="8"/>		
+		<Speed min="0" max="105"/>	
+	</device>	
+	<device name="FC7100-75">		
+		<Quality min="0" max="8"/>		
+		<Force min="0" max="48"/>		
+		<Condition min="1" max="8"/>		
+		<Speed min="0" max="105"/>	
+	</device>	
+	<device name="FC7100-100">		
+		<Quality min="0" max="8"/>		
+		<Force min="0" max="48"/>		
+		<Condition min="1" max="8"/>		
+		<Speed min="0" max="105"/>	
+	</device>	
+	<device name="FC7100-130">		
+		<Quality min="0" max="8"/>		
+		<Force min="0" max="48"/>		
+		<Condition min="1" max="8"/>		
+		<Speed min="0" max="105"/>	
+	</device>	
+	<device name="FC7100-160">		
+		<Quality min="0" max="8"/>		
+		<Force min="0" max="48"/>		
+		<Condition min="1" max="8"/>		
+		<Speed min="0" max="105"/>	
+	</device>	
+	<device name="FC4500-50">		
+		<Quality min="0" max="10"/>		
+		<Force min="0" max="48"/>		
+		<Condition min="1" max="8"/>		
+		<Speed min="0" max="75"/>	
+	</device>
+	<device name="FC4500-60">		
+		<Quality min="0" max="10"/>		
+		<Force min="0" max="48"/>		
+		<Condition min="1" max="8"/>		
+		<Speed min="0" max="75"/>	
+	</device>
+	<device name="FC4510-60">		
+		<Quality min="0" max="10"/>		
+		<Force min="0" max="48"/>		
+		<Condition min="1" max="8"/>		
+		<Speed min="0" max="75"/>	
+	</device>
+	<device name="CraftROBO CC300-20">		
+		<Quality min="0" max="0"/>		
+		<Force min="1" max="33"/>		
+		<Condition min="1" max="0"/>		
+		<Speed min="0" max="7"/>	
+	</device>		
+	<device name="CraftROBO CC300L-20">		
+		<Quality min="0" max="0"/>		
+		<Force min="1" max="33"/>		
+		<Condition min="0" max="0"/>		
+		<Speed min="0" max="7"/>	
+	</device>		
+	<device name="CraftROBO CC330-20">		
+		<Quality min="0" max="0"/>		
+		<Force min="1" max="33"/>		
+		<Condition min="1" max="0"/>		
+		<Speed min="0" max="10"/>	
+	</device>		
+	<device name="CraftROBO CC330L-20">		
+		<Quality min="0" max="0"/>		
+		<Force min="1" max="33"/>		
+		<Condition min="0" max="0"/>		
+		<Speed min="0" max="10"/>	
+	</device>
+	<device name="CE6000-40">		
+		<Quality min="0" max="3"/>		
+		<Force min="0" max="31"/>		
+		<Condition min="1" max="8"/>		
+		<Speed min="0" max="60"/>	
+	</device>		
+	<device name="CE6000-60">		
+		<Quality min="0" max="3"/>		
+		<Force min="0" max="38"/>		
+		<Condition min="1" max="8"/>		
+		<Speed min="0" max="64"/>	
+	</device>		
+	<device name="CE6000-120">		
+		<Quality min="0" max="2"/>		
+		<Force min="0" max="38"/>		
+		<Condition min="1" max="8"/>		
+		<Speed min="0" max="71"/>	
+	</device>	
+	<device name="FC8000MK2-60">		
+		<Quality min="0" max="8"/>		
+		<Force min="0" max="48"/>		
+		<Condition min="1" max="8"/>		
+		<Speed min="0" max="105"/>	
+	</device>    	
+	<device name="FC8000MK2-75">		
+		<Quality min="0" max="8"/>		
+		<Force min="0" max="48"/>		
+		<Condition min="1" max="8"/>		
+		<Speed min="0" max="105"/>	
+	</device>		
+	<device name="FC8000MK2-100">		
+		<Quality min="0" max="8"/>		
+		<Force min="0" max="48"/>		
+		<Condition min="1" max="8"/>		
+		<Speed min="0" max="105"/>	
+	</device>		
+	<device name="FC8000MK2-130">		
+		<Quality min="0" max="8"/>		
+		<Force min="0" max="48"/>		
+		<Condition min="1" max="8"/>		
+		<Speed min="0" max="105"/>	
+	</device>		
+	<device name="FC8000MK2-160">		
+		<Quality min="0" max="8"/>		
+		<Force min="0" max="48"/>		
+		<Condition min="1" max="8"/>		
+		<Speed min="0" max="105"/>	
+	</device>
+</CuttingParmsRanges>

@@ -1,0 +1,314 @@
+? usb_port.h
+Index: ulpt.c
+===================================================================
+RCS file: /cvs/src/sys/dev/usb/ulpt.c,v
+retrieving revision 1.49
+diff -u -p -u -r1.49 ulpt.c
+--- ulpt.c	10 Feb 2015 21:56:09 -0000	1.49
++++ ulpt.c	28 May 2015 08:36:58 -0000
+@@ -54,10 +54,6 @@
+ #include <dev/usb/usbdevs.h>
+ #include <dev/usb/usb_quirks.h>
+ 
+-#define	TIMEOUT		hz*16	/* wait up to 16 seconds for a ready */
+-#define	STEP		hz/4
+-
+-#define	LPTPRI		(PZERO+8)
+ #define	ULPT_BSIZE	16384
+ 
+ #ifdef ULPT_DEBUG
+@@ -90,9 +86,6 @@ struct ulpt_softc {
+ 
+ 	int sc_in;
+ 	struct usbd_pipe *sc_in_pipe;	/* bulk in pipe */
+-	struct usbd_xfer *sc_in_xfer1;
+-	struct usbd_xfer *sc_in_xfer2;
+-	u_char sc_junk[64];	/* somewhere to dump input */
+ 
+ 	u_char sc_state;
+ #define	ULPT_OPEN	0x01	/* device is open */
+@@ -108,8 +101,7 @@ struct ulpt_softc {
+ 	struct ulpt_fwdev *sc_fwdev;
+ };
+ 
+-void ulpt_disco(void *);
+-
++int ulpt_do_read(struct ulpt_softc *, struct uio *uio, int);
+ int ulpt_do_write(struct ulpt_softc *, struct uio *uio, int);
+ int ulpt_status(struct ulpt_softc *);
+ void ulpt_reset(struct ulpt_softc *);
+@@ -154,7 +146,6 @@ void ieee1284_print_id(char *);
+ #define	ULPTUNIT(s)	(minor(s) & 0x1f)
+ #define	ULPTFLAGS(s)	(minor(s) & 0xe0)
+ 
+-
+ int ulpt_match(struct device *, void *, void *);
+ void ulpt_attach(struct device *, struct device *, void *);
+ int ulpt_detach(struct device *, int);
+@@ -435,19 +426,6 @@ ulpt_reset(struct ulpt_softc *sc)
+ 	}
+ }
+ 
+-static void
+-ulpt_input(struct usbd_xfer *xfer, void *priv, usbd_status status)
+-{
+-	struct ulpt_softc *sc = priv;
+-
+-	DPRINTFN(2,("ulpt_input: got some data\n"));
+-	/* Do it again. */
+-	if (xfer == sc->sc_in_xfer1)
+-		usbd_transfer(sc->sc_in_xfer2);
+-	else
+-		usbd_transfer(sc->sc_in_xfer1);
+-}
+-
+ int ulptusein = 1;
+ 
+ /*
+@@ -512,32 +490,6 @@ ulptopen(dev_t dev, int flag, int mode, 
+ 			sc->sc_state = 0;
+ 			goto done;
+ 		}
+-		sc->sc_in_xfer1 = usbd_alloc_xfer(sc->sc_udev);
+-		sc->sc_in_xfer2 = usbd_alloc_xfer(sc->sc_udev);
+-		if (sc->sc_in_xfer1 == NULL || sc->sc_in_xfer2 == NULL) {
+-			error = ENOMEM;
+-			if (sc->sc_in_xfer1 != NULL) {
+-				usbd_free_xfer(sc->sc_in_xfer1);
+-				sc->sc_in_xfer1 = NULL;
+-			}
+-			if (sc->sc_in_xfer2 != NULL) {
+-				usbd_free_xfer(sc->sc_in_xfer2);
+-				sc->sc_in_xfer2 = NULL;
+-			}
+-			usbd_close_pipe(sc->sc_out_pipe);
+-			sc->sc_out_pipe = NULL;
+-			usbd_close_pipe(sc->sc_in_pipe);
+-			sc->sc_in_pipe = NULL;
+-			sc->sc_state = 0;
+-			goto done;
+-		}
+-		usbd_setup_xfer(sc->sc_in_xfer1, sc->sc_in_pipe, sc,
+-		    sc->sc_junk, sizeof sc->sc_junk, USBD_SHORT_XFER_OK,
+-		    USBD_NO_TIMEOUT, ulpt_input);
+-		usbd_setup_xfer(sc->sc_in_xfer2, sc->sc_in_pipe, sc,
+-		    sc->sc_junk, sizeof sc->sc_junk, USBD_SHORT_XFER_OK,
+-		    USBD_NO_TIMEOUT, ulpt_input);
+-		usbd_transfer(sc->sc_in_xfer1); /* ignore failed start */
+ 	}
+ 
+ 	sc->sc_state = ULPT_OPEN;
+@@ -588,14 +540,6 @@ ulptclose(dev_t dev, int flag, int mode,
+ 		usbd_abort_pipe(sc->sc_in_pipe);
+ 		usbd_close_pipe(sc->sc_in_pipe);
+ 		sc->sc_in_pipe = NULL;
+-		if (sc->sc_in_xfer1 != NULL) {
+-			usbd_free_xfer(sc->sc_in_xfer1);
+-			sc->sc_in_xfer1 = NULL;
+-		}
+-		if (sc->sc_in_xfer2 != NULL) {
+-			usbd_free_xfer(sc->sc_in_xfer2);
+-			sc->sc_in_xfer2 = NULL;
+-		}
+ 	}
+ 
+ 	sc->sc_state = 0;
+@@ -623,7 +567,8 @@ ulpt_do_write(struct ulpt_softc *sc, str
+ 		return (ENOMEM);
+ 	}
+ 	while ((n = min(ULPT_BSIZE, uio->uio_resid)) != 0) {
+-		ulpt_statusmsg(ulpt_status(sc), sc);
++		if (sc->sc_in == -1)
++			ulpt_statusmsg(ulpt_status(sc), sc);
+ 		error = uiomovei(bufp, n, uio);
+ 		if (error)
+ 			break;
+@@ -747,3 +692,67 @@ ieee1284_print_id(char *str)
+ 	}
+ }
+ #endif
++
++int
++ulpt_do_read(struct ulpt_softc *sc, struct uio *uio, int flags)
++{
++	u_int32_t n, tn;
++	int error = 0;
++	void *bufp;
++	struct usbd_xfer *xfer;
++	usbd_status err;
++
++	DPRINTFN(1, ("ulptread\n"));
++	xfer = usbd_alloc_xfer(sc->sc_udev);
++	if (xfer == NULL)
++		return (ENOMEM);
++	bufp = usbd_alloc_buffer(xfer, ULPT_BSIZE);
++	if (bufp == NULL) {
++		usbd_free_xfer(xfer);
++		return (ENOMEM);
++	}
++	while ((n = min(ULPT_BSIZE, uio->uio_resid)) != 0) {
++		DPRINTFN(1, ("ulptread: start transfer %d bytes\n", n));
++		usbd_setup_xfer(xfer, sc->sc_in_pipe, 0, bufp, n,
++		    USBD_SYNCHRONOUS | USBD_SHORT_XFER_OK,
++		    USBD_DEFAULT_TIMEOUT, NULL);
++		err = usbd_transfer(xfer);
++		if (err) {
++			usbd_clear_endpoint_stall(sc->sc_in_pipe);
++			DPRINTF(("ulptread: error=%d\n", err));
++			if (err == USBD_INTERRUPTED)
++				error = EINTR;
++			else if (err == USBD_TIMEOUT)
++				error = ETIMEDOUT;
++			else 
++				error = EIO;
++			break;
++		}
++		usbd_get_xfer_status(xfer, NULL, NULL, &tn, NULL);
++		DPRINTFN(1, ("ulptread: got %d bytes\n", tn));
++		error = uiomovei(bufp, tn, uio);
++		if (error || tn < n)
++			break;
++	}
++	usbd_free_xfer(xfer);
++
++	return (error);
++}
++
++int
++ulptread(dev_t dev, struct uio *uio, int flags)
++{
++	struct ulpt_softc *sc;
++	int error;
++
++	sc = ulpt_cd.cd_devs[ULPTUNIT(dev)];
++
++	if (usbd_is_dying(sc->sc_udev) || sc->sc_in == -1)
++		return (EIO);
++
++	sc->sc_refcnt++;
++	error = ulpt_do_read(sc, uio, flags);
++	if (--sc->sc_refcnt < 0)
++		usb_detach_wakeup(&sc->sc_dev);
++	return (error);
++}
+Index: usbdevs
+===================================================================
+RCS file: /cvs/src/sys/dev/usb/usbdevs,v
+retrieving revision 1.645
+diff -u -p -u -r1.645 usbdevs
+--- usbdevs	16 Feb 2015 14:51:44 -0000	1.645
++++ usbdevs	28 May 2015 08:37:03 -0000
+@@ -406,6 +406,7 @@ vendor ASUS		0x0b05	ASUS
+ vendor OCT		0x0b39	Omnidirectional Control Technology
+ vendor TEKRAM		0x0b3b	Tekram Technology
+ vendor HAL		0x0b41	HAL Corporation
++vendor GRAPHTEC		0x0b4d	Graphtec
+ vendor NEC2		0x0b62	NEC
+ vendor ATI2		0x0b6f	ATI
+ vendor KURUSUGAWA	0x0b7e	Kurusugawa Electronics
+@@ -2065,6 +2066,14 @@ product HAGIWARA FG		0x0005  FlashGate
+ 
+ /* HAL Corporation products */
+ product HAL IMR001		0x0011	Crossam2+USB IR commander
++
++/* Graphtec products */
++product GRAPHTEC CC200		0x110a	Craft ROBO CC200-20
++product GRAPHTEC CC300		0x111a	Craft ROBO CC300-20
++product GRAPHTEC SILHOUETTE1	0x111c	Silhouette SD 1
++product GRAPHTEC SILHOUETTE2	0x111d	Silhouette SD 2
++product GRAPHTEC SILHOUETTEC	0x1121	Silhouette Cameo
++product GRAPHTEC SILHOUETTEP	0x1123	Silhouette Portrait
+ 
+ /* Handspring, Inc. */
+ product HANDSPRING VISOR	0x0100	Handspring Visor
+Index: usbdevs.h
+===================================================================
+RCS file: /cvs/src/sys/dev/usb/usbdevs.h,v
+retrieving revision 1.657
+diff -u -p -u -r1.657 usbdevs.h
+--- usbdevs.h	16 Feb 2015 14:51:58 -0000	1.657
++++ usbdevs.h	28 May 2015 08:37:07 -0000
+@@ -1,4 +1,4 @@
+-/*	$OpenBSD: usbdevs.h,v 1.657 2015/02/16 14:51:58 sthen Exp $	*/
++/*	$OpenBSD$	*/
+ 
+ /*
+  * THIS FILE IS AUTOMATICALLY GENERATED.  DO NOT EDIT.
+@@ -413,6 +413,7 @@
+ #define	USB_VENDOR_OCT	0x0b39		/* Omnidirectional Control Technology */
+ #define	USB_VENDOR_TEKRAM	0x0b3b		/* Tekram Technology */
+ #define	USB_VENDOR_HAL	0x0b41		/* HAL Corporation */
++#define	USB_VENDOR_GRAPHTEC	0x0b4d		/* Graphtec */
+ #define	USB_VENDOR_NEC2	0x0b62		/* NEC */
+ #define	USB_VENDOR_ATI2	0x0b6f		/* ATI */
+ #define	USB_VENDOR_KURUSUGAWA	0x0b7e		/* Kurusugawa Electronics */
+@@ -2072,6 +2073,14 @@
+ 
+ /* HAL Corporation products */
+ #define	USB_PRODUCT_HAL_IMR001	0x0011		/* Crossam2+USB IR commander */
++
++/* Graphtec products */
++#define	USB_PRODUCT_GRAPHTEC_CC200	0x110a		/* Craft ROBO CC200-20 */
++#define	USB_PRODUCT_GRAPHTEC_CC300	0x111a		/* Craft ROBO CC300-20 */
++#define	USB_PRODUCT_GRAPHTEC_SILHOUETTE1	0x111c		/* Silhouette SD 1 */
++#define	USB_PRODUCT_GRAPHTEC_SILHOUETTE2	0x111d		/* Silhouette SD 2 */
++#define	USB_PRODUCT_GRAPHTEC_SILHOUETTEC	0x1121		/* Silhouette Cameo */
++#define	USB_PRODUCT_GRAPHTEC_SILHOUETTEP	0x1123		/* Silhouette Portrait */
+ 
+ /* Handspring, Inc. */
+ #define	USB_PRODUCT_HANDSPRING_VISOR	0x0100		/* Handspring Visor */
+Index: usbdevs_data.h
+===================================================================
+RCS file: /cvs/src/sys/dev/usb/usbdevs_data.h,v
+retrieving revision 1.651
+diff -u -p -u -r1.651 usbdevs_data.h
+--- usbdevs_data.h	16 Feb 2015 14:51:58 -0000	1.651
++++ usbdevs_data.h	28 May 2015 08:37:14 -0000
+@@ -1,4 +1,4 @@
+-/*	$OpenBSD: usbdevs_data.h,v 1.651 2015/02/16 14:51:58 sthen Exp $	*/
++/*	$OpenBSD$	*/
+ 
+ /*
+  * THIS FILE IS AUTOMATICALLY GENERATED.  DO NOT EDIT.
+@@ -4242,6 +4242,30 @@ const struct usb_known_product usb_known
+ 	    "Crossam2+USB IR commander",
+ 	},
+ 	{
++	    USB_VENDOR_GRAPHTEC, USB_PRODUCT_GRAPHTEC_CC200,
++	    "Craft ROBO CC200-20",
++	},
++	{
++	    USB_VENDOR_GRAPHTEC, USB_PRODUCT_GRAPHTEC_CC300,
++	    "Craft ROBO CC300-20",
++	},
++	{
++	    USB_VENDOR_GRAPHTEC, USB_PRODUCT_GRAPHTEC_SILHOUETTE1,
++	    "Silhouette SD 1",
++	},
++	{
++	    USB_VENDOR_GRAPHTEC, USB_PRODUCT_GRAPHTEC_SILHOUETTE2,
++	    "Silhouette SD 2",
++	},
++	{
++	    USB_VENDOR_GRAPHTEC, USB_PRODUCT_GRAPHTEC_SILHOUETTEC,
++	    "Silhouette Cameo",
++	},
++	{
++	    USB_VENDOR_GRAPHTEC, USB_PRODUCT_GRAPHTEC_SILHOUETTEP,
++	    "Silhouette Portrait",
++	},
++	{
+ 	    USB_VENDOR_HANDSPRING, USB_PRODUCT_HANDSPRING_VISOR,
+ 	    "Handspring Visor",
+ 	},
+@@ -12660,6 +12684,10 @@ const struct usb_known_vendor usb_known_
+ 	{
+ 	    USB_VENDOR_HAL,
+ 	    "HAL Corporation",
++	},
++	{
++	    USB_VENDOR_GRAPHTEC,
++	    "Graphtec",
+ 	},
+ 	{
+ 	    USB_VENDOR_NEC2,
