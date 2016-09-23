@@ -3,6 +3,7 @@ package robo
 import (
 	"bufio"
 	"fmt"
+	"io"
 )
 
 const (
@@ -164,7 +165,13 @@ func str(c *bufio.ReadWriter, cmd string) string {
 	return recv(c.Reader)
 }
 
-func Version(c *bufio.ReadWriter) string    { return str(c, "FG") }
+func Version(c io.Writer) string {
+	io.WriteString(c, "FG")
+	//return str(c, "FG")
+	return ""
+}
+
+//func Version(c *bufio.ReadWriter) string    { return str(c, "FG") }
 func StatusWord(c *bufio.ReadWriter) string { return str(c, "@") }
 
 type Orientation int

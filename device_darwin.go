@@ -1,8 +1,11 @@
 package robo
 
-import "log"
+import (
+	"io"
+	"log"
+)
 
-func NewDevice() Device {
+func NewDevice() io.ReadWriteCloser {
 	dev, err := NewUSB()
 	if err != nil {
 		log.Fatal(err)

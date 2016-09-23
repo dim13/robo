@@ -1,8 +1,7 @@
 package robo
 
-import "bufio"
+import "io"
 
 type Device interface {
-	Close()
-	Handle() *bufio.ReadWriter
+	io.ReadWriteCloser
 }

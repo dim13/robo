@@ -1,9 +1,8 @@
 package robo
 
 import (
-	"bufio"
 	"errors"
-	"log"
+	"io"
 
 	"github.com/kylelemons/gousb/usb"
 )
@@ -11,6 +10,8 @@ import (
 type USB struct {
 	ctx *usb.Context
 	dev *usb.Device
+	w   io.Writer
+	r   io.Reader
 }
 
 var (
@@ -21,7 +22,6 @@ var (
 	silhouette_sd       = usb.ID(0x111d)
 	silhouette_cameo    = usb.ID(0x1121)
 	silhouette_portrait = usb.ID(0x1123)
-	debug               = 3
 )
 
 func init() {
@@ -43,11 +43,11 @@ func match(desc *usb.Descriptor) bool {
 }
 
 func NewUSB() (USB, error) {
-	ctx := usb.NewContext()
-	ctx.Debug(debug)
-	devs, err := ctx.ListDevices(match)
+	u := USB{}
+	u.ctx = usb.NewContext()
+	devs, err := u.ctx.ListDevices(match)
 	if err != nil {
-		log.Fatal(err)
+		return USB{}, err
 	}
 	if len(devs) != 1 {
 		for _, dev := range devs {
@@ -55,42 +55,44 @@ func NewUSB() (USB, error) {
 		}
 		return USB{}, errors.New("Cannot find Craft ROBO")
 	}
-	return USB{ctx, devs[0]}, nil
-}
+	u.dev = devs[0]
 
-func (d USB) Close() {
-	d.dev.Close()
-	d.ctx.Close()
-}
-
-func (d USB) Handle() *bufio.ReadWriter {
-	var (
-		r *bufio.Reader
-		w *bufio.Writer
-	)
-
-	for _, c := range d.dev.Configs {
+	for _, c := range u.dev.Configs {
 		for _, i := range c.Interfaces {
 			for _, s := range i.Setups {
 				for _, ep := range s.Endpoints {
-					e, err := d.dev.OpenEndpoint(
+					e, err := u.dev.OpenEndpoint(
 						c.Config,
 						i.Number,
 						s.Number,
 						ep.Address)
 					if err != nil {
-						log.Fatal(err)
+						return USB{}, err
 					}
 					switch ep.Direction() {
 					case usb.ENDPOINT_DIR_OUT:
-						w = bufio.NewWriter(e)
+						u.w = e
 					case usb.ENDPOINT_DIR_IN:
-						r = bufio.NewReader(e)
+						u.r = e
 					}
 				}
 			}
 		}
 	}
 
-	return bufio.NewReadWriter(r, w)
+	return u, nil
+}
+
+func (d USB) Close() error {
+	d.dev.Close()
+	d.ctx.Close()
+	return nil
+}
+
+func (d USB) Read(b []byte) (int, error) {
+	return d.r.Read(b)
+}
+
+func (d USB) Write(b []byte) (int, error) {
+	return d.w.Write(b)
 }
