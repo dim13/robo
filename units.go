@@ -1,6 +1,9 @@
 package robo
 
-import "fmt"
+import (
+	"fmt"
+	"strings"
+)
 
 const (
 	MM = Unit(20.0)
@@ -63,3 +66,11 @@ func parseTriple(s string) (t Triple) {
 }
 
 type Path []Point
+
+func (p Path) String() string {
+	pp := make([]string, len(p))
+	for i, pt := range p {
+		pp[i] = pt.String()
+	}
+	return strings.Join(pp, ",")
+}
