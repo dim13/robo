@@ -1,5 +1,5 @@
 package robo
 
-func NewDevice() (Device, error) {
+func Open() (Device, error) {
 	return NewUSB()
 }

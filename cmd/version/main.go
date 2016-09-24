@@ -8,7 +8,7 @@ import (
 )
 
 func main() {
-	dev, err := robo.NewDevice()
+	dev, err := robo.Open()
 	if err != nil {
 		log.Fatal(err)
 	}
