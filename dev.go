@@ -2,9 +2,14 @@ package robo
 
 import (
 	"bufio"
+	"io"
 	"os"
 	"syscall"
 )
+
+type Device struct {
+	io.ReadWriteCloser
+}
 
 // LP represents Line Printer
 type LP struct {

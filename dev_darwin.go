@@ -8,7 +8,11 @@ import (
 )
 
 func Open() (io.ReadWriteCloser, error) {
-	return NewUSB()
+	dev, err := NewUSB()
+	if err != nil {
+		return Device{}, err
+	}
+	return Device{dev}, nil
 }
 
 type USB struct {

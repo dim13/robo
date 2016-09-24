@@ -1,8 +1,10 @@
 package robo
 
-import "io"
-
-func Open() (io.ReadWriteCloser, error) {
+func Open() (Device, error) {
 	// note: ulpt* doesn't support read(), thus this dev is broken atm.
-	return NewLP("/dev/ulpt0")
+	dev, err := NewLP("/dev/ulpt0")
+	if err != nil {
+		return Device{}, nil
+	}
+	return Device{dev}
 }
