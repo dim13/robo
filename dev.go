@@ -6,6 +6,7 @@ import (
 	"syscall"
 )
 
+// LP represents Line Printer
 type LP struct {
 	*os.File
 }

@@ -14,8 +14,8 @@ func Open() (io.ReadWriteCloser, error) {
 type USB struct {
 	ctx *usb.Context
 	dev *usb.Device
-	w   io.Writer
-	r   io.Reader
+	io.Writer
+	io.Reader
 }
 
 var (
@@ -75,9 +75,9 @@ func NewUSB() (USB, error) {
 					}
 					switch ep.Direction() {
 					case usb.ENDPOINT_DIR_OUT:
-						u.w = e
+						u.Writer = e
 					case usb.ENDPOINT_DIR_IN:
-						u.r = e
+						u.Reader = e
 					}
 				}
 			}
@@ -91,12 +91,4 @@ func (d USB) Close() error {
 	d.dev.Close()
 	d.ctx.Close()
 	return nil
-}
-
-func (d USB) Read(b []byte) (int, error) {
-	return d.r.Read(b)
-}
-
-func (d USB) Write(b []byte) (int, error) {
-	return d.w.Write(b)
 }
