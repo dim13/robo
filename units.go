@@ -31,11 +31,18 @@ func parseUnit(s string) (u Unit) {
 	return
 }
 
+type Orientation int
+
+const (
+	Portrait Orientation = iota
+	Landscape
+)
+
+var orientation = Portrait
+
 type Point struct {
 	X, Y Unit
 }
-
-var orientation = Portrait
 
 func (p Point) String() (s string) {
 	switch orientation {
@@ -45,6 +52,10 @@ func (p Point) String() (s string) {
 		s = fmt.Sprintf("%v,%v", p.Y, p.X)
 	}
 	return
+}
+
+func (p Point) Scale(f Unit) Point {
+	return Point{p.X * f, p.Y * f}
 }
 
 func parsePoint(s string) (p Point) {
@@ -74,3 +85,35 @@ func (p Path) String() string {
 	}
 	return strings.Join(pp, ",")
 }
+
+func (ph Path) Scale(f Unit) Path {
+	ret := make(Path, len(ph))
+	for i, p := range ph {
+		ret[i] = p.Scale(f)
+	}
+	return ret
+}
+
+type LineStyle int
+
+const (
+	Solid LineStyle = iota
+	Dots
+	ShortDash
+	Dash
+	LongDash
+	DashDot
+	DashLongDot
+	DashDoubleDot
+	DashLongDoubleDot
+)
+
+type Direction byte
+
+const (
+	Stop Direction = 1 << iota >> 1
+	Down
+	Up
+	Right
+	Left
+)

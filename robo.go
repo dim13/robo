@@ -47,17 +47,6 @@ func (p Point) SearchMarks(c *bufio.ReadWriter, auto bool) bool {
 	return parseUnit(recv(c.Reader)) == 0
 }
 
-func (p Point) Scale(f Unit) Point {
-	return Point{p.X * f, p.Y * f}
-}
-
-func (ph Path) Scale(f Unit) (ret Path) {
-	for _, p := range ph {
-		ret = append(ret, p.Scale(f))
-	}
-	return
-}
-
 func (ph Path) send(c *bufio.Writer, a ...interface{}) {
 	fmt.Fprint(c, a...)
 	for _, p := range ph {
@@ -174,31 +163,10 @@ func Version(c io.Writer) string {
 //func Version(c *bufio.ReadWriter) string    { return str(c, "FG") }
 func StatusWord(c *bufio.ReadWriter) string { return str(c, "@") }
 
-type Orientation int
-
-const (
-	Portrait Orientation = iota
-	Landscape
-)
-
 func (o Orientation) Orientation(c *bufio.Writer) {
 	orientation = o
 	send(c, "FN", o)
 }
-
-type LineStyle int
-
-const (
-	Solid LineStyle = iota
-	Dots
-	ShortDash
-	Dash
-	LongDash
-	DashDot
-	DashLongDot
-	DashDoubleDot
-	DashLongDoubleDot
-)
 
 func (l LineStyle) LineStyle(c *bufio.Writer) { send(c, "L", l) }
 func (p Point) LineStyle(c *bufio.Writer)     { p.send(c, "L100,1,") }
@@ -241,16 +209,6 @@ func Initialize(c *bufio.ReadWriter, mid int, o Orientation) {
 	o.Orientation(c.Writer)
 }
 
-type Direction byte
-
-const (
-	Stop Direction = 1 << iota >> 1
-	Down
-	Up
-	Right
-	Left
-)
-
 func (d Direction) Step(c *bufio.Writer) { esc(c, NUL, byte(d)) }
 
 // Untested
@@ -259,7 +217,9 @@ func BootUpgrade(c *bufio.ReadWriter) string {
 	s, _ := c.ReadString(' ')
 	return s
 }
+
 func UpdateFirmware(c *bufio.ReadWriter) bool {
 	return str(c, "CC1VERUP") == string(NUL)
 }
+
 func EnableDebug(c *bufio.Writer) { send(c, "FP,GRFCC1") }
