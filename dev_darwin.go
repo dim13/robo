@@ -7,6 +7,10 @@ import (
 	"github.com/kylelemons/gousb/usb"
 )
 
+func Open() (io.ReadWriteCloser, error) {
+	return NewUSB()
+}
+
 type USB struct {
 	ctx *usb.Context
 	dev *usb.Device
