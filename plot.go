@@ -5,7 +5,9 @@ type Plotter interface {
 }
 
 type Line []Point
-type Berzier [4]Point
+type Bezier [4]Point
+type Circle [3]Point
 
 func (v Line) Draw() []byte   { return nil } // MDDDD...
 func (v Bezier) Draw() []byte { return nil } // BZ...
+func (v Circle) Draw() []byte { return nil } // W...

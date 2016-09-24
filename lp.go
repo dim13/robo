@@ -15,8 +15,8 @@ func NewLP(path string) (LP, error) {
 	return LP{f}, err
 }
 
-func (d LP) Close() {
-	d.File.Close()
+func (d LP) Close() error {
+	return d.File.Close()
 }
 
 func (d LP) SetNonblock() {
