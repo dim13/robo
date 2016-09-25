@@ -14,9 +14,7 @@ func main() {
 	}
 	defer r.Close()
 	r.Init()
-	if !r.Ready() {
-		log.Fatal("not ready")
-	}
+	r.Wait4Ready()
 	ver := r.Version()
 	fmt.Println("Version:", ver)
 	r.GoHome()
