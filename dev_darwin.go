@@ -4,6 +4,7 @@ import (
 	"bufio"
 	"errors"
 	"io"
+	"log"
 
 	"github.com/kylelemons/gousb/usb"
 )
@@ -97,16 +98,19 @@ func (d USB) Close() error {
 // ReadString reads until End of Text
 func (d USB) ReadString() (string, error) {
 	buf := bufio.NewReader(d.Reader)
-	resp, err := buf.ReadString(ETX)
+	s, err := buf.ReadString(ETX)
 	if err != nil {
 		return "", err
 	}
-	return resp[:len(resp)-1], nil
+	s = s[:len(s)-1]
+	log.Printf(">>> %q", s)
+	return s, nil
 }
 
 // WriteString terminates transfer with End of Text
 func (d USB) WriteString(s string) error {
 	buf := bufio.NewWriter(d.Writer)
+	log.Printf("<<< %q", s)
 	buf.WriteString(s)
 	buf.WriteByte(ETX)
 	return buf.Flush()
@@ -115,6 +119,7 @@ func (d USB) WriteString(s string) error {
 // Command prefixes transfer with Escape
 func (d USB) Command(b []byte) error {
 	buf := bufio.NewWriter(d.Writer)
+	log.Printf(">>> %q", b)
 	buf.WriteByte(ESC)
 	buf.Write(b)
 	return buf.Flush()

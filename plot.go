@@ -2,7 +2,6 @@ package robo
 
 import (
 	"fmt"
-	"log"
 	"strings"
 )
 
@@ -70,6 +69,9 @@ func (r Robo) Init() {
 func (r Robo) Ready() bool {
 	r.dev.Command([]byte{5})
 	resp, _ := r.dev.ReadString()
-	log.Printf("ready %q", resp)
 	return resp == "0"
+}
+
+func (r Robo) GoHome() {
+	r.dev.WriteString("TT")
 }

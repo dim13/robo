@@ -19,4 +19,5 @@ func main() {
 	}
 	ver := r.Version()
 	fmt.Println("Version:", ver)
+	r.GoHome()
 }
