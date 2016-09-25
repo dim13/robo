@@ -1,18 +1,15 @@
 package robo
 
 import (
+	"bufio"
 	"errors"
 	"io"
 
 	"github.com/kylelemons/gousb/usb"
 )
 
-func Open() (io.ReadWriteCloser, error) {
-	dev, err := NewUSB()
-	if err != nil {
-		return Device{}, err
-	}
-	return Device{dev}, nil
+func Open() (Device, error) {
+	return NewUSB()
 }
 
 type USB struct {
@@ -95,4 +92,30 @@ func (d USB) Close() error {
 	d.dev.Close()
 	d.ctx.Close()
 	return nil
+}
+
+// ReadString reads until End of Text
+func (d USB) ReadString() (string, error) {
+	buf := bufio.NewReader(d.Reader)
+	resp, err := buf.ReadString(ETX)
+	if err != nil {
+		return "", err
+	}
+	return resp[:len(resp)-1], nil
+}
+
+// WriteString terminates transfer with End of Text
+func (d USB) WriteString(s string) error {
+	buf := bufio.NewWriter(d.Writer)
+	buf.WriteString(s)
+	buf.WriteByte(ETX)
+	return buf.Flush()
+}
+
+// Command prefixes transfer with Escape
+func (d USB) Command(b []byte) error {
+	buf := bufio.NewWriter(d.Writer)
+	buf.WriteByte(ESC)
+	buf.Write(b)
+	return buf.Flush()
 }

@@ -7,8 +7,18 @@ import (
 	"syscall"
 )
 
-type Device struct {
+const (
+	NUL = byte(0x00) // Null
+	ETX = byte(0x03) // End of Text
+	ESC = byte(0x1B) // Escape
+	FS  = byte(0x1C) // File Separator
+)
+
+type Device interface {
 	io.ReadWriteCloser
+	ReadString() (string, error)
+	WriteString(string) error
+	Command([]byte) error
 }
 
 // Open is implemented in according GOOS files

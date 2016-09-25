@@ -3,14 +3,6 @@ package robo
 import (
 	"bufio"
 	"fmt"
-	"io"
-)
-
-const (
-	NUL = 0x00 // Null
-	ETX = 0x03 // End of Text
-	ESC = 0x1B // Escape
-	FS  = 0x1C // File Separator
 )
 
 func etx(c *bufio.Writer) {
@@ -154,11 +146,13 @@ func str(c *bufio.ReadWriter, cmd string) string {
 	return recv(c.Reader)
 }
 
+/*
 func Version(c io.Writer) string {
 	io.WriteString(c, "FG")
 	//return str(c, "FG")
 	return ""
 }
+*/
 
 //func Version(c *bufio.ReadWriter) string    { return str(c, "FG") }
 func StatusWord(c *bufio.ReadWriter) string { return str(c, "@") }
@@ -193,7 +187,7 @@ func Initialize(c *bufio.ReadWriter, mid int, o Orientation) {
 	}
 
 	GoHome(c.Writer)
-	fmt.Println("Craft ROBO Ver.", Version(c))
+	//fmt.Println("Craft ROBO Ver.", Version(c))
 
 	if pen, ok := MediaID[mid]; ok {
 		pen.Apply(c.Writer)

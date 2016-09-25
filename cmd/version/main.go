@@ -8,10 +8,15 @@ import (
 )
 
 func main() {
-	dev, err := robo.Open()
+	r, err := robo.NewRobo()
 	if err != nil {
 		log.Fatal(err)
 	}
-	defer dev.Close()
-	fmt.Println(robo.Version(dev))
+	defer r.Close()
+	r.Init()
+	if !r.Ready() {
+		log.Fatal("not ready")
+	}
+	ver := r.Version()
+	fmt.Println("Version:", ver)
 }

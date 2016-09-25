@@ -2,8 +2,25 @@ package robo
 
 import (
 	"fmt"
+	"log"
 	"strings"
 )
+
+type Robo struct {
+	dev Device
+}
+
+func NewRobo() (Robo, error) {
+	dev, err := Open()
+	if err != nil {
+		return Robo{}, err
+	}
+	return Robo{dev}, nil
+}
+
+func (r Robo) Close() error {
+	return r.dev.Close()
+}
 
 type Plotter interface {
 	Plot() []byte
@@ -39,3 +56,20 @@ func CuttingArea(p Point) string { return "FU" + p.String() }
 //func Calibration(p Point) string     { return "TB72" + p.String() }
 
 func Curve(a int, p ...Point) string { return fmt.Sprintf("Y%d,%v", a, Path(p)) }
+
+func (r Robo) Version() string {
+	r.dev.WriteString("FG")
+	resp, _ := r.dev.ReadString()
+	return resp
+}
+
+func (r Robo) Init() {
+	r.dev.Command([]byte{4})
+}
+
+func (r Robo) Ready() bool {
+	r.dev.Command([]byte{5})
+	resp, _ := r.dev.ReadString()
+	log.Printf("ready %q", resp)
+	return resp == "0"
+}
