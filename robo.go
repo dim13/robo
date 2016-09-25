@@ -7,7 +7,7 @@ import (
 )
 
 const (
-	NUL = 0x00
+	NUL = 0x00 // Null
 	ETX = 0x03 // End of Text
 	ESC = 0x1B // Escape
 	FS  = 0x1C // File Separator

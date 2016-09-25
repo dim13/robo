@@ -11,6 +11,8 @@ type Device struct {
 	io.ReadWriteCloser
 }
 
+// Open is implemented in according GOOS files
+
 // LP represents Line Printer
 type LP struct {
 	*os.File
