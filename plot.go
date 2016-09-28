@@ -88,24 +88,27 @@ func (r Robo) Printf(f string, a ...interface{}) {
 	r.dev.WriteString(s)
 }
 
-func (r Robo) GoHome()                 { r.Printf("TT") }
-func (r Robo) Home()                   { r.Printf("H") }
-func (r Robo) Origin()                 { r.Printf("FJ") }
-func (r Robo) Calibrate()              { r.Printf("TB70") }
-func (r Robo) TestCut()                { r.Printf("FH") }
-func (r Robo) TestLoop()               { r.Printf("FI") }
-func (r Robo) Factor(x, y, z Unit)     { r.Printf("&%v", Triple{x, y, z}) }
-func (r Robo) Offset(p Point)          { r.Printf("^%v", p) }
-func (r Robo) LowerLeft(p Point)       { r.Printf("\\%v", p) }
-func (r Robo) UpperRight(p Point)      { r.Printf("Z%v", p) }
-func (r Robo) CuttingArea(p Point)     { r.Printf("FU%v", p) }
-func (r Robo) Calibration(p Point)     { r.Printf("TB72,%v", p) }
-func (r Robo) Move(p Point)            { r.Printf("M%v", p) }
-func (r Robo) MoveRelative(p Point)    { r.Printf("O%v", p) }
-func (r Robo) Draw(p ...Point)         { r.Printf("D%v", Path(p)) }
-func (r Robo) DrawRelative(p Point)    { r.Printf("E%v", p) }
-func (r Robo) Bezier(a, b, c, d Point) { r.Printf("BZ1,%v", Path{a, b, c, d}) }
+func (r Robo) GoHome()                         { r.Printf("TT") }
+func (r Robo) Home()                           { r.Printf("H") }
+func (r Robo) Origin()                         { r.Printf("FJ") }
+func (r Robo) Calibrate()                      { r.Printf("TB70") }
+func (r Robo) TestCut()                        { r.Printf("FH") }
+func (r Robo) TestLoop()                       { r.Printf("FI") }
+func (r Robo) Factor(x, y, z Unit)             { r.Printf("&%v", Triple{x, y, z}) }
+func (r Robo) Offset(p Point)                  { r.Printf("^%v", p) }
+func (r Robo) LowerLeft(p Point)               { r.Printf("\\%v", p) }
+func (r Robo) UpperRight(p Point)              { r.Printf("Z%v", p) }
+func (r Robo) CuttingArea(p Point)             { r.Printf("FU%v", p) }
+func (r Robo) Calibration(p Point)             { r.Printf("TB72,%v", p) }
+func (r Robo) Move(p Point)                    { r.Printf("M%v", p) }
+func (r Robo) MoveRelative(p Point)            { r.Printf("O%v", p) }
+func (r Robo) Draw(p ...Point)                 { r.Printf("D%v", Path(p)) }
+func (r Robo) DrawRelative(p Point)            { r.Printf("E%v", p) }
+func (r Robo) Bezier(a, b, c, d Point)         { r.Printf("BZ1,%v", Path{a, b, c, d}) }
+func (r Robo) Bezierf(x int, a, b, c, d Point) { r.Printf("BZ%v,%v", x, Path{a, b, c, d}) }
 func (r Robo) Line(p ...Point) {
-	r.Move(p[0])
-	r.Draw(p[1:]...)
+	if len(p) > 1 {
+		r.Move(p[0])
+		r.Draw(p[1:]...)
+	}
 }

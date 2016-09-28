@@ -1,5 +1,7 @@
 package robo
 
+const LPDevice = "/dev/usb/lp0"
+
 func Open() (Device, error) {
-	return NewLP("/dev/usb/lp0")
+	return NewLP(LPDevice)
 }
