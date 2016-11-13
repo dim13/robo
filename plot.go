@@ -127,3 +127,5 @@ func (r Robo) UnknownFE(u Unit)          { r.Printf("FE%v", u) }
 func (r Robo) DistanceCorrection(u Unit) { r.Printf("FB%v,0", u) }
 func (r Robo) TrackEnhancing(u Unit)     { r.Printf("FY%v", u) }
 func (r Robo) RegMarkLen(u Unit)         { r.Printf("TB51,%v", u) }
+
+func (r Robo) Orientation(o Orientation) { r.Printf("FN%d", o) }
