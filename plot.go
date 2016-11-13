@@ -57,12 +57,6 @@ func CuttingArea(p Point) string { return "FU" + p.String() }
 
 func Curve(a int, p ...Point) string { return fmt.Sprintf("Y%d,%v", a, Path(p)) }
 
-func (r Robo) Version() string {
-	r.dev.WriteString("FG")
-	resp, _ := r.dev.ReadString()
-	return strings.TrimSpace(resp)
-}
-
 func (r Robo) Wait4Ready() {
 	t := time.NewTicker(time.Second)
 	defer t.Stop()
@@ -87,6 +81,15 @@ func (r Robo) Printf(f string, a ...interface{}) {
 	s := fmt.Sprintf(f, a...)
 	r.dev.WriteString(s)
 }
+
+func (r Robo) Scanf(f string, a ...interface{}) string {
+	s := fmt.Sprintf(f, a...)
+	r.dev.WriteString(s)
+	resp, _ := r.dev.ReadString()
+	return strings.TrimSpace(resp)
+}
+
+func (r Robo) Version() string { return r.Scanf("FG") }
 
 func (r Robo) GoHome()                         { r.Printf("TT") }
 func (r Robo) Home()                           { r.Printf("H") }
