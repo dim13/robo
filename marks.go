@@ -38,3 +38,9 @@ func DrawMarks(c *bufio.Writer, offset, size Point, length int) {
 	Point{5240, 200}.Draw(c)
 	Point{5240, 600}.Draw(c)
 }
+
+func (r Robo) DrawMarks() {
+	r.Line(Point{600, 3800}, Point{200, 3800}, Point{200, 3400})
+	r.Line(Point{200, 600}, Point{200, 200}, Point{600, 200})
+	r.Line(Point{4840, 200}, Point{5240, 200}, Point{5240, 600})
+}

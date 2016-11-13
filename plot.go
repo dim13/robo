@@ -89,7 +89,8 @@ func (r Robo) Scanf(f string, a ...interface{}) string {
 	return strings.TrimSpace(resp)
 }
 
-func (r Robo) Version() string { return r.Scanf("FG") }
+func (r Robo) Version() string         { return r.Scanf("FG") }
+func (r Robo) UnknownFQ(u Unit) string { return r.Scanf("FQ%v", u) }
 
 func (r Robo) GoHome()                         { r.Printf("TT") }
 func (r Robo) Home()                           { r.Printf("H") }
@@ -115,3 +116,14 @@ func (r Robo) Line(p ...Point) {
 		r.Draw(p[1:]...)
 	}
 }
+
+func (r Robo) SetOrigin(u Unit)          { r.Printf("SO%v", u) }
+func (r Robo) LineScale(u Unit)          { r.Printf("B%v", u) }
+func (r Robo) Media(u Unit)              { r.Printf("FW%v", u) }
+func (r Robo) Speed(u Unit)              { r.Printf("!%v", u) }
+func (r Robo) Force(u Unit)              { r.Printf("FX%v", u) }
+func (r Robo) Overcut(u Unit)            { r.Printf("FC%v", u) }
+func (r Robo) UnknownFE(u Unit)          { r.Printf("FE%v", u) }
+func (r Robo) DistanceCorrection(u Unit) { r.Printf("FB%v,0", u) }
+func (r Robo) TrackEnhancing(u Unit)     { r.Printf("FY%v", u) }
+func (r Robo) RegMarkLen(u Unit)         { r.Printf("TB51,%v", u) }
