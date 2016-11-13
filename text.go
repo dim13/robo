@@ -15,19 +15,19 @@ type Glyph struct {
 
 type Set []Path
 
-func Print(c *bufio.Writer, in io.Reader, scale Unit) {
+func (r Robo) Print(in io.Reader, scale Unit) {
 	var off Point
 
 	scanner := bufio.NewScanner(in)
 	for scanner.Scan() {
-		font.putchar(c, scanner.Text(), scale, &off)
+		font.putchar(r, scanner.Text(), scale, &off)
 	}
 	if err := scanner.Err(); err != nil {
 		log.Fatal(err)
 	}
 }
 
-func (f Font) putchar(c *bufio.Writer, s string, scale Unit, off *Point) {
+func (f Font) putchar(r Robo, s string, scale Unit, off *Point) {
 	for _, ch := range s {
 		gl, ok := f[ch]
 		if ok {
@@ -35,9 +35,9 @@ func (f Font) putchar(c *bufio.Writer, s string, scale Unit, off *Point) {
 				off.X += height * scale
 				off.Y = 0
 			}
-			off.Offset(c)
+			r.Offset(*off)
 			for _, p := range gl.S {
-				p.Scale(scale).Line(c)
+				r.Line(p.Scale(scale)...)
 				//p.Scale(scale).Curve(c, 0)
 			}
 			off.Y += gl.W * scale

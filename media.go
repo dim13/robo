@@ -1,102 +1,84 @@
 package robo
 
-import (
-	"bufio"
-	"fmt"
-)
-
 // Overcut: depends on blade, 0 for pens
 
 type Media struct {
 	Descr   string // Description
-	ID      int    // FW111
-	Speed   int    // !10
-	Force   int    // FX10,0
-	Overcut int    // FC ?
+	ID      Unit   // FW111
+	Speed   Unit   // !10
+	Force   Unit   // FX10,0
+	Overcut Unit   // FC ?
 }
 
-var MediaID = make(map[int]Media)
-
-func init() {
-	for _, m := range Medias {
-		MediaID[m.ID] = m
-	}
+func (r Robo) SetMedia(m Media) {
+	r.Media(m.ID)
+	r.Speed(m.Speed)
+	r.Force(m.Force)
+	r.Overcut(m.Overcut)
 }
 
-func (m Media) String() string {
-	return fmt.Sprintf("%v: Speed %2d, Force %2d %s",
-		m.ID, m.Speed, m.Force, m.Descr)
-}
-
-func (m Media) Apply(c *bufio.Writer) {
-	Unit(m.ID).Media(c)
-	Unit(m.Speed).Speed(c)
-	Unit(m.Force).Force(c)
-	Unit(m.Overcut).Overcut(c)
-}
-
-var Medias = []Media{
-	{
+var (
+	MediaCardWithoutCraftPaperBacking = Media{
 		Descr:   "Card without Craft Paper Backing",
 		ID:      100,
 		Speed:   10,
 		Force:   27,
 		Overcut: 18,
-	},
-	{
+	}
+	MediaCardWithCraftPaperBacking = Media{
 		Descr:   "Card with Craft Paper Backing",
 		ID:      101,
 		Speed:   10,
 		Force:   27,
 		Overcut: 18,
-	},
-	{
+	}
+	MediaVinylSticker = Media{
 		Descr:   "Vinyl Sticker",
 		ID:      102,
 		Speed:   10,
 		Force:   10,
 		Overcut: 18,
-	},
-	{
+	}
+	MediaFilmLables = Media{
 		Descr:   "Film Labels",
 		ID:      106,
 		Speed:   10,
 		Force:   14,
 		Overcut: 18,
-	},
-	{
+	}
+	MediaMagneticSheet = Media{
 		Descr:   "Magnetic Sheet",
 		ID:      107,
 		Speed:   10,
 		Force:   12,
 		Overcut: 18,
-	},
-	{
+	}
+	MediaThick = Media{
 		Descr:   "Thick Media",
 		ID:      111,
 		Speed:   10,
 		Force:   27,
 		Overcut: 18,
-	},
-	{
+	}
+	MediaThin = Media{
 		Descr:   "Thin Media",
 		ID:      112,
 		Speed:   10,
 		Force:   2,
 		Overcut: 18,
-	},
-	{
+	}
+	MediaPen = Media{
 		Descr:   "Pen",
 		ID:      113,
 		Speed:   10,
 		Force:   10,
 		Overcut: 0,
-	},
-	{
+	}
+	MediaCustom = Media{
 		Descr:   "Custom",
 		ID:      300,
 		Speed:   10,
 		Force:   10,
 		Overcut: 18,
-	},
-}
+	}
+)

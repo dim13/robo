@@ -44,14 +44,15 @@ type Point struct {
 	X, Y Unit
 }
 
+func (p Point) Swap() Point { return Point{X: p.Y, Y: p.X} }
+
 func (p Point) String() (s string) {
 	switch orientation {
 	case Portrait:
-		s = fmt.Sprintf("%v,%v", p.X, p.Y)
 	case Landscape:
-		s = fmt.Sprintf("%v,%v", p.Y, p.X)
+		p = p.Swap()
 	}
-	return
+	return fmt.Sprintf("%v,%v", p.X, p.Y)
 }
 
 func (p Point) Scale(f Unit) Point {
@@ -86,10 +87,10 @@ func (p Path) String() string {
 	return strings.Join(pp, ",")
 }
 
-func (ph Path) Scale(f Unit) Path {
-	ret := make(Path, len(ph))
-	for i, p := range ph {
-		ret[i] = p.Scale(f)
+func (p Path) Scale(f Unit) Path {
+	ret := make(Path, len(p))
+	for i, pt := range p {
+		ret[i] = pt.Scale(f)
 	}
 	return ret
 }

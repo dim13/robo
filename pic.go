@@ -36,9 +36,9 @@ func parsePage() (pa Page) {
 	return pa
 }
 
-func DrawPic(c *bufio.Writer) {
-	Landscape.Orientation(c)
+func (r Robo) DrawPic() {
+	//Landscape.Orientation(c)
 	for _, p := range parsePage() {
-		p.Line(c)
+		r.Line(p...)
 	}
 }

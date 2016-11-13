@@ -1,7 +1,5 @@
 package robo
 
-import "bufio"
-
 /*
 	Landscape		Portrait
 	┌─  H  ─┐		┌─  W  ─┐
@@ -24,20 +22,6 @@ import "bufio"
 	─┐			└─
 	 │
 */
-
-func DrawMarks(c *bufio.Writer, offset, size Point, length int) {
-	Point{600, 3800}.Move(c)
-	Point{200, 3800}.Draw(c)
-	Point{200, 3400}.Draw(c)
-
-	Point{200, 600}.Move(c)
-	Point{200, 200}.Draw(c)
-	Point{600, 200}.Draw(c)
-
-	Point{4840, 200}.Move(c)
-	Point{5240, 200}.Draw(c)
-	Point{5240, 600}.Draw(c)
-}
 
 func (r Robo) DrawMarks() {
 	r.Line(Point{600, 3800}, Point{200, 3800}, Point{200, 3400})
