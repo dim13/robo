@@ -20,6 +20,7 @@ var A4 = Point{272 * MM, 200 * MM}
 type Page struct {
 	o  Orientation
 	sz Point // A4
+	m  Media
 }
 
 type Unit float64
