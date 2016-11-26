@@ -8,7 +8,7 @@ import (
 	"strings"
 )
 
-type Page []Path
+type Pic []Path
 
 func parseLine(s string) (pa Path) {
 	if strings.HasPrefix(s, "line from ") {
@@ -23,7 +23,7 @@ func parseLine(s string) (pa Path) {
 	return pa
 }
 
-func parsePage() (pa Page) {
+func parsePic() (pa Pic) {
 	scanner := bufio.NewScanner(os.Stdin)
 	for scanner.Scan() {
 		if p := parseLine(scanner.Text()); p != nil {
@@ -38,7 +38,7 @@ func parsePage() (pa Page) {
 
 func (r Robo) DrawPic() {
 	//Landscape.Orientation(c)
-	for _, p := range parsePage() {
+	for _, p := range parsePic() {
 		r.Line(p...)
 	}
 }
