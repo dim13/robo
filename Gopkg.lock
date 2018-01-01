@@ -4,7 +4,10 @@
 [[projects]]
   branch = "master"
   name = "github.com/golang/freetype"
-  packages = ["raster","truetype"]
+  packages = [
+    "raster",
+    "truetype"
+  ]
   revision = "e2365dfdc4a05e4b8299a783240d4a7d5a65d4e4"
 
 [[projects]]
@@ -17,7 +20,7 @@
   branch = "master"
   name = "github.com/llgcode/draw2d"
   packages = ["."]
-  revision = "dcbfbe505d35de8166ccfc47ff9e4bb020473e18"
+  revision = "c41aa97d30ae131f178c555e3bbaeae333dc8f0d"
 
 [[projects]]
   branch = "master"
@@ -28,8 +31,11 @@
 [[projects]]
   branch = "master"
   name = "golang.org/x/image"
-  packages = ["font","math/fixed"]
-  revision = "e20db36d77bd0cb36cea8fe49d5c37d82d21591f"
+  packages = [
+    "font",
+    "math/fixed"
+  ]
+  revision = "12117c17ca67ffa1ce22e9409f3b0b0a93ac08c7"
 
 [solve-meta]
   analyzer-name = "dep"
