@@ -12,9 +12,8 @@ func main() {
 		log.Fatal(err)
 	}
 	defer dev.Close()
-	defer dev.Home()
 
 	dev.Initialize(robo.MediaPen, robo.Portrait)
 	dev.UpperRight(robo.A4)
-	//dev.TestPattern(handle.Writer)
+	dev.TestPattern()
 }
