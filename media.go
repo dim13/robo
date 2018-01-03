@@ -10,6 +10,10 @@ type Media struct {
 	Overcut Unit   // FC ?
 }
 
+func (m Media) String() string {
+	return m.Descr
+}
+
 func (r Robo) SetMedia(m Media) {
 	r.Media(m.ID)
 	r.Speed(m.Speed)

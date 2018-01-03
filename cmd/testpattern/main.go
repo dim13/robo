@@ -7,16 +7,14 @@ import (
 )
 
 func main() {
-	dev, err := robo.Open()
+	dev, err := robo.NewRobo()
 	if err != nil {
 		log.Fatal(err)
 	}
 	defer dev.Close()
+	defer dev.Home()
 
-	handle := dev.Handle()
-	defer robo.Home(handle.Writer)
-
-	robo.Initialize(handle, 113, robo.Portrait)
-	robo.A4.UpperRight(handle.Writer)
-	robo.TestPattern(handle.Writer)
+	dev.Initialize(robo.MediaPen, robo.Portrait)
+	dev.UpperRight(robo.A4)
+	//dev.TestPattern(handle.Writer)
 }

@@ -103,7 +103,6 @@ func (r Robo) Offset(p Point)                  { r.Printf("^%v", p) }
 func (r Robo) LowerLeft(p Point)               { r.Printf("\\%v", p) }
 func (r Robo) UpperRight(p Point)              { r.Printf("Z%v", p) }
 func (r Robo) CuttingArea(p Point)             { r.Printf("FU%v", p) }
-func (r Robo) Calibration(p Point)             { r.Printf("TB72,%v", p) }
 func (r Robo) Move(p Point)                    { r.Printf("M%v", p) }
 func (r Robo) MoveRelative(p Point)            { r.Printf("O%v", p) }
 func (r Robo) Draw(p ...Point)                 { r.Printf("D%v", Path(p)) }
@@ -129,3 +128,24 @@ func (r Robo) TrackEnhancing(u Unit)     { r.Printf("FY%v", u) }
 func (r Robo) RegMarkLen(u Unit)         { r.Printf("TB51,%v", u) }
 
 func (r Robo) Orientation(o Orientation) { r.Printf("FN%d", o) }
+
+func (r Robo) Initialize(m Media, o Orientation) {
+	r.Init()
+	if !r.Ready() {
+		fmt.Println("not ready")
+	}
+	r.GoHome()
+
+	// Print version
+	// fmt.Println("Craft ROBO Ver.", r.Version())
+
+	r.SetMedia(m)
+	r.TrackEnhancing(Unit(0))
+	r.UnknownFE(Unit(0))
+
+	// Print calibration
+	// Print distance correction
+
+	r.RegMarkLen(Unit(400))
+	r.Orientation(o)
+}
