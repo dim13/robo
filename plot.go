@@ -22,10 +22,6 @@ func (r Robo) Close() error {
 	return r.dev.Close()
 }
 
-type Plotter interface {
-	Plot() []byte
-}
-
 func (r Robo) Wait4Ready() {
 	t := time.NewTicker(time.Second)
 	defer t.Stop()
