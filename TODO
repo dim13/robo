@@ -1,0 +1,21 @@
+LPR Emulation
+
+Page width = 80 chars with 10 chars per inch = 8 inches = 20.32 cm
+Page height = 66 lines with 6 lines per inch = 11 inches = 27.94 cm 
+
+Also common: 54 lines per page
+
+CPI: 10, 12, 15
+LPI: 4, 6, 8, 9, 12
+
+Margin top:	0.33"
+Margin bottom:	0.53"
+Margin L/R:	0.12"
+
+A4: 210x297mm	(8.26x11.69")
+Letter: 8.5x11"	(215.9x279.4mm)
+
+See also:
+
+- http://reportman.sourceforge.net/doc/dotmatrix.html
+- https://files.support.epson.com/pdf/lq850_/lq850_u1.pdf
