@@ -4,7 +4,7 @@ import (
 	"flag"
 	"os"
 
-	"dim13.org/robo"
+	"github.com/dim13/robo"
 )
 
 var scale = flag.Float64("scale", 1.0, "font scale")

@@ -3,7 +3,7 @@ package main
 import (
 	"fmt"
 
-	"dim13.org/robo"
+	"github.com/dim13/robo"
 )
 
 func main() {
