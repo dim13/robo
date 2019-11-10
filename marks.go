@@ -2,34 +2,27 @@ package robo
 
 import "bufio"
 
-/*	Landscape		Portrait
-	+- H -+			+- W -+
-	|x1  3|			|2  1x|
+/*
+	Landscape		Portrait
+	┌─  H  ─┐		┌─  W  ─┐
+	│x1    3│		│2    1x│
 
-	W ->			   |  H
-				   v
-	|2			     3|
-	+-			     -+
+	W   →			    ↓   H
+
+	│2			       3│
+	└─			       ─┘
 */
 
 /*
-	Type1
+	Type1			Type2
 
-	 |	|
-	-+	+-
+	 │     │
+	─┘     └─		┌─     ─┐
+				│       │
 
-
-	-+
-	 |
-
-	Type2
-
-	+-	-+
-	|	 |
-
-
-	|
-	+-
+				│
+	─┐			└─
+	 │
 */
 
 func DrawMarks(c *bufio.Writer, offset, size Point, length int) {
