@@ -253,6 +253,6 @@ func BootUpgrade(c *bufio.ReadWriter) string {
 	return s
 }
 func UpdateFirmware(c *bufio.ReadWriter) bool {
-	return str(c, "CC1VERUP") == string(NUL)
+	return str(c, "CC1VERUP") == string(rune(NUL))
 }
 func EnableDebug(c *bufio.Writer) { send(c, "FP,GRFCC1") }

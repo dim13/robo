@@ -5,32 +5,27 @@ import (
 	"errors"
 	"log"
 
-	"github.com/kylelemons/gousb/usb"
+	"github.com/google/gousb"
 )
 
 type USB struct {
-	ctx *usb.Context
-	dev *usb.Device
+	ctx  *gousb.Context
+	dev  *gousb.Device
+	done func()
+	intf *gousb.Interface
 }
 
-var (
-	graphtec            = usb.ID(0x0b4d)
-	craftrobo           = usb.ID(0x110a)
-	craftrobolite       = usb.ID(0x111a)
-	silhouette          = usb.ID(0x111c)
-	silhouette_sd       = usb.ID(0x111d)
-	silhouette_cameo    = usb.ID(0x1121)
-	silhouette_portrait = usb.ID(0x1123)
-	debug               = 3
+const (
+	graphtec            = 0x0b4d
+	craftrobo           = 0x110a
+	craftrobolite       = 0x111a
+	silhouette          = 0x111c
+	silhouette_sd       = 0x111d
+	silhouette_cameo    = 0x1121
+	silhouette_portrait = 0x1123
 )
 
-func init() {
-	// bump timeouts
-	usb.DefaultReadTimeout *= 60
-	usb.DefaultWriteTimeout *= 300
-}
-
-func match(desc *usb.Descriptor) bool {
+func match(desc *gousb.DeviceDesc) bool {
 	if desc.Vendor == graphtec {
 		switch desc.Product {
 		case craftrobo, craftrobolite,
@@ -43,9 +38,8 @@ func match(desc *usb.Descriptor) bool {
 }
 
 func NewUSB() (USB, error) {
-	ctx := usb.NewContext()
-	ctx.Debug(debug)
-	devs, err := ctx.ListDevices(match)
+	ctx := gousb.NewContext()
+	devs, err := ctx.OpenDevices(match)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -55,42 +49,24 @@ func NewUSB() (USB, error) {
 		}
 		return USB{}, errors.New("Cannot find Craft ROBO")
 	}
-	return USB{ctx, devs[0]}, nil
+	intf, done, err := devs[0].DefaultInterface()
+	return USB{ctx, devs[0], done, intf}, nil
 }
 
 func (d USB) Close() {
+	d.done()
 	d.dev.Close()
 	d.ctx.Close()
 }
 
 func (d USB) Handle() *bufio.ReadWriter {
-	var (
-		r *bufio.Reader
-		w *bufio.Writer
-	)
-
-	for _, c := range d.dev.Configs {
-		for _, i := range c.Interfaces {
-			for _, s := range i.Setups {
-				for _, ep := range s.Endpoints {
-					e, err := d.dev.OpenEndpoint(
-						c.Config,
-						i.Number,
-						s.Number,
-						ep.Address)
-					if err != nil {
-						log.Fatal(err)
-					}
-					switch ep.Direction() {
-					case usb.ENDPOINT_DIR_OUT:
-						w = bufio.NewWriter(e)
-					case usb.ENDPOINT_DIR_IN:
-						r = bufio.NewReader(e)
-					}
-				}
-			}
-		}
+	in, err := d.intf.InEndpoint(2)
+	if err != nil {
+		panic(err)
 	}
-
-	return bufio.NewReadWriter(r, w)
+	out, err := d.intf.OutEndpoint(1)
+	if err != nil {
+		panic(err)
+	}
+	return bufio.NewReadWriter(bufio.NewReader(in), bufio.NewWriter(out))
 }
