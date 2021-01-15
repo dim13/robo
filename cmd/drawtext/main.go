@@ -2,6 +2,7 @@ package main
 
 import (
 	"flag"
+	"log"
 	"os"
 
 	"github.com/dim13/robo"
@@ -12,7 +13,10 @@ var scale = flag.Float64("scale", 1.0, "font scale")
 func main() {
 	flag.Parse()
 
-	dev := robo.NewDevice()
+	dev, err := robo.NewDevice()
+	if err != nil {
+		log.Fatal(err)
+	}
 	defer dev.Close()
 
 	handle := dev.Handle()
