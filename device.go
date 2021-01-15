@@ -2,8 +2,6 @@ package robo
 
 import (
 	"bufio"
-	"errors"
-	"log"
 
 	"github.com/google/gousb"
 )
@@ -39,18 +37,15 @@ func match(desc *gousb.DeviceDesc) bool {
 
 func NewDevice() (USB, error) {
 	ctx := gousb.NewContext()
-	devs, err := ctx.OpenDevices(match)
+	dev, err := ctx.OpenDeviceWithVIDPID(graphtec, craftrobo)
 	if err != nil {
-		log.Fatal(err)
+		return USB{}, err
 	}
-	if len(devs) != 1 {
-		for _, dev := range devs {
-			dev.Close()
-		}
-		return USB{}, errors.New("Cannot find Craft ROBO")
+	intf, done, err := dev.DefaultInterface()
+	if err != nil {
+		return USB{}, err
 	}
-	intf, done, err := devs[0].DefaultInterface()
-	return USB{ctx, devs[0], done, intf}, nil
+	return USB{ctx, dev, done, intf}, nil
 }
 
 func (d USB) Close() error {
