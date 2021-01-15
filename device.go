@@ -9,8 +9,9 @@ import (
 type USB struct {
 	ctx  *gousb.Context
 	dev  *gousb.Device
-	done func()
 	intf *gousb.Interface
+	*bufio.ReadWriter
+	done func()
 }
 
 const (
@@ -45,24 +46,27 @@ func NewDevice() (USB, error) {
 	if err != nil {
 		return USB{}, err
 	}
-	return USB{ctx, dev, done, intf}, nil
+	in, err := intf.InEndpoint(2)
+	if err != nil {
+		return USB{}, err
+	}
+	out, err := intf.OutEndpoint(1)
+	if err != nil {
+		return USB{}, err
+	}
+	return USB{
+		ctx:        ctx,
+		dev:        dev,
+		intf:       intf,
+		done:       done,
+		ReadWriter: bufio.NewReadWriter(bufio.NewReader(in), bufio.NewWriter(out)),
+	}, nil
 }
 
 func (d USB) Close() error {
+	d.ReadWriter.Flush()
 	d.done()
 	d.dev.Close()
 	d.ctx.Close()
 	return nil
-}
-
-func (d USB) Handle() *bufio.ReadWriter {
-	in, err := d.intf.InEndpoint(2)
-	if err != nil {
-		panic(err)
-	}
-	out, err := d.intf.OutEndpoint(1)
-	if err != nil {
-		panic(err)
-	}
-	return bufio.NewReadWriter(bufio.NewReader(in), bufio.NewWriter(out))
 }

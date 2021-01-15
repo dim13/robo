@@ -13,10 +13,9 @@ func main() {
 	}
 	defer dev.Close()
 
-	handle := dev.Handle()
-	defer robo.Home(handle.Writer)
+	defer robo.Home(dev.Writer)
 
-	robo.Initialize(handle, 113, robo.Portrait)
-	robo.A4.UpperRight(handle.Writer)
-	robo.TestPattern(handle.Writer)
+	robo.Initialize(dev.ReadWriter, 113, robo.Portrait)
+	robo.A4.UpperRight(dev.Writer)
+	robo.TestPattern(dev.Writer)
 }
