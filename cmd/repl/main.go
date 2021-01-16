@@ -1,7 +1,9 @@
 package main
 
 import (
+	"bufio"
 	"log"
+	"os"
 
 	"github.com/dim13/robo"
 )
@@ -12,10 +14,8 @@ func main() {
 		log.Fatal(err)
 	}
 	defer dev.Close()
-
-	defer robo.Home(dev.Writer)
-
-	robo.Initialize(dev.ReadWriter, 113, robo.Portrait)
-	robo.A4.UpperRight(dev.Writer)
-	robo.TestPattern(dev.Writer)
+	s := bufio.NewScanner(os.Stdin)
+	for s.Scan() {
+		robo.Send(dev.Writer, s.Text())
+	}
 }

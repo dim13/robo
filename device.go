@@ -36,7 +36,7 @@ func match(desc *gousb.DeviceDesc) bool {
 	return false
 }
 
-func NewDevice() (USB, error) {
+func Open() (USB, error) {
 	ctx := gousb.NewContext()
 	dev, err := ctx.OpenDeviceWithVIDPID(graphtec, craftrobo)
 	if err != nil {

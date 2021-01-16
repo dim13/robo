@@ -13,7 +13,7 @@ var scale = flag.Float64("scale", 1.0, "font scale")
 func main() {
 	flag.Parse()
 
-	dev, err := robo.NewDevice()
+	dev, err := robo.Open()
 	if err != nil {
 		log.Fatal(err)
 	}
