@@ -7,8 +7,8 @@ import (
 	"crypto/des"
 	"flag"
 	"fmt"
-	"io/ioutil"
 	"log"
+	"os"
 )
 
 var (
@@ -21,7 +21,7 @@ var (
 func main() {
 	flag.Parse()
 
-	f, err := ioutil.ReadFile(*file)
+	f, err := os.ReadFile(*file)
 	if err != nil {
 		log.Fatal(err)
 	}

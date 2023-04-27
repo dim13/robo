@@ -17,7 +17,7 @@ func etx(c *bufio.Writer) {
 	c.Flush()
 }
 
-func (p Point) send(c *bufio.Writer, a ...interface{}) {
+func (p Point) send(c *bufio.Writer, a ...any) {
 	fmt.Fprint(c, a[0], p)
 	for _, arg := range a[1:] {
 		fmt.Fprint(c, arg)
@@ -57,7 +57,7 @@ func (ph Path) Scale(f Unit) (ret Path) {
 	return
 }
 
-func (ph Path) send(c *bufio.Writer, a ...interface{}) {
+func (ph Path) send(c *bufio.Writer, a ...any) {
 	fmt.Fprint(c, a...)
 	for _, p := range ph {
 		fmt.Fprint(c, p, ",")
@@ -81,7 +81,7 @@ func (ph Path) Line(c *bufio.Writer) {
 	ph[1:].Draw(c)
 }
 
-func (u Unit) send(c *bufio.Writer, a ...interface{}) {
+func (u Unit) send(c *bufio.Writer, a ...any) {
 	fmt.Fprint(c, a[0], u)
 	for _, arg := range a[1:] {
 		fmt.Fprint(c, arg)
@@ -132,12 +132,12 @@ func Recv(c *bufio.Reader) string {
 	return recv(c)
 }
 
-func send(c *bufio.Writer, a ...interface{}) {
+func send(c *bufio.Writer, a ...any) {
 	fmt.Fprint(c, a...)
 	etx(c)
 }
 
-func Send(c *bufio.Writer, a interface{}) {
+func Send(c *bufio.Writer, a any) {
 	send(c, a)
 }
 

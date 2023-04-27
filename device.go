@@ -24,18 +24,6 @@ const (
 	silhouette_portrait = 0x1123
 )
 
-func match(desc *gousb.DeviceDesc) bool {
-	if desc.Vendor == graphtec {
-		switch desc.Product {
-		case craftrobo, craftrobolite,
-			silhouette, silhouette_sd,
-			silhouette_cameo, silhouette_portrait:
-			return true
-		}
-	}
-	return false
-}
-
 func Open() (USB, error) {
 	ctx := gousb.NewContext()
 	dev, err := ctx.OpenDeviceWithVIDPID(graphtec, craftrobo)
