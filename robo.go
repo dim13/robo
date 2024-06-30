@@ -50,35 +50,35 @@ func (p Point) Scale(f Unit) Point {
 	return Point{p.X * f, p.Y * f}
 }
 
-func (ph Path) Scale(f Unit) (ret Path) {
-	for _, p := range ph {
-		ret = append(ret, p.Scale(f))
+func (p Path) Scale(f Unit) (ret Path) {
+	for _, pt := range p {
+		ret = append(ret, pt.Scale(f))
 	}
 	return
 }
 
-func (ph Path) send(c *bufio.Writer, a ...any) {
+func (p Path) send(c *bufio.Writer, a ...any) {
 	fmt.Fprint(c, a...)
-	for _, p := range ph {
-		fmt.Fprint(c, p, ",")
+	for _, pt := range p {
+		fmt.Fprint(c, pt, ",")
 	}
 	etx(c)
 }
 
-func (ph Path) Draw(c *bufio.Writer)                 { ph.send(c, "D") }
-func (ph Path) DrawRelative(c *bufio.Writer)         { ph.send(c, "E") }
-func (ph Path) Curve(c *bufio.Writer, a int)         { ph.send(c, "Y", a, ",") }
-func (ph Path) CurveRelative(c *bufio.Writer, a int) { ph.send(c, "_", a, ",") }
+func (p Path) Draw(c *bufio.Writer)                 { p.send(c, "D") }
+func (p Path) DrawRelative(c *bufio.Writer)         { p.send(c, "E") }
+func (p Path) Curve(c *bufio.Writer, a int)         { p.send(c, "Y", a, ",") }
+func (p Path) CurveRelative(c *bufio.Writer, a int) { p.send(c, "_", a, ",") }
 
-func (ph Path) Bezier(c *bufio.Writer, a int)  { ph[0:4].send(c, "BZ", a, ",") }
-func (ph Path) Circle(c *bufio.Writer)         { ph[0:3].send(c, "W") }
-func (ph Path) Circle3P(c *bufio.Writer)       { ph[0:3].send(c, "WP") }
-func (ph Path) CircleRelative(c *bufio.Writer) { ph[0:2].send(c, "]") }
-func (ph Path) Ellipse(c *bufio.Writer)        { ph[0:4].send(c, ")") }
+func (p Path) Bezier(c *bufio.Writer, a int)  { p[0:4].send(c, "BZ", a, ",") }
+func (p Path) Circle(c *bufio.Writer)         { p[0:3].send(c, "W") }
+func (p Path) Circle3P(c *bufio.Writer)       { p[0:3].send(c, "WP") }
+func (p Path) CircleRelative(c *bufio.Writer) { p[0:2].send(c, "]") }
+func (p Path) Ellipse(c *bufio.Writer)        { p[0:4].send(c, ")") }
 
-func (ph Path) Line(c *bufio.Writer) {
-	ph[0].Move(c)
-	ph[1:].Draw(c)
+func (p Path) Line(c *bufio.Writer) {
+	p[0].Move(c)
+	p[1:].Draw(c)
 }
 
 func (u Unit) send(c *bufio.Writer, a ...any) {
