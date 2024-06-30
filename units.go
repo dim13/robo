@@ -11,7 +11,11 @@ const (
 	PT = IN / 72
 )
 
-var A4 = Point{272 * MM, 200 * MM}
+var (
+	Margin = Point{25 * MM, 10 * MM}
+	A4     = Point{297 * MM, 210 * MM}
+	Letter = Point{11 * IN, 8.5 * IN}
+)
 
 type Unit float64
 
@@ -30,6 +34,13 @@ func parseUnit(s string) (u Unit) {
 
 type Point struct {
 	X, Y Unit
+}
+
+func (p Point) Sub(o Point) Point {
+	return Point{
+		X: p.X - o.X,
+		Y: p.Y - o.Y,
+	}
 }
 
 var orientation = Portrait

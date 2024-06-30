@@ -16,6 +16,6 @@ func main() {
 	defer robo.Home(dev.Writer)
 
 	robo.Initialize(dev.ReadWriter, 113, robo.Portrait)
-	robo.A4.UpperRight(dev.Writer)
+	robo.A4.Sub(robo.Margin).UpperRight(dev.Writer)
 	robo.TestPattern(dev.Writer)
 }
