@@ -19,8 +19,7 @@ func main() {
 	robo.Triple{100, 100, 100}.Factor(dev)
 
 	size := robo.CM * 15
-	for i, p := range ClarkY {
-		_, _ = i, p
+	for i, p := range Eppler393 {
 		origin := robo.Point{5, robo.Unit(5 + 10*i)}.Scale(robo.CM)
 		p.Scale(size).Add(origin).Line(dev)
 		Box.Scale(size).Add(origin).Line(dev)
