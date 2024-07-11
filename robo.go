@@ -50,9 +50,20 @@ func (p Point) Scale(f Unit) Point {
 	return Point{p.X * f, p.Y * f}
 }
 
+func (p Point) Add(f Point) Point {
+	return Point{p.X + f.X, p.Y + f.Y}
+}
+
 func (p Path) Scale(f Unit) (ret Path) {
 	for _, pt := range p {
 		ret = append(ret, pt.Scale(f))
+	}
+	return
+}
+
+func (p Path) Add(f Point) (ret Path) {
+	for _, pt := range p {
+		ret = append(ret, pt.Add(f))
 	}
 	return
 }

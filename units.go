@@ -12,6 +12,7 @@ const (
 )
 
 var (
+	Zero   = Point{0, 0}
 	Margin = Point{25 * MM, 10 * MM}
 	A4     = Point{297 * MM, 210 * MM}
 	Letter = Point{11 * IN, 8.5 * IN}

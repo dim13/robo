@@ -1,0 +1,46 @@
+Full Speed device @ 1 (0x00100000): .............................................   Composite device from unknown vendor
+    Port Information:   0x001a
+           Not Captive
+           Attached to Root Hub
+           External Device
+           Connected
+           Enabled
+    Number Of Endpoints (includes EP0):   
+        Total Endpoints for Configuration 1 (current):   3
+    Device Descriptor   
+        Descriptor Version Number:   0x0100
+        Device Class:   0   (Composite)
+        Device Subclass:   0
+        Device Protocol:   0
+        Device MaxPacketSize:   64
+        Device VendorID/ProductID:   0x0B4D/0x110A   (unknown vendor)
+        Device Version Number:   0x0100
+        Number of Configurations:   1
+        Manufacturer String:   0 (none)
+        Product String:   0 (none)
+        Serial Number String:   1 "123"
+    Configuration Descriptor (current config)   
+        Length (and contents):   32
+            Raw Descriptor (hex)    0000: 09 02 20 00 01 01 00 C0  10 09 04 00 00 02 07 01  
+            Raw Descriptor (hex)    0010: 02 00 07 05 01 02 40 00  00 07 05 82 02 40 00 00  
+            Unknown Descriptor   0020: 
+        Number of Interfaces:   1
+        Configuration Value:   1
+        Attributes:   0xC0 (self-powered)
+        MaxPower:   32 mA
+        Interface #0 - Printer   
+            Alternate Setting   0
+            Number of Endpoints   2
+            Interface Class:   7   (Printer)
+            Interface Subclass;   1
+            Interface Protocol:   2
+            Endpoint 0x01 - Bulk Output   
+                Address:   0x01  (OUT)
+                Attributes:   0x02  (Bulk)
+                Max Packet Size:   64
+                Polling Interval:   0 ms
+            Endpoint 0x82 - Bulk Input   
+                Address:   0x82  (IN)
+                Attributes:   0x02  (Bulk)
+                Max Packet Size:   64
+                Polling Interval:   0 ms
