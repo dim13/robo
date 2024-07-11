@@ -1,7 +1,7 @@
 package robo
 
 import (
-	"bufio"
+	"io"
 
 	"github.com/google/gousb"
 )
@@ -10,7 +10,8 @@ type USB struct {
 	ctx  *gousb.Context
 	dev  *gousb.Device
 	intf *gousb.Interface
-	*bufio.ReadWriter
+	io.Reader
+	io.Writer
 	done func()
 }
 
@@ -43,16 +44,16 @@ func Open() (USB, error) {
 		return USB{}, err
 	}
 	return USB{
-		ctx:        ctx,
-		dev:        dev,
-		intf:       intf,
-		done:       done,
-		ReadWriter: bufio.NewReadWriter(bufio.NewReader(in), bufio.NewWriter(out)),
+		ctx:    ctx,
+		dev:    dev,
+		intf:   intf,
+		done:   done,
+		Reader: in,
+		Writer: out,
 	}, nil
 }
 
 func (d USB) Close() error {
-	d.ReadWriter.Flush()
 	d.done()
 	d.dev.Close()
 	d.ctx.Close()

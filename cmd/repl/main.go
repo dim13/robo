@@ -16,6 +16,6 @@ func main() {
 	defer dev.Close()
 	s := bufio.NewScanner(os.Stdin)
 	for s.Scan() {
-		robo.Send(dev.Writer, s.Text())
+		robo.Send(dev, s.Text())
 	}
 }

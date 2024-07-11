@@ -1,6 +1,6 @@
 package robo
 
-import "bufio"
+import "io"
 
 /*
 	Landscape		Portrait
@@ -25,7 +25,7 @@ import "bufio"
 	 │
 */
 
-func DrawMarks(c *bufio.Writer, offset, size Point, length int) {
+func DrawMarks(c io.Writer, offset, size Point, length int) {
 	Point{600, 3800}.Move(c)
 	Point{200, 3800}.Draw(c)
 	Point{200, 3400}.Draw(c)

@@ -1,8 +1,8 @@
 package robo
 
-import "bufio"
+import "io"
 
-func TestPattern(c *bufio.Writer) {
+func TestPattern(c io.Writer) {
 	Triple{100, 100, 100}.Factor(c)
 	Point{0, 0}.Offset(c)
 	Point{0, 0}.LowerLeft(c)

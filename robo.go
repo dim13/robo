@@ -3,6 +3,7 @@ package robo
 import (
 	"bufio"
 	"fmt"
+	"io"
 )
 
 const (
@@ -12,12 +13,11 @@ const (
 	FS  = 0x1C // File Separator
 )
 
-func etx(c *bufio.Writer) {
-	c.WriteByte(ETX)
-	c.Flush()
+func etx(c io.Writer) {
+	c.Write([]byte{ETX})
 }
 
-func (p Point) send(c *bufio.Writer, a ...any) {
+func (p Point) send(c io.Writer, a ...any) {
 	fmt.Fprint(c, a[0], p)
 	for _, arg := range a[1:] {
 		fmt.Fprint(c, arg)
@@ -25,25 +25,25 @@ func (p Point) send(c *bufio.Writer, a ...any) {
 	etx(c)
 }
 
-func (p Point) Draw(c *bufio.Writer)         { p.send(c, "D") }
-func (p Point) DrawRelative(c *bufio.Writer) { p.send(c, "E") }
-func (p Point) Move(c *bufio.Writer)         { p.send(c, "M") }
-func (p Point) MoveRelative(c *bufio.Writer) { p.send(c, "O") }
-func (p Point) Offset(c *bufio.Writer)       { p.send(c, "^") }
-func (p Point) LowerLeft(c *bufio.Writer)    { p.send(c, "\\") }
-func (p Point) UpperRight(c *bufio.Writer)   { p.send(c, "Z") }
-func (p Point) CuttingArea(c *bufio.Writer)  { p.send(c, "FU") }
-func (p Point) Calibration(c *bufio.Writer)  { p.send(c, "TB72,") }
+func (p Point) Draw(c io.Writer)         { p.send(c, "D") }
+func (p Point) DrawRelative(c io.Writer) { p.send(c, "E") }
+func (p Point) Move(c io.Writer)         { p.send(c, "M") }
+func (p Point) MoveRelative(c io.Writer) { p.send(c, "O") }
+func (p Point) Offset(c io.Writer)       { p.send(c, "^") }
+func (p Point) LowerLeft(c io.Writer)    { p.send(c, "\\") }
+func (p Point) UpperRight(c io.Writer)   { p.send(c, "Z") }
+func (p Point) CuttingArea(c io.Writer)  { p.send(c, "FU") }
+func (p Point) Calibration(c io.Writer)  { p.send(c, "TB72,") }
 
-func (p Point) SearchMarks(c *bufio.ReadWriter, auto bool) bool {
-	send(c.Writer, "TB99")
-	send(c.Writer, "TB55,1")
+func (p Point) SearchMarks(c io.ReadWriter, auto bool) bool {
+	send(c, "TB99")
+	send(c, "TB55,1")
 	if auto {
-		send(c.Writer, "TB123,", p)
+		send(c, "TB123,", p)
 	} else {
-		send(c.Writer, "TB23,", p)
+		send(c, "TB23,", p)
 	}
-	return parseUnit(recv(c.Reader)) == 0
+	return parseUnit(recv(c)) == 0
 }
 
 func (p Point) Scale(f Unit) Point {
@@ -57,7 +57,7 @@ func (p Path) Scale(f Unit) (ret Path) {
 	return
 }
 
-func (p Path) send(c *bufio.Writer, a ...any) {
+func (p Path) send(c io.Writer, a ...any) {
 	fmt.Fprint(c, a...)
 	for _, pt := range p {
 		fmt.Fprint(c, pt, ",")
@@ -65,23 +65,23 @@ func (p Path) send(c *bufio.Writer, a ...any) {
 	etx(c)
 }
 
-func (p Path) Draw(c *bufio.Writer)                 { p.send(c, "D") }
-func (p Path) DrawRelative(c *bufio.Writer)         { p.send(c, "E") }
-func (p Path) Curve(c *bufio.Writer, a int)         { p.send(c, "Y", a, ",") }
-func (p Path) CurveRelative(c *bufio.Writer, a int) { p.send(c, "_", a, ",") }
+func (p Path) Draw(c io.Writer)                 { p.send(c, "D") }
+func (p Path) DrawRelative(c io.Writer)         { p.send(c, "E") }
+func (p Path) Curve(c io.Writer, a int)         { p.send(c, "Y", a, ",") }
+func (p Path) CurveRelative(c io.Writer, a int) { p.send(c, "_", a, ",") }
 
-func (p Path) Bezier(c *bufio.Writer, a int)  { p[0:4].send(c, "BZ", a, ",") }
-func (p Path) Circle(c *bufio.Writer)         { p[0:3].send(c, "W") }
-func (p Path) Circle3P(c *bufio.Writer)       { p[0:3].send(c, "WP") }
-func (p Path) CircleRelative(c *bufio.Writer) { p[0:2].send(c, "]") }
-func (p Path) Ellipse(c *bufio.Writer)        { p[0:4].send(c, ")") }
+func (p Path) Bezier(c io.Writer, a int)  { p[0:4].send(c, "BZ", a, ",") }
+func (p Path) Circle(c io.Writer)         { p[0:3].send(c, "W") }
+func (p Path) Circle3P(c io.Writer)       { p[0:3].send(c, "WP") }
+func (p Path) CircleRelative(c io.Writer) { p[0:2].send(c, "]") }
+func (p Path) Ellipse(c io.Writer)        { p[0:4].send(c, ")") }
 
-func (p Path) Line(c *bufio.Writer) {
+func (p Path) Line(c io.Writer) {
 	p[0].Move(c)
 	p[1:].Draw(c)
 }
 
-func (u Unit) send(c *bufio.Writer, a ...any) {
+func (u Unit) send(c io.Writer, a ...any) {
 	fmt.Fprint(c, a[0], u)
 	for _, arg := range a[1:] {
 		fmt.Fprint(c, arg)
@@ -89,83 +89,84 @@ func (u Unit) send(c *bufio.Writer, a ...any) {
 	etx(c)
 }
 
-func (u Unit) Origin(c *bufio.Writer)             { u.send(c, "SO") }
-func (u Unit) LineScale(c *bufio.Writer)          { u.send(c, "B") }
-func (u Unit) Media(c *bufio.Writer)              { u.send(c, "FW") }
-func (u Unit) Speed(c *bufio.Writer)              { u.send(c, "!") }
-func (u Unit) Force(c *bufio.Writer)              { u.send(c, "FX") }
-func (u Unit) Overcut(c *bufio.Writer)            { u.send(c, "FC") }
-func (u Unit) UnknownFE(c *bufio.Writer)          { u.send(c, "FE") }
-func (u Unit) DistanceCorrection(c *bufio.Writer) { u.send(c, "FB", ",0") }
-func (u Unit) TrackEnhancing(c *bufio.Writer)     { u.send(c, "FY") }
-func (u Unit) RegMarkLen(c *bufio.Writer)         { u.send(c, "TB51,") }
+func (u Unit) Origin(c io.Writer)             { u.send(c, "SO") }
+func (u Unit) LineScale(c io.Writer)          { u.send(c, "B") }
+func (u Unit) Media(c io.Writer)              { u.send(c, "FW") }
+func (u Unit) Speed(c io.Writer)              { u.send(c, "!") }
+func (u Unit) Force(c io.Writer)              { u.send(c, "FX") }
+func (u Unit) Overcut(c io.Writer)            { u.send(c, "FC") }
+func (u Unit) UnknownFE(c io.Writer)          { u.send(c, "FE") }
+func (u Unit) DistanceCorrection(c io.Writer) { u.send(c, "FB", ",0") }
+func (u Unit) TrackEnhancing(c io.Writer)     { u.send(c, "FY") }
+func (u Unit) RegMarkLen(c io.Writer)         { u.send(c, "TB51,") }
 
-func esc(c *bufio.Writer, bytes ...byte) {
-	c.WriteByte(ESC)
-	for _, b := range bytes {
-		c.WriteByte(b)
-	}
-	c.Flush()
+func esc(c io.Writer, bytes ...byte) {
+	c.Write([]byte{ESC})
+	c.Write(bytes)
 }
 
-func Init(c *bufio.Writer) { esc(c, 4) }
+func Init(c io.Writer) { esc(c, 4) }
 
-func Ready(c *bufio.ReadWriter) bool {
-	esc(c.Writer, 5)
-	return parseUnit(recv(c.Reader)) == 0
+func Ready(c io.ReadWriter) bool {
+	esc(c, 5)
+	return parseUnit(recv(c)) == 0
 }
 
-func (u Unit) UnknownFQ(c *bufio.ReadWriter) Unit {
-	u.send(c.Writer, "FQ", u)
-	return parseUnit(recv(c.Reader))
+func (u Unit) UnknownFQ(c io.ReadWriter) Unit {
+	u.send(c, "FQ", u)
+	return parseUnit(recv(c))
 }
 
-func recv(c *bufio.Reader) string {
-	ans, err := c.ReadString(ETX)
+func readString(r io.Reader, delim byte) (string, error) {
+	return bufio.NewReader(r).ReadString(delim)
+}
+
+func recv(c io.Reader) string {
+	ans, err := readString(c, ETX)
 	if err != nil {
 		panic(err)
 	}
 	return ans[:len(ans)-1]
 }
 
-func Recv(c *bufio.Reader) string {
+func Recv(c io.Reader) string {
 	return recv(c)
 }
 
-func send(c *bufio.Writer, a ...any) {
+func send(c io.Writer, a ...any) {
 	fmt.Fprint(c, a...)
 	etx(c)
 }
 
-func Send(c *bufio.Writer, a any) {
+func Send(c io.Writer, a any) {
 	send(c, a)
 }
 
-func GoHome(c *bufio.Writer)    { send(c, "TT") }
-func Home(c *bufio.Writer)      { send(c, "H") }
-func Origin(c *bufio.Writer)    { send(c, "FJ") }
-func Calibrate(c *bufio.Writer) { send(c, "TB70") }
-func TestCut(c *bufio.Writer)   { send(c, "FH") }
-func TestLoop(c *bufio.Writer)  { send(c, "FI") }
+func GoHome(c io.Writer)    { send(c, "TT") }
+func Home(c io.Writer)      { send(c, "H") }
+func Origin(c io.Writer)    { send(c, "FJ") }
+func Calibrate(c io.Writer) { send(c, "TB70") }
+func TestCut(c io.Writer)   { send(c, "FH") }
+func TestLoop(c io.Writer)  { send(c, "FI") }
 
-func point(c *bufio.ReadWriter, cmd string) Point {
-	send(c.Writer, cmd)
-	return parsePoint(recv(c.Reader))
+func point(c io.ReadWriter, cmd string) Point {
+	send(c, cmd)
+	return parsePoint(recv(c))
 }
 
-func Calibration(c *bufio.ReadWriter) Point        { return point(c, "TB71") }
-func Offset(c *bufio.ReadWriter) Point             { return point(c, "?") }
-func LowerLeft(c *bufio.ReadWriter) Point          { return point(c, "[") }
-func UpperRight(c *bufio.ReadWriter) Point         { return point(c, "U") }
-func DistanceCorrection(c *bufio.ReadWriter) Point { return point(c, "FA") }
+func Calibration(c io.ReadWriter) Point        { return point(c, "TB71") }
+func Offset(c io.ReadWriter) Point             { return point(c, "?") }
+func LowerLeft(c io.ReadWriter) Point          { return point(c, "[") }
+func UpperRight(c io.ReadWriter) Point         { return point(c, "U") }
+func DistanceCorrection(c io.ReadWriter) Point { return point(c, "FA") }
 
-func str(c *bufio.ReadWriter, cmd string) string {
-	send(c.Writer, cmd)
-	return recv(c.Reader)
+func str(c io.ReadWriter, cmd string) string {
+	send(c, cmd)
+	return recv(c)
 }
 
-func Version(c *bufio.ReadWriter) string    { return str(c, "FG") }
-func StatusWord(c *bufio.ReadWriter) string { return str(c, "@") }
+func Version(c io.ReadWriter) string    { return str(c, "FG") }
+func StatusWord(c io.ReadWriter) string { return str(c, "@") }
 
 type Orientation int
 
@@ -174,7 +175,7 @@ const (
 	Landscape
 )
 
-func (o Orientation) Orientation(c *bufio.Writer) {
+func (o Orientation) Orientation(c io.Writer) {
 	orientation = o
 	send(c, "FN", o)
 }
@@ -193,45 +194,45 @@ const (
 	DashLongDoubleDot
 )
 
-func (l LineStyle) LineStyle(c *bufio.Writer) { send(c, "L", l) }
-func (p Point) LineStyle(c *bufio.Writer)     { p.send(c, "L100,1,") }
+func (l LineStyle) LineStyle(c io.Writer) { send(c, "L", l) }
+func (p Point) LineStyle(c io.Writer)     { p.send(c, "L100,1,") }
 
-func triple(c *bufio.ReadWriter, cmd string) Triple {
-	send(c.Writer, cmd)
-	return parseTriple(recv(c.Reader))
+func triple(c io.ReadWriter, cmd string) Triple {
+	send(c, cmd)
+	return parseTriple(recv(c))
 }
 
-func Gin(c *bufio.ReadWriter) Triple     { return triple(c, "G") }
-func CallGin(c *bufio.ReadWriter) Triple { return triple(c, "C") }
+func Gin(c io.ReadWriter) Triple     { return triple(c, "G") }
+func CallGin(c io.ReadWriter) Triple { return triple(c, "C") }
 
-func (t Triple) send(c *bufio.Writer, cmd string) {
+func (t Triple) send(c io.Writer, cmd string) {
 	fmt.Fprint(c, cmd, t)
 	etx(c)
 }
 
-func (t Triple) Factor(c *bufio.Writer) { t.send(c, "&") }
+func (t Triple) Factor(c io.Writer) { t.send(c, "&") }
 
-func Initialize(c *bufio.ReadWriter, mid int, o Orientation) {
-	Init(c.Writer)
+func Initialize(c io.ReadWriter, mid int, o Orientation) {
+	Init(c)
 	if !Ready(c) {
 		fmt.Println("not ready")
 	}
 
-	GoHome(c.Writer)
+	GoHome(c)
 	fmt.Println("Craft ROBO Ver.", Version(c))
 
 	if pen, ok := MediaID[mid]; ok {
-		pen.Apply(c.Writer)
+		pen.Apply(c)
 	}
 
-	Unit(0).TrackEnhancing(c.Writer)
-	Unit(0).UnknownFE(c.Writer)
+	Unit(0).TrackEnhancing(c)
+	Unit(0).UnknownFE(c)
 
 	fmt.Println("Calibration", Calibration(c))
 	fmt.Println("Correction ", DistanceCorrection(c))
 
-	Unit(400).RegMarkLen(c.Writer)
-	o.Orientation(c.Writer)
+	Unit(400).RegMarkLen(c)
+	o.Orientation(c)
 }
 
 type Direction byte
@@ -244,15 +245,15 @@ const (
 	Left
 )
 
-func (d Direction) Step(c *bufio.Writer) { esc(c, NUL, byte(d)) }
+func (d Direction) Step(c io.Writer) { esc(c, NUL, byte(d)) }
 
 // Untested
-func BootUpgrade(c *bufio.ReadWriter) string {
-	esc(c.Writer, 1)
-	s, _ := c.ReadString(' ')
+func BootUpgrade(c io.ReadWriter) string {
+	esc(c, 1)
+	s, _ := readString(c, ' ')
 	return s
 }
-func UpdateFirmware(c *bufio.ReadWriter) bool {
+func UpdateFirmware(c io.ReadWriter) bool {
 	return str(c, "CC1VERUP") == string(rune(NUL))
 }
-func EnableDebug(c *bufio.Writer) { send(c, "FP,GRFCC1") }
+func EnableDebug(c io.Writer) { send(c, "FP,GRFCC1") }

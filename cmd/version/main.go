@@ -13,5 +13,5 @@ func main() {
 		log.Fatal(err)
 	}
 	defer dev.Close()
-	fmt.Println(robo.Version(dev.ReadWriter))
+	fmt.Println(robo.Version(dev))
 }

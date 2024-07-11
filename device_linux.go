@@ -1,13 +1,12 @@
 package robo
 
 import (
-	"bufio"
+	"io"
 	"os"
 )
 
 type USB struct {
-	done func() error
-	*bufio.ReadWriter
+	io.ReadWriteCloser
 }
 
 const (
@@ -26,13 +25,6 @@ func Open() (USB, error) {
 		return USB{}, err
 	}
 	return USB{
-		ReadWriter: bufio.NewReadWriter(bufio.NewReader(fs), bufio.NewWriter(fs)),
-		done:       fs.Close,
+		ReadWriteCloser: fs,
 	}, nil
-}
-
-func (d USB) Close() error {
-	d.ReadWriter.Flush()
-	d.done()
-	return nil
 }

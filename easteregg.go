@@ -1,6 +1,6 @@
 package robo
 
-import "bufio"
+import "io"
 
 // found in firmware V2.30
 var easteregg = []string{
@@ -323,7 +323,7 @@ var easteregg = []string{
 	`FO0`,    // ?
 }
 
-func EasterEgg(c *bufio.Writer) {
+func EasterEgg(c io.Writer) {
 	for _, cmd := range easteregg {
 		Send(c, cmd)
 	}

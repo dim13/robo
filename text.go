@@ -15,7 +15,7 @@ type Glyph struct {
 
 type Set []Path
 
-func Print(c *bufio.Writer, in io.Reader, scale Unit) {
+func Print(c io.Writer, in io.Reader, scale Unit) {
 	var off Point
 
 	scanner := bufio.NewScanner(in)
@@ -27,7 +27,7 @@ func Print(c *bufio.Writer, in io.Reader, scale Unit) {
 	}
 }
 
-func (f Font) putchar(c *bufio.Writer, s string, scale Unit, off *Point) {
+func (f Font) putchar(c io.Writer, s string, scale Unit, off *Point) {
 	for _, ch := range s {
 		gl, ok := f[ch]
 		if ok {

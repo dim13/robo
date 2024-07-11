@@ -1,8 +1,8 @@
 package robo
 
 import (
-	"bufio"
 	"fmt"
+	"io"
 )
 
 // Overcut: depends on blade, 0 for pens
@@ -28,7 +28,7 @@ func (m Media) String() string {
 		m.ID, m.Speed, m.Force, m.Descr)
 }
 
-func (m Media) Apply(c *bufio.Writer) {
+func (m Media) Apply(c io.Writer) {
 	Unit(m.ID).Media(c)
 	Unit(m.Speed).Speed(c)
 	Unit(m.Force).Force(c)
