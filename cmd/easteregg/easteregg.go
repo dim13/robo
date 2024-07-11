@@ -1,9 +1,7 @@
-package robo
-
-import "io"
+package main
 
 // found in firmware V2.30
-var easteregg = []string{
+var Easteregg = []string{
 	`FU5440,4000`,  // cutting area (A4 - margin)
 	`FM1`,          // ?
 	`TB50,0`,       // landscape?
@@ -321,10 +319,4 @@ var easteregg = []string{
 	`&1,1,1`, // factor
 	`TB50,0`, // landscape?
 	`FO0`,    // ?
-}
-
-func EasterEgg(c io.Writer) {
-	for _, cmd := range easteregg {
-		Send(c, cmd)
-	}
 }
