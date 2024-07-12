@@ -36,14 +36,14 @@ func (p Point) CuttingArea(c io.Writer)  { p.send(c, "FU") }
 func (p Point) Calibration(c io.Writer)  { p.send(c, "TB72,") }
 
 func (p Point) SearchMarks(c io.ReadWriter, auto bool) bool {
-	send(c, "TB99")
-	send(c, "TB55,1")
+	Send(c, "TB99")
+	Send(c, "TB55,1")
 	if auto {
-		send(c, "TB123,", p)
+		Send(c, "TB123,", p)
 	} else {
-		send(c, "TB23,", p)
+		Send(c, "TB23,", p)
 	}
-	return parseUnit(recv(c)) == 0
+	return parseUnit(Recv(c)) == 0
 }
 
 func (p Point) Scale(f Unit) Point {
@@ -120,19 +120,19 @@ func Init(c io.Writer) { esc(c, 4) }
 
 func Ready(c io.ReadWriter) bool {
 	esc(c, 5)
-	return parseUnit(recv(c)) == 0
+	return parseUnit(Recv(c)) == 0
 }
 
 func (u Unit) Query(c io.ReadWriter) Unit {
 	u.send(c, "FQ", u)
-	return parseUnit(recv(c))
+	return parseUnit(Recv(c))
 }
 
 func readString(r io.Reader, delim byte) (string, error) {
 	return bufio.NewReader(r).ReadString(delim)
 }
 
-func recv(c io.Reader) string {
+func Recv(c io.Reader) string {
 	ans, err := readString(c, ETX)
 	if err != nil {
 		panic(err)
@@ -140,29 +140,21 @@ func recv(c io.Reader) string {
 	return ans[:len(ans)-1]
 }
 
-func Recv(c io.Reader) string {
-	return recv(c)
-}
-
-func send(c io.Writer, a ...any) {
+func Send(c io.Writer, a ...any) {
 	fmt.Fprint(c, a...)
 	etx(c)
 }
 
-func Send(c io.Writer, a any) {
-	send(c, a)
-}
-
-func GoHome(c io.Writer)    { send(c, "TT") }
-func Home(c io.Writer)      { send(c, "H") }
-func Origin(c io.Writer)    { send(c, "FJ") }
-func Calibrate(c io.Writer) { send(c, "TB70") }
-func TestCut(c io.Writer)   { send(c, "FH") }
-func TestLoop(c io.Writer)  { send(c, "FI") }
+func GoHome(c io.Writer)    { Send(c, "TT") }
+func Home(c io.Writer)      { Send(c, "H") }
+func Origin(c io.Writer)    { Send(c, "FJ") }
+func Calibrate(c io.Writer) { Send(c, "TB70") }
+func TestCut(c io.Writer)   { Send(c, "FH") }
+func TestLoop(c io.Writer)  { Send(c, "FI") }
 
 func point(c io.ReadWriter, cmd string) Point {
-	send(c, cmd)
-	return parsePoint(recv(c))
+	Send(c, cmd)
+	return parsePoint(Recv(c))
 }
 
 func Calibration(c io.ReadWriter) Point        { return point(c, "TB71") }
@@ -172,8 +164,8 @@ func UpperRight(c io.ReadWriter) Point         { return point(c, "U") }
 func DistanceCorrection(c io.ReadWriter) Point { return point(c, "FA") }
 
 func str(c io.ReadWriter, cmd string) string {
-	send(c, cmd)
-	return recv(c)
+	Send(c, cmd)
+	return Recv(c)
 }
 
 func Version(c io.ReadWriter) string    { return str(c, "FG") }
@@ -188,7 +180,7 @@ const (
 
 func (o Orientation) Orientation(c io.Writer) {
 	orientation = o
-	send(c, "FN", o)
+	Send(c, "FN", o)
 }
 
 type LineStyle int
@@ -205,12 +197,12 @@ const (
 	DashLongDoubleDot
 )
 
-func (l LineStyle) LineStyle(c io.Writer) { send(c, "L", l) }
+func (l LineStyle) LineStyle(c io.Writer) { Send(c, "L", l) }
 func (p Point) LineStyle(c io.Writer)     { p.send(c, "L100,1,") }
 
 func triple(c io.ReadWriter, cmd string) Triple {
-	send(c, cmd)
-	return parseTriple(recv(c))
+	Send(c, cmd)
+	return parseTriple(Recv(c))
 }
 
 func Gin(c io.ReadWriter) Triple     { return triple(c, "G") }
@@ -267,4 +259,4 @@ func BootUpgrade(c io.ReadWriter) string {
 func UpdateFirmware(c io.ReadWriter) bool {
 	return str(c, "CC1VERUP") == string(rune(NUL))
 }
-func EnableDebug(c io.Writer) { send(c, "FP,GRFCC1") }
+func EnableDebug(c io.Writer) { Send(c, "FP,GRFCC1") }
