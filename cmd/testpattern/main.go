@@ -13,6 +13,7 @@ func main() {
 	}
 	defer dev.Close()
 
+	robo.Initialize(dev, 113, robo.Portrait)
 	for _, cmd := range TestPattern {
 		robo.Send(dev, cmd)
 	}
