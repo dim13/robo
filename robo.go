@@ -29,7 +29,7 @@ func (p Point) Draw(c io.Writer)         { p.send(c, "D") }
 func (p Point) DrawRelative(c io.Writer) { p.send(c, "E") }
 func (p Point) Move(c io.Writer)         { p.send(c, "M") }
 func (p Point) MoveRelative(c io.Writer) { p.send(c, "O") }
-func (p Point) Offset(c io.Writer)       { p.send(c, "^") }
+func (p Point) Origin(c io.Writer)       { p.send(c, "^") }
 func (p Point) LowerLeft(c io.Writer)    { p.send(c, "\\") }
 func (p Point) UpperRight(c io.Writer)   { p.send(c, "Z") }
 func (p Point) CuttingArea(c io.Writer)  { p.send(c, "FU") }

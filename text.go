@@ -35,7 +35,7 @@ func (f Font) putchar(c io.Writer, s string, scale Unit, off *Point) {
 				off.X += height * scale
 				off.Y = 0
 			}
-			off.Offset(c)
+			off.Origin(c)
 			for _, p := range gl.S {
 				p.Scale(scale).Line(c)
 				//p.Scale(scale).Curve(c, 0)
