@@ -376,13 +376,10 @@ var font = Font{
 	'4': Glyph{
 		S: Set{
 			Path{
+				Point{50, 26},
 				Point{8, 26},
 				Point{36, 6},
 				Point{36, 36},
-			},
-			Path{
-				Point{8, 26},
-				Point{50, 26},
 			},
 		},
 		W: 40,
@@ -444,12 +441,9 @@ var font = Font{
 	'7': Glyph{
 		S: Set{
 			Path{
-				Point{8, 34},
-				Point{50, 14},
-			},
-			Path{
 				Point{8, 6},
 				Point{8, 34},
+				Point{50, 14},
 			},
 		},
 		W: 40,
@@ -690,10 +684,7 @@ var font = Font{
 	'A': Glyph{
 		S: Set{
 			Path{
-				Point{8, 18},
 				Point{50, 2},
-			},
-			Path{
 				Point{8, 18},
 				Point{50, 34},
 			},
@@ -764,10 +755,7 @@ var font = Font{
 	'D': Glyph{
 		S: Set{
 			Path{
-				Point{8, 7},
 				Point{50, 7},
-			},
-			Path{
 				Point{8, 7},
 				Point{8, 21},
 				Point{10, 27},
@@ -787,20 +775,14 @@ var font = Font{
 	'E': Glyph{
 		S: Set{
 			Path{
+				Point{8, 33},
 				Point{8, 7},
 				Point{50, 7},
-			},
-			Path{
-				Point{8, 7},
-				Point{8, 33},
+				Point{50, 33},
 			},
 			Path{
 				Point{28, 7},
 				Point{28, 23},
-			},
-			Path{
-				Point{50, 7},
-				Point{50, 33},
 			},
 		},
 		W: 38,
@@ -808,10 +790,7 @@ var font = Font{
 	'F': Glyph{
 		S: Set{
 			Path{
-				Point{8, 6},
 				Point{50, 6},
-			},
-			Path{
 				Point{8, 6},
 				Point{8, 32},
 			},
@@ -917,9 +896,6 @@ var font = Font{
 			Path{
 				Point{8, 5},
 				Point{50, 5},
-			},
-			Path{
-				Point{50, 5},
 				Point{50, 29},
 			},
 		},
@@ -928,18 +904,9 @@ var font = Font{
 	'M': Glyph{
 		S: Set{
 			Path{
-				Point{8, 8},
 				Point{50, 8},
-			},
-			Path{
 				Point{8, 8},
 				Point{50, 24},
-			},
-			Path{
-				Point{8, 40},
-				Point{50, 24},
-			},
-			Path{
 				Point{8, 40},
 				Point{50, 40},
 			},
@@ -949,16 +916,10 @@ var font = Font{
 	'N': Glyph{
 		S: Set{
 			Path{
-				Point{8, 8},
 				Point{50, 8},
-			},
-			Path{
 				Point{8, 8},
 				Point{50, 36},
-			},
-			Path{
 				Point{8, 36},
-				Point{50, 36},
 			},
 		},
 		W: 44,
@@ -994,10 +955,7 @@ var font = Font{
 	'P': Glyph{
 		S: Set{
 			Path{
-				Point{8, 7},
 				Point{50, 7},
-			},
-			Path{
 				Point{8, 7},
 				Point{8, 25},
 				Point{10, 31},
@@ -1047,10 +1005,7 @@ var font = Font{
 	'R': Glyph{
 		S: Set{
 			Path{
-				Point{8, 7},
 				Point{50, 7},
-			},
-			Path{
 				Point{8, 7},
 				Point{8, 25},
 				Point{10, 31},
@@ -1131,10 +1086,7 @@ var font = Font{
 			Path{
 				Point{8, 2},
 				Point{50, 18},
-			},
-			Path{
 				Point{8, 34},
-				Point{50, 18},
 			},
 		},
 		W: 36,
@@ -1144,18 +1096,9 @@ var font = Font{
 			Path{
 				Point{8, 4},
 				Point{50, 14},
-			},
-			Path{
-				Point{8, 24},
-				Point{50, 14},
-			},
-			Path{
 				Point{8, 24},
 				Point{50, 34},
-			},
-			Path{
 				Point{8, 44},
-				Point{50, 34},
 			},
 		},
 		W: 48,
@@ -1190,14 +1133,8 @@ var font = Font{
 	'Z': Glyph{
 		S: Set{
 			Path{
-				Point{8, 34},
-				Point{50, 6},
-			},
-			Path{
 				Point{8, 6},
 				Point{8, 34},
-			},
-			Path{
 				Point{50, 6},
 				Point{50, 34},
 			},
@@ -1207,20 +1144,14 @@ var font = Font{
 	'[': Glyph{
 		S: Set{
 			Path{
+				Point{0, 22},
 				Point{0, 8},
 				Point{64, 8},
+				Point{64, 22},
 			},
 			Path{
 				Point{0, 10},
 				Point{64, 10},
-			},
-			Path{
-				Point{0, 8},
-				Point{0, 22},
-			},
-			Path{
-				Point{64, 8},
-				Point{64, 22},
 			},
 		},
 		W: 28,
@@ -1241,16 +1172,10 @@ var font = Font{
 				Point{64, 18},
 			},
 			Path{
-				Point{0, 20},
-				Point{64, 20},
-			},
-			Path{
 				Point{0, 6},
 				Point{0, 20},
-			},
-			Path{
-				Point{64, 6},
 				Point{64, 20},
+				Point{64, 6},
 			},
 		},
 		W: 28,
@@ -1740,10 +1665,7 @@ var font = Font{
 			Path{
 				Point{22, 4},
 				Point{50, 16},
-			},
-			Path{
 				Point{22, 28},
-				Point{50, 16},
 			},
 		},
 		W: 32,
@@ -1753,18 +1675,9 @@ var font = Font{
 			Path{
 				Point{22, 6},
 				Point{50, 14},
-			},
-			Path{
-				Point{22, 22},
-				Point{50, 14},
-			},
-			Path{
 				Point{22, 22},
 				Point{50, 30},
-			},
-			Path{
 				Point{22, 38},
-				Point{50, 30},
 			},
 		},
 		W: 44,
@@ -1802,14 +1715,8 @@ var font = Font{
 	'z': Glyph{
 		S: Set{
 			Path{
-				Point{22, 29},
-				Point{50, 7},
-			},
-			Path{
 				Point{22, 7},
 				Point{22, 29},
-			},
-			Path{
 				Point{50, 7},
 				Point{50, 29},
 			},
