@@ -12,7 +12,6 @@ func main() {
 		log.Fatal(err)
 	}
 	defer dev.Close()
-	defer robo.Home(dev)
 
 	for _, cmd := range Easteregg {
 		robo.Send(dev, cmd)
