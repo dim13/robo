@@ -106,7 +106,7 @@ func (u Unit) Media(c io.Writer)              { u.send(c, "FW") }
 func (u Unit) Speed(c io.Writer)              { u.send(c, "!") }
 func (u Unit) Force(c io.Writer)              { u.send(c, "FX") }
 func (u Unit) Overcut(c io.Writer)            { u.send(c, "FC") }
-func (u Unit) UnknownFE(c io.Writer)          { u.send(c, "FE") }
+func (u Unit) LiftControl(c io.Writer)        { u.send(c, "FE") }
 func (u Unit) DistanceCorrection(c io.Writer) { u.send(c, "FB", ",0") }
 func (u Unit) TrackEnhancing(c io.Writer)     { u.send(c, "FY") }
 func (u Unit) RegMarkLen(c io.Writer)         { u.send(c, "TB51,") }
@@ -123,7 +123,7 @@ func Ready(c io.ReadWriter) bool {
 	return parseUnit(recv(c)) == 0
 }
 
-func (u Unit) UnknownFQ(c io.ReadWriter) Unit {
+func (u Unit) Query(c io.ReadWriter) Unit {
 	u.send(c, "FQ", u)
 	return parseUnit(recv(c))
 }
@@ -237,7 +237,7 @@ func Initialize(c io.ReadWriter, mid int, o Orientation) {
 	}
 
 	Unit(0).TrackEnhancing(c)
-	Unit(0).UnknownFE(c)
+	Unit(0).LiftControl(c)
 
 	fmt.Println("Calibration", Calibration(c))
 	fmt.Println("Correction ", DistanceCorrection(c))
