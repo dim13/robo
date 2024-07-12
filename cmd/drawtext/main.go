@@ -19,7 +19,7 @@ func main() {
 	}
 	defer dev.Close()
 
-	defer robo.Home(dev.Writer)
+	defer robo.Home(dev)
 
 	robo.Initialize(dev, 113, robo.Portrait)
 	robo.A4.Sub(robo.Margin).UpperRight(dev)
