@@ -4,8 +4,8 @@ package main
 var Easteregg = []string{
 	`FU5440,4000`,  // cutting area (A4 - margin)
 	`FM1`,          // ?
-	`TB50,0`,       // landscape?
-	`FO5440`,       // ?
+	`TB50,0`,       // orientation portrait
+	`FO5440`,       // feed
 	`&100,100,100`, // factor
 	`\0,0`,         // set lower left
 	`Z5940,4200`,   // set upper right (A4)
