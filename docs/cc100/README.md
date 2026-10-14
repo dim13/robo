@@ -21,6 +21,7 @@ The CPU is a Renesas H8S running in advanced mode (24-bit addresses), with 256 K
 | `ghidra/H8S` | Ghidra processor module for H8S (see below). |
 | `ghidra/scripts` | Headless scripts: `Setup` (memory map, vectors), `Names` (apply symbols), `Dump` (decompile all), `Funcs`, `Stats`, `Dis`. |
 | `ghidra/build.sh` | Regenerates `decompiled.c` and `functions.txt`. |
+| `assets/` | ROM data cut into files (demo GP-GL job, stroke font, line types, USB descriptors, ...) by `assets/extract.py`. |
 
 Readable sources by area:
 
