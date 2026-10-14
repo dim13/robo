@@ -15,6 +15,13 @@ type Glyph struct {
 
 type Set []Path
 
+// Lookup returns the Hershey glyph for r. Glyph X grows downwards from the top
+// of the line with the baseline at 50, Y is the advance direction.
+func Lookup(r rune) (Glyph, bool) {
+	g, ok := font[r]
+	return g, ok
+}
+
 func Print(c io.Writer, in io.Reader, scale Unit) {
 	var off Point
 
