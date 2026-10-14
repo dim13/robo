@@ -104,7 +104,6 @@ extern uint8_t  pen_is_down;            /* 0xFFB410 */
 extern int16_t  pen_level;              /* 0xFFB40E */
 extern int16_t  press_settle, lift_delay, lift_settle; /* 0xFFB408, 0xFFB40A, 0xFFB40C */
 extern volatile uint8_t usb_rx_blocked; /* 0xFFB2F2 */
-extern unsigned long usb_ier_shadow;         /* 0xFFC426 */
 struct kick { int16_t ticks; uint8_t pad; uint8_t level; };
 extern struct kick lift_profile[5];         /* 0xFFC368 */
 extern struct kick press_profile[2][3][5];  /* 0xFFC2F0 [profile][speed][step] */
@@ -377,29 +376,7 @@ void power_key_isr(void)
 /* Boot                                                                       */
 /* ======================================================================== */
 
-/* 0x13940, called from the reset stub at 0x400 */
-int main(void)
-{
-	/* 0x1f644, 0x739c(0), 0x238ec (runtime init), 0x1f660, 0x1f656: port/clock setup TODO */
-	tick_timer_init();
-	eeprom_check_format();
-	usb_init();
-	rx_init();
-	/* 0x1f66c */
-	sci0_init();                 /* 9600 8N2 */
-	usb_suspended = 0;
-	motion_test_mode = 0;
-	cur_pen = 1;
-	motion_init();
-	settings_apply();
-	solenoid_init();
-	pen_reset();
-	/* 0x1054c, 0x2195c */
-	if (PORT_JUMPERS & 0x3c)
-		factory_test_select();
-	power_off(0);                /* boot into "off"; power key starts warm_restart */
-	return 0;
-}
+/* main: see boot.c */
 
 /* 0x13736 */
 void factory_test_select(void)
@@ -445,72 +422,11 @@ void enter_gpgl(void)
 /* Tool solenoid and pen selection                                           */
 /* ======================================================================== */
 
-static void block_usb_rx(void)
-{
-	usb_rx_blocked = 1;
-	USB_INT_EN &= ~(1UL << 18);
-	usb_ier_shadow = USB_INT_EN | 10;
-}
+/* block_usb_rx: see motion.c */
 
-/* 0x17c1c: level 0 lifts, otherwise presses with D/A value `level` */
-char solenoid_set(int level)
-{
-	int i;
+/* solenoid_set: see motion.c */
 
-	if (level == 0) {
-		if (lift_delay)
-			delay_ticks(lift_delay);
-		block_usb_rx();
-		for (i = 0; i < 5 && lift_profile[i].ticks; i++) {
-			DA_SOLENOID = lift_profile[i].level;
-			delay_ticks(lift_profile[i].ticks);
-		}
-		DA_SOLENOID = 0;
-		usb_rx_blocked = 0;
-		delay_ticks(lift_settle);
-		pen_is_down = 0;
-		pen_level = 0;
-		return 0;
-	}
-
-	if (!blade_init_active && cut_force < 1) {  /* 0xffb2c2 read here as "force set explicitly" */
-		level += level * media_percent[(unsigned char)media_type] / 100;
-		if (level < 0)
-			level = 0;
-		if (level > 255)
-			level = 255;
-	}
-	if (pen_is_down) {           /* already pressed: just change the hold level */
-		pen_level = level;
-		DA_SOLENOID = (uint8_t)level;
-		return 1;
-	}
-	block_usb_rx();
-	delay_ticks(1);
-	for (i = 0; i < 5; i++) {
-		struct kick *k = &press_profile[solenoid_profile][speed_index - 1][i];
-		if (!k->ticks)
-			break;
-		DA_SOLENOID = k->level;
-		delay_ticks(k->ticks);
-	}
-	usb_rx_blocked = 0;
-	pen_level = level;
-	DA_SOLENOID = (uint8_t)level;
-	delay_ticks(press_settle);
-	pen_is_down = 1;
-	return 1;
-}
-
-/* 0x181da */
-int force_level_value(char level)
-{
-	if (level < 0)
-		level = 0;
-	if (level > 3)
-		level = 3;
-	return force_table[(int)level];
-}
+/* force_level_value: see motion.c */
 
 /* 0x17fac */
 void select_pen(int pen)
@@ -591,76 +507,11 @@ extern int16_t last_dir;                     /* 0xFFB61C, tenths of a degree */
 extern int16_t backlash_now, backlash_x;     /* 0xFFB61E / 0xFFB620 */
 extern int16_t last_pen;                     /* 0xFFBBD4 */
 
-static int queue_full(void)  { return ((mq_head + 1) & (QUEUE_LEN - 1)) == mq_tail; }
-static int axes_idle(void)   { return motor_busy_x == 0 && motor_busy_y == 0; }
+/* axes_idle: see motion.c */
 
-/* 0x19acc */
-void motion_drain(void)
-{
-	if (queue_full() && axes_idle())
-		motion_start_next();
-	if (queued_x != dev_x || last_y != dev_y)
-		motion_plan_segment(queued_x, last_y, 1800);
-	while (mq_head != mq_tail) {
-		if (axes_idle())
-			motion_start_next();
-		else
-			delay_ticks(1);
-	}
-	while (!axes_idle())
-		delay_ticks(1);
-}
+/* motion_drain: see motion.c */
 
-/* 0x19b9c: queue a straight move in device steps. Simplified: the speed-profile
- * selection (0xFFB628.. pen down vs 0xFFB634.. pen up) and the exact backlash
- * ramp are summarised in comments. */
-int motion_line_to(long x, long y, int pen_down)
-{
-	long dx, dy;
-	int dir, turn = 1800;
-
-	/* idle_timer_reset() */
-	if ((pen_down != 0) != last_pen) {
-		motion_drain();
-		last_pen = pen_down != 0;
-	}
-	dx = backlash_now - dev_x + x;
-	dy = y - dev_y;
-	dir = atan_tenths(dy, dx);
-	if (dx == 0 && dy == 0)
-		return 0;
-
-	if (mq_head != mq_tail) {
-		turn = dir - last_dir;
-		if (turn < 0)
-			turn = -turn;
-		if (turn > 1800)
-			turn = 3600 - turn;
-		if (turn > 250) {        /* more than 25 degrees */
-			if ((dx < 0 ? -dx : dx) <= 80) {
-				if (axes_idle())
-					motion_start_next();
-			} else {
-				motion_drain(); /* stop at the corner */
-			}
-		}
-	}
-	/* select pen-down / pen-up speed profile here (0xFFB60C..0xFFB614) */
-
-	/* X backlash: ramp backlash_now towards +backlash_x when moving +X, 0 when moving -X.
-	 * TODO: the ramp steps by 1 or 2 depending on |dx| and is only applied when turn <= 25 deg. */
-	if (x != last_x)
-		backlash_now = (x > last_x) ? backlash_x : 0;
-
-	queued_x = backlash_now + x;
-	motion_plan_segment(queued_x, y, turn);
-	if (!pen_down && axes_idle())
-		motion_start_next();
-	last_x = x;
-	last_y = y;
-	last_dir = dir;
-	return dir;
-}
+/* motion_line_to: see motion.c */
 
 /* 0x1bc6a: X axis timer compare interrupt (vector 40). Y (0x1bcc4, vector 44) mirrors it. */
 /* jog_dir_x: 0xFFBBD6 */
@@ -668,22 +519,7 @@ extern int16_t queue_loading;  /* 0xFFBBD2 */
 extern struct axis axis_x, axis_y;
 
 
-void timer_x_isr(void)
-{
-	if (jog_dir_x) {
-		axis_isr_x_jog();
-		return;
-	}
-	REG8(0xFFFF25) &= ~1;      /* clear compare flag */
-	if (queue_loading == 0 && motor_busy_x) {
-		axis_profile_step(&axis_x);
-		if (!(REG8(0xFFFF35) & 1) && motor_busy_y)
-			axis_profile_step(&axis_y);  /* service the other axis if its flag is pending */
-		if (!axes_idle())
-			return;
-		motion_start_next();
-	}
-}
+/* timer_x_isr: see motion.c */
 
 /* ======================================================================== */
 /* Integer math helpers                                                       */

@@ -5,7 +5,7 @@
 #   ln -s "$PWD/H8S" ~/.config/ghidra/ghidra_<version>_PUBLIC/Extensions/H8S    (Linux)
 set -e
 GHIDRA=${GHIDRA:-/opt/homebrew/opt/ghidra/libexec}
-D=$(cd "$(dirname "$0")" && pwd)
+D=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)
 "$GHIDRA/support/sleigh" "$D/H8S/data/languages/h8s_advanced.slaspec" > /dev/null 2>&1
 T=$(mktemp -d)
 trap 'rm -rf "$T"' EXIT

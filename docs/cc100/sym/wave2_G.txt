@@ -80,7 +80,7 @@
 00021620 sensor_scan_diag
 0002195c sensor_init void sensor_init(void)
 000219a0 sensor_pot_shift
-000219fa sensor_pot_step void sensor_pot_step(void)
+000219fa sensor_pot_set_level void sensor_pot_set_level(int level)
 00021a26 sensor_autocal_gain int sensor_autocal_gain(int blink_forever)
 00021c40 sensor_reply_adc void sensor_reply_adc(void)
 00021cb6 sensor_measure_reply void sensor_measure_reply(void)

@@ -367,182 +367,40 @@ void cmd_FI_test_plot_loop(void);
 #define RM_TYPE(v)      ((v) << 10)
 #define RM_TYPE_MASK    0x0c00
 
-/* [1f930] */
-char regmark_enable(int on)
-{
-	regmark_cfg = (regmark_cfg & ~RM_APPLY) | (on ? RM_APPLY : 0);
-	return on != 0;
-}
+/* regmark_enable: see regmark.c */
 
-static void read_optional_xy(long *x, long *y)
-{
-	*x = *y = 0;
-	if (end_of_params() == 0) {
-		*x = read_coord();
-		if (end_of_params() == 0)
-			*y = read_coord();
-	}
-}
+/* read_optional_xy: see regmark.c */
 
 extern long regmark_org_x, regmark_org_y;       /* [ffc112] [ffc116] mark origin */
 extern long mark_off_x, mark_off_y;             /* [ffc102] [ffc106] TB54 mark offset */
 
-/* [1fb80] TB22 / TB23 [,x,y]: manual search, tool positioned by user */
-void cmd_TB2x_search_manual(int type)
-{
-	regmark_cfg = (regmark_cfg & ~RM_SEARCH_MASK) | RM_SEARCH(type);
-	read_optional_xy(&regmark_org_x, &regmark_org_y);
-	regmark_search_manual();        /* [1575a] replies "%5d" result */
-}
+/* cmd_TB2x_search_manual: see regmark.c */
 
-/* [1fbe6] TB122 / TB123 [,x,y]: automatic search */
-void cmd_TB12x_search_auto(int type)
-{
-	regmark_cfg = (regmark_cfg & ~RM_SEARCH_MASK) | RM_SEARCH(type);
-	read_optional_xy(&regmark_org_x, &regmark_org_y);
-	regmark_search_auto();          /* [15fb2] replies "%5d" result */
-}
+/* cmd_TB12x_search_auto: see regmark.c */
 
-/* [1f8aa] TB50[,n]: orientation for registration, n != 0 = landscape */
-void cmd_TB50_orientation(void)
-{
-	long n;
+/* cmd_TB50_orientation: see regmark.c */
 
-	wait_motion();
-	n = end_of_params() == 0 ? read_int() : 0;
-	if (!regmark_active)
-		regmark_set_orientation(n != 0);    /* [1f79c] */
-}
+/* cmd_TB51_mark_length: see regmark.c */
 
-/* [1f956] TB51,len: mark length 5..20 mm */
-void cmd_TB51_mark_length(void)
-{
-	int mm = 0;     /* TODO: uninitialised in the original when no param */
+/* cmd_TB52_mark_type: see regmark.c */
 
-	if (end_of_params() == 0)
-		mm = read_coord() / 200;
-	if (mm >= 5 && mm <= 20)
-		regmark_length = mm;
-}
+/* cmd_TB53_mark_width: see regmark.c */
 
-/* [1f9a0] TB52[,n]: mark type, 1 if n == 1 (default), else 2 */
-void cmd_TB52_mark_type(void)
-{
-	int n = end_of_params() == 0 ? read_int() : 1;
+/* cmd_TB54_mark_offset: see regmark.c */
 
-	regmark_cfg = (regmark_cfg & ~RM_TYPE_MASK) | RM_TYPE(n == 1 ? 1 : 2);
-}
+/* cmd_TB55_flag: see regmark.c */
 
-/* [1f9ee] TB53,w: mark line width 60..200 internal (0.3..1 mm), unused */
-void cmd_TB53_mark_width(void)
-{
-	int w = 0;      /* TODO: uninitialised in the original */
+/* cmd_TB71_get_calibration: see regmark.c */
 
-	if (end_of_params() == 0)
-		w = (int)read_coord();
-	if (w >= 60 && w <= 200)
-		regmark_width = w;
-}
+/* cmd_TB72_set_calibration: see regmark.c */
 
-/* [1fa30] TB54[,x[,y]]: mark offset */
-void cmd_TB54_mark_offset(void)
-{
-	if (end_of_params() == 0) {
-		mark_off_x = read_coord();
-		if (end_of_params() == 0)
-			mark_off_y = read_coord();
-	}
-}
+/* cmd_TB98_query: see regmark.c */
 
-/* [1fa6c] TB55,n */
-void cmd_TB55_flag(void)
-{
-	if (end_of_params() == 0)
-		regmark_cfg = (regmark_cfg & ~RM_FLAG55) | (read_int() ? RM_FLAG55 : 0);
-}
+/* cmd_TB: see regmark.c */
 
-/* [1fab4] TB71: calibration offsets */
-void cmd_TB71_get_calibration(void)
-{
-	reply_begin(2);
-	reply_number_comma(5, eeprom_read_word(EE(EE_REG_CAL_X)));
-	reply_number_end(5, eeprom_read_word(EE(EE_REG_CAL_Y)));
-}
+/* regmark_init: see regmark.c */
 
-/* [1faf8] TB72,x,y: calibration offsets -40..40 (x10 internal units) */
-void cmd_TB72_set_calibration(void)
-{
-	int x = clamp(read_int(), 40);
-	int y = clamp(read_int(), 40);
-
-	eeprom_write_word(x, EE(EE_REG_CAL_X));
-	eeprom_write_word(y, EE(EE_REG_CAL_Y));
-	regmark_load_calibration();     /* [206d6] */
-}
-
-/* [1f90a] TB98: constant reply 1 */
-void cmd_TB98_query(void)
-{
-	reply_begin(1);
-	reply_number_end(6, 1);
-}
-
-/* [1f6cc] TBn dispatcher */
-void cmd_TB(void)
-{
-	int n = read_int();
-
-	if (n & 0xff00)
-		return;
-	switch (n) {
-	case 0:   regmark_enable(0); break;
-	case 22:
-	case 23:  cmd_TB2x_search_manual(n - 21); break;
-	case 122:
-	case 123: cmd_TB12x_search_auto(n - 121); break;
-	case 50:  cmd_TB50_orientation(); break;
-	case 51:  cmd_TB51_mark_length(); break;
-	case 52:  cmd_TB52_mark_type(); break;
-	case 53:  cmd_TB53_mark_width(); break;
-	case 54:  cmd_TB54_mark_offset(); break;
-	case 55:  cmd_TB55_flag(); break;
-	case 70:  regmark_calibrate(); break;   /* [1fa9c] -> [1fc4c] */
-	case 71:  cmd_TB71_get_calibration(); break;
-	case 72:  cmd_TB72_set_calibration(); break;
-	case 98:  cmd_TB98_query(); break;
-	case 99:  regmark_enable(99); break;
-	}
-}
-
-/* [20616] power-on / reset defaults */
-void regmark_init(void)
-{
-	unsigned char b;
-
-	regmark_cfg = (regmark_cfg & ~(RM_APPLY | RM_FLAG55 | RM_SEARCH_MASK | RM_TYPE_MASK))
-	            | RM_TYPE(2);
-	regmark_length = 10;
-	mark_off_x = mark_off_y = 0;
-	regmark_org_x = regmark_org_y = 0;
-	b = eeprom_read_byte(EE(0x29));
-	sensor_gain_x = b & 0x0f;            /* [ffc124] */
-	sensor_gain_y = b >> 4;              /* [ffc126] */
-	sensor_scan_speed = eeprom_read_byte(EE(0x28)) << 1;
-	regmark_load_calibration();
-	regmark_scan_mode = 0;                       /* [ffc222] */
-	landscape = 0;
-}
-
-/* [206d6] sensor-to-tool offset from EEPROM */
-void regmark_load_calibration(void)
-{
-	scan_off_x = 0;                       /* [ffc11c] */
-	scan_off_y = -3000;                   /* [ffc120] */
-	scan_off_x -= eeprom_read_word(EE(0x20)) * 20;
-	scan_off_y -= eeprom_read_word(EE(0x22)) * 20;
-	scan_off_x -= eeprom_read_word(EE(EE_REG_CAL_X)) * 10;
-	scan_off_y -= eeprom_read_word(EE(EE_REG_CAL_Y)) * 10;
-}
+/* regmark_load_calibration: see regmark.c */
 
 /*
  * [1575a] / [15fb2] regmark_search_manual / regmark_search_auto (summary):

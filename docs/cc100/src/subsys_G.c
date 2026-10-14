@@ -21,7 +21,6 @@
 
 #include "cc100.h"
 
-typedef struct { long x, y; } point_t;
 
 /* ---- externals (other address ranges) ---- */
 extern void delay_ticks(int ticks);                     /* 0x12e66 */
@@ -31,9 +30,9 @@ extern void planner_flush(void);                        /* 0x17f2e  TODO name */
 extern void planner_kick(void);                         /* 0x19acc  TODO name */
 extern void planner_line(long x, long y, int pen);      /* 0x19b9c  motion planner */
 extern void tool_drive(int force);                      /* 0x17c1c  solenoid/force PWM */
-extern void distance_correct(point_t *p);               /* 0x0f4b2 */
+extern void distance_correct(pt_t *p);               /* 0x0f4b2 */
 extern void regmark_motion_emit(long x, long y, int pen); /* 0x10f4e/0x10d90/0x10686/0x10ce0 */
-extern void mark_centre(point_t *a, point_t *b);        /* 0x05ecc  TODO exact semantics */
+extern void mark_centre(pt_t *a, pt_t *b);        /* 0x05ecc  TODO exact semantics */
 /* eeprom_read_byte: 0x127d8 */
 /* eeprom_write_byte: 0x12786 */
 extern void reply_begin(int nfields);                   /* 0x113e4 */
@@ -53,7 +52,7 @@ long   origin_x, origin_y;           /* 0xffb4e8/c */
 long   origin2_x, origin2_y;         /* 0xffc2e4/8  TODO */
 long   regmark_off_x, regmark_off_y;         /* 0xffb4f0/4 */
 long   orient_off_x, orient_off_y;   /* 0xffb4f8/c */
-point_t dev_pos;                     /* 0xffb54c */
+pt_t dev_pos;                     /* 0xffb54c */
 long   mach_xmin, mach_ymin, mach_xmax, mach_ymax;   /* 0xffb524..0xffb530 */
 long   mach_last_x, mach_last_y;     /* 0xffb534 */
 int    mach_last_outcode;            /* 0xffb5c8 */
@@ -174,9 +173,9 @@ static void machine_clip_plot(long x, long y, int pen)
 /* ======================================================================== */
 
 /* 0x1c824 */
-static point_t apply_origin_offsets(long x, long y, int no_user_offset)
+static pt_t apply_origin_offsets(long x, long y, int no_user_offset)
 {
-	point_t p;
+	pt_t p;
 	if (!no_user_offset) {
 		x += offset_x;
 		y += offset_y;
@@ -186,24 +185,13 @@ static point_t apply_origin_offsets(long x, long y, int no_user_offset)
 	return p;
 }
 
-/* 0x1c6c4: affine registration-mark correction */
-static point_t regmark_transform(long x, long y)
-{
-	point_t r;
-	if (rm_scale_on) {
-		x = (long)(x * rm_sx);
-		y = (long)(y * rm_sy);
-	}
-	r.x = (long)(x * rm_xx + y * rm_xy);
-	r.y = (long)(y * rm_yy + x * rm_yx);
-	return r;
-}
+/* regmark_transform: see regmark.c */
 
 /* 0x1c918 */
-static point_t apply_regmark_and_cal(point_t p)
+static pt_t apply_regmark_and_cal(pt_t p)
 {
 	if (regmark_active)
-		p = regmark_transform(p.x, p.y);
+		regmark_transform(&p, p.x, p.y);
 	p.x += regmark_off_x;
 	p.y += regmark_off_y;
 	return p;
@@ -230,7 +218,7 @@ void apply_orientation(long x, long y, long *out)
 /* 0x1c608 */
 void device_plot(long x, long y, int pen)
 {
-	point_t p = { x, y };
+	pt_t p = { x, y };
 	long o[2];
 
 	p = apply_regmark_and_cal(p);
@@ -241,7 +229,7 @@ void device_plot(long x, long y, int pen)
 /* 0x1c572 */
 void plot_device(long x, long y, int pen)
 {
-	point_t p = apply_origin_offsets(x, y, 0);
+	pt_t p = apply_origin_offsets(x, y, 0);
 	if (regmark_active) {
 		/* regmark_clip_plot(p.x, p.y, pen);  0x1c146: clip to rm_area_*, then device_plot */
 		device_plot(p.x, p.y, pen); /* TODO: area clipping omitted here */
@@ -331,7 +319,7 @@ void track_feed_min_and_queue(long x, long y, int pen)
 	if (pen && x < feed_min_x)
 		feed_min_x = x;
 	{
-		point_t p = { x, y };
+		pt_t p = { x, y };
 		distance_correct(&p);           /* 0x1d0bc queue_point */
 		queue_segment(p.x, p.y, pen);
 	}
@@ -426,104 +414,21 @@ long dround(double v)
 #define ADC_RESULT() ((unsigned)((*(volatile unsigned char *)0xffff90 << 8) | \
                                  *(volatile unsigned char *)0xffff91) >> 6)
 
-/* 0x2078a */
-void sensor_on(void)
-{
-	*(volatile unsigned char *)0xffff06 |= 0x10;    /* sensor LED on */
-	*(volatile unsigned char *)0xffff99 = 0x37;     /* ADCR */
-	*(volatile unsigned char *)0xffff98 = 0x30;     /* ADCSR: start, scan */
-	delay_ticks(30);
-}
+/* sensor_on: see regmark.c */
 
-/* 0x207bc */
-void sensor_off(void)
-{
-	*(volatile unsigned char *)0xffff98 = 0;
-	*(volatile unsigned char *)0xffff06 &= ~0x10;
-}
+/* sensor_off: see regmark.c */
 
-/* 0x219a0: shift n clock pulses into the digital pot on port 0xffff00 (bits 1..3) */
-static void sensor_pot_shift(int n, unsigned bits)
-{
-	volatile unsigned char *p = (volatile unsigned char *)0xffff00;
-	int i;
+/* sensor_pot_shift: see regmark.c */
 
-	*p &= ~0x08;                    /* select */
-	for (i = 0; i < n; i++) {
-		if (bits & 0x8000)
-			*p &= ~0x02;            /* data */
-		bits <<= 1;
-		*p &= ~0x06;                /* clock */
-	}
-	*p |= 0x08;
-	/* TODO: the decompile never sets the data/clock bits high again; likely
-	 * read-modify-write of an output latch that Ghidra folded. */
-}
+/* sensor_pot_set_level: see regmark.c */
 
-/* 0x219fa */
-void sensor_pot_step(void)
-{
-	sensor_pot_shift(10, 0);
-	delay_ticks(10);
-}
+/* sensor_init: see regmark.c */
 
-/* 0x2195c */
-void sensor_init(void)
-{
-	*(volatile unsigned char *)0xfffde8 &= ~0x02;
-	*(volatile unsigned char *)0xffff00 = (*(volatile unsigned char *)0xffff00 & 0xf9) | 0x08;
-	(void)eeprom_read_byte(0x300019);       /* gain steps; passed to the pot (TODO) */
-	sensor_pot_step();
-	sensor_threshold = 0x200;
-	*(volatile unsigned char *)0xffff06 &= ~0x10;
-}
+/* sensor_autocal_gain: see regmark.c */
 
-/* 0x21a26: raise the gain until the sensor reads above threshold; save it */
-int sensor_autocal_gain(int blink_forever)
-{
-	int steps = 0;
+/* sensor_reply_adc: see regmark.c */
 
-	*(volatile unsigned char *)0xffff06 |= 0x10;
-	*(volatile unsigned char *)0xffff98 = 0;
-	*(volatile unsigned char *)0xffff99 = 0x37;
-	sensor_pot_step();
-	do {
-		*(volatile unsigned char *)0xffff98 = 0;
-		if (ADC_RESULT() > (unsigned)sensor_threshold)
-			break;
-		steps++;
-		sensor_pot_step();
-	} while (steps != 0xff);
-	eeprom_write_byte((unsigned char)steps, 0x300019);
-	if (!blink_forever)
-		return steps;
-	for (;;) {                      /* service mode: blink the busy LED */
-		delay_ticks(500);
-		*(volatile unsigned char *)0xffff09 &= ~0x08;
-		delay_ticks(500);
-		*(volatile unsigned char *)0xffff09 |= 0x08;
-	}
-}
-
-/* 0x21c40 */
-void sensor_reply_adc(void)
-{
-	unsigned v;
-	*(volatile unsigned char *)0xffff99 = 0x37;
-	*(volatile unsigned char *)0xffff98 = 0;
-	v = ADC_RESULT();
-	reply_begin(1);
-	reply_number_end(5, v);
-}
-
-/* 0x21cb6: service 't' measurement */
-void sensor_measure_reply(void)
-{
-	*(volatile unsigned char *)0xffff06 |= 0x10;
-	delay_ticks(50);
-	sensor_reply_adc();
-	*(volatile unsigned char *)0xffff06 &= ~0x10;
-}
+/* sensor_measure_reply: see regmark.c */
 
 /* ======================================================================== */
 /* USB helpers                                                              */

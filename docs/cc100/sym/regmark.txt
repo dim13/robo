@@ -1,0 +1,30 @@
+# Registration-mark subsystem: RAM globals not yet named in symbols.txt (fork K)
+00ffb08a rm_yx_fx int
+00ffb08c rm_xx_fx int
+00ffb08e rm_yy_fx int
+00ffb090 rm_xy_fx int
+00ffb0a2 rm_sx_fx int
+00ffb0a4 rm_sy_fx int
+00ffb0a6 rm_unk_a6 long
+00ffb0ac rm_flag_ac char
+00ffb264 move_last_x long
+00ffb268 move_last_y long
+00ffb3bc regmark_samples
+00ffb3ec span_x1 long
+00ffb3f0 span_y1 long
+00ffb3f4 span_x2 long
+00ffb3f8 span_y2 long
+00ffb3fc regmark_feed_origin long
+00ffb54c dev_pos_x long
+00ffb550 dev_pos_y long
+00ffc102 regmark_offset_x long
+00ffc106 regmark_offset_y long
+00ffc112 regmark_dist_x long
+00ffc116 regmark_dist_y long
+00ffc12a sensor_filter_sum long
+00ffc12e sensor_ring
+00ffc20a sensor_ring_tail pointer
+00ffc20e sensor_ring_head pointer
+00ffc212 sensor_ring_mid pointer
+00ffc21a scan_limit_xmax long
+00ffc21e scan_start long

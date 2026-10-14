@@ -1,0 +1,51 @@
+# Motion layer (fork J). RAM globals; all functions in this area were already named.
+00ffb40e solenoid_level int
+00ffb410 solenoid_down char
+00ffb412 press_profile_sel char
+00ffb408 solenoid_press_settle int
+00ffb40a solenoid_prelift_delay int
+00ffb40c solenoid_lift_settle int
+00ffb4ba force_da_value int
+00ffb4bc force_level int
+00ffb5e0 plan_pos_x long
+00ffb5e4 plan_pos_y long
+00ffb600 last_target_x long
+00ffb604 last_target_y long
+00ffb608 last_target_x_bl long
+00ffb60c ramp_steps long
+00ffb610 ramp_time long
+00ffb614 max_subseg_len long
+00ffb61c last_dir_tenths int
+00ffb61e backlash_cur int
+00ffb620 backlash_x int
+00ffb622 jog_ramp_idx int
+00ffb626 start_speed int
+00ffb628 ramp_steps_down long
+00ffb62c ramp_time_down long
+00ffb630 max_subseg_down long
+00ffb634 ramp_steps_up long
+00ffb638 ramp_time_up long
+00ffb63c max_subseg_up long
+00ffb640 speed_ramp long[96]
+00ffb7d0 seg_head long
+00ffb7d4 seg_tail long
+00ffb7d8 speed_down int
+00ffb7da speed_up int
+00ffb7dc accel int
+00ffb7de speed_cur int
+00ffb7e0 speed_start int
+00ffb7e2 seg_ring
+00ffb9f2 seg_blend
+00ffbb92 corner_ramp_idx int[32]
+00ffbbd2 motion_loading int
+00ffbbd4 motion_pen_state int
+00ffbbd8 dir_force_trim char[72]
+00ffbf12 axis_x
+00ffbf56 axis_y
+00ffc2f0 press_profiles
+00ffc368 lift_profile
+00ffc37c force_table int[4]
+00ffc385 media_force_pct char[14]
+00ffc39e ramp_steps_max long
+00ffc3a2 step_phase_table int[32]
+00ffc3e2 corner_speed_tab int[32]

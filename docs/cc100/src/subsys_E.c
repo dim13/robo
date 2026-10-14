@@ -140,16 +140,7 @@ void clip_sort_hits(char mode, long n, long *pts)
 
 /* 0x5452: fetch a detected registration mark */
 extern long regmark_marks[6];                          /* 0xffb0ae: m1.xy, m2.xy, m3.xy */
-void regmark_get_mark(int idx, long *x, long *y)
-{
-	if (idx > 255)
-		return;                                /* high byte must be 0 */
-	switch (idx) {
-	case 0: case 1: *x = regmark_marks[0]; *y = regmark_marks[1]; break;
-	case 2:         *x = regmark_marks[2]; *y = regmark_marks[3]; break;
-	case 3:         *x = regmark_marks[4]; *y = regmark_marks[5]; break;
-	}
-}
+/* regmark_get_mark: see regmark.c */
 
 /* 0xd4c8: move in millimetres (200 internal units per mm), pen up */
 void move_mm(long x_mm, long y_mm)

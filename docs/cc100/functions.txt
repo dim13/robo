@@ -148,7 +148,7 @@
 0000b904     76   1   0 font_step
 0000b950     26   1   2 font_run_glyph
 0000b96a    496   2  13 font_interp
-0000bb5a     22   1   0 font_op_penup
+0000bb5a     22   1   0 font_op_draw_next
 0000bb70    114   1   4 font_op_ef
 0000bbe2    148   1   3 font_op_arc
 0000bc76     56   1   0 font_op_call
@@ -156,7 +156,7 @@
 0000bd38    184   1   2 font_op_fb
 0000bdf0    136   1   3 font_op_fc
 0000be78    226   1   2 font_op_fd
-0000bf5a     20   1   0 font_op_pendown
+0000bf5a     20   1   0 font_op_move_next
 0000bf6e    122   1   1 font_op_return
 0000bfe8     44   1   2 font_op_helper1
 0000c014    148   1   3 font_op_helper2
@@ -461,8 +461,10 @@
 00019acc    208  21   3 motion_drain
 00019b9c   1008   3   5 motion_line_to
 00019f8c   3996   2   9 motion_plan_segment
+0001af28     60   0   0 motion_clear_counters
 0001af64    508   3   2 motion_init
 0001b162   2496   5   1 motion_start_next
+0001bb22    132   0   1 hypot_approx
 0001bba6    196   2   1 atan_tenths
 0001bc6a     90   1   3 timer_x_isr
 0001bcc4     90   1   3 timer_y_isr
@@ -587,7 +589,7 @@
 00021620    828   1  11 sensor_scan_diag
 0002195c     68   3   2 sensor_init
 000219a0     90   1   0 sensor_pot_shift
-000219fa     44   3   2 sensor_pot_step
+000219fa     44   3   2 sensor_pot_set_level
 00021a26    210   2   3 sensor_autocal_gain
 00021af8     42   1   1 svc_n_threshold
 00021b22    116   1   3 svc_a
@@ -612,7 +614,7 @@
 00022c74    418   3   0 __fadd
 00022e16     62   4   0 __bitfield_helper
 00022eee    510  30   0 __ddiv
-00023052     38  20   1 __divmodsi4
+00023052     38  21   1 __divmodsi4
 00023078     60   5   0 __udivmodsi4
 000230b4    192   1   0 __dtof
 00023174    130  30   0 __dtol

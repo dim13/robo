@@ -13,6 +13,8 @@
 #define ESC 0x1b
 #define FS  0x1c
 
+typedef struct { long x, y; } pt_t;   /* point in internal units */
+
 /* ---- RAM globals ---- */
 extern char fw_version_string[10];                   /* 0x028cec */
 extern double rm_yx;                             /* 0xffb06a */
@@ -201,12 +203,12 @@ extern int sensor_trace;                         /* 0xffcf00 */
 /* ---- functions ---- */
 void clip_sort_hits(char mode, long n, long *pts);           /* 0x04100 */
 void regmark_find_corners(void);                             /* 0x046b8 */
-void regmark_line_intersect(int *parallel);                  /* 0x048ba */
-void regmark_axis_intersect(int *parallel);                  /* 0x05082 */
+void regmark_line_intersect(int *parallel, pt_t *out, pt_t d, pt_t c, pt_t b, pt_t a);                  /* 0x048ba */
+void regmark_axis_intersect(int *parallel, pt_t *out, pt_t c, pt_t b, pt_t a);                  /* 0x05082 */
 void regmark_get_mark(int idx, long *x, long *y);            /* 0x05452 */
 void regmark_compute_transform(void);                        /* 0x054e4 */
-long regmark_scale_x(void);                                  /* 0x05bc0 */
-long regmark_scale_y(void);                                  /* 0x05d40 */
+long regmark_scale_x(double dx, double dy);                                  /* 0x05bc0 */
+long regmark_scale_y(double dx, double dy);                                  /* 0x05d40 */
 void regmark_scale_fail_hook(void);                          /* 0x05ec0 */
 void regmark_extend_segment(long *p1, long *p2);             /* 0x05ecc */
 void clip_segment_hits(long poly_top, long *out, long x0, long y0, long x1, long y1, int *n_hits, int *n_touch, int *flags); /* 0x06140 */
@@ -289,7 +291,7 @@ char * font_lookup(unsigned int code, long table);           /* 0x0b890 */
 int font_step(int op);                                       /* 0x0b904 */
 void font_run_glyph(int code);                               /* 0x0b950 */
 void font_interp(const unsigned char *prog);                                /* 0x0b96a */
-int font_op_penup(void);                                     /* 0x0bb5a */
+int font_op_draw_next(void);                                     /* 0x0bb5a */
 void font_op_ef(void);                                       /* 0x0bb70 */
 void font_op_arc(void);                                      /* 0x0bbe2 */
 void font_op_call(long *sp, int n);                          /* 0x0bc76 */
@@ -297,7 +299,7 @@ void font_op_fa(void);                                       /* 0x0bcae */
 void font_op_fb(void);                                       /* 0x0bd38 */
 void font_op_fc(void);                                       /* 0x0bdf0 */
 void font_op_fd(void);                                       /* 0x0be78 */
-int font_op_pendown(void);                                   /* 0x0bf5a */
+int font_op_move_next(void);                                   /* 0x0bf5a */
 int font_op_return(void);                                    /* 0x0bf6e */
 void font_op_helper1(void);                                  /* 0x0bfe8 */
 void font_op_helper2(void);                                  /* 0x0c014 */
@@ -588,8 +590,8 @@ void timer_y_isr(void);                                      /* 0x1bcc4 */
 void jog_x_step(void);                                       /* 0x1bd1e */
 void jog_y_step(void);                                       /* 0x1bf32 */
 int regmark_area_outcode(long *p);                           /* 0x1c242 */
-void regmark_clip_x(long *p, long *q, long x);               /* 0x1c39a */
-void regmark_clip_y(long *p, long *q, long y);               /* 0x1c414 */
+int  regmark_clip_x(pt_t *p, pt_t *q, long x);               /* 0x1c39a */
+int  regmark_clip_y(pt_t *p, pt_t *q, long y);               /* 0x1c414 */
 void device_plot_origin(void);                               /* 0x1c4ba */
 void plot_device(long x, long y, int pen);                   /* 0x1c572 */
 int machine_outcode(const long *p);                                /* 0x1cbc6 */
@@ -676,7 +678,7 @@ void sensor_on(void);                                        /* 0x2078a */
 void sensor_off(void);                                       /* 0x207bc */
 int move_clamped_wait(long x, long y, int pen);              /* 0x21546 */
 void sensor_init(void);                                      /* 0x2195c */
-void sensor_pot_step(void);                                  /* 0x219fa */
+void sensor_pot_set_level(int level);                                  /* 0x219fa */
 int sensor_autocal_gain(int blink_forever);                  /* 0x21a26 */
 void svc_n_threshold(void);                                  /* 0x21af8 */
 void svc_a(void);                                            /* 0x21b22 */
@@ -705,6 +707,20 @@ extern unsigned char *workbuf_ptrs[7];           /* 0xffb0e8  6 KiB pool at 0xff
 extern long workbuf_sizes[6];                    /* 0xffb104 */
 void apply_orientation(long x, long y, long *out);   /* 0x1c9c0 */
 void device_plot(long x, long y, int pen);           /* 0x1c608 */
+void device_plot_noclip(long x, long y, int pen);      /* 0x1c492 */
+void device_plot_raw(long x, long y, int pen);         /* 0x1c4d4 */
+void device_plot_nocal(long x, long y, int pen);       /* 0x1c678 */
+void motor_run_continuous(int run, int vx, int vy);    /* 0x1d7ac */
+void regmark_clear_transform(void);                    /* 0x045e4 */
+void regmark_transform(pt_t *out, long x, long y);     /* 0x1c6c4 */
+void save_return_addr(void);                           /* 0x1f644 */
+void _INITSCT(void);                                   /* 0x238ec  C runtime: copy .data, clear .bss */
+int  main(void);                                       /* 0x13940 */
+void motion_clear_counters(void);                      /* 0x1af28  orphan */
+long hypot_approx(long a, long b);                     /* 0x1bb22  orphan */
+extern long plan_pos_x, plan_pos_y;                    /* 0xffb5e0 / 0xffb5e4 */
+extern long last_target_x, last_target_y;              /* 0xffb600 / 0xffb604 */
+extern long last_target_x_bl;                          /* 0xffb608 */
 #define CONFIG_BYTE (*(unsigned char *)0xffb368) /* persistent config bits */
 
 #endif /* CC100_H */

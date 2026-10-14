@@ -162,6 +162,19 @@ Every point passes through this pipeline (`plot_to`, 0x1DB80):
 The offset (`^`) is applied at the user/device boundary. Changing the offset does not
 move the tool.
 
+### 4.1 Motion
+
+* The CPU clock is 16 MHz. One motor step is 0.05 mm, a half-step.
+* Speed is `!` level × 10 mm/s, so 10..100 mm/s. Acceleration is 3000 mm/s², from a start
+  speed of 10 mm/s.
+* At most a quarter of each segment is spent accelerating, and a quarter decelerating.
+* The cutter stops at corners sharper than 25° on moves longer than 4 mm. Smaller turns are
+  blended using a corner-speed table (120 mm/s at 1.6° down to 23 mm/s at 24°).
+* The pen-down move is: solenoid kick at D/A 220 for 5 ms, then 155 for 60 ms, then the
+  force level.
+* With the cutter offset active, the force is reduced by up to about 20 % when cutting
+  toward +X within ±60°.
+
 ## 5. Replies
 
 * Every reply is one or more decimal fields separated by `,` and followed by a single ETX.
@@ -275,9 +288,9 @@ Line types for `L`:
 
 | Command | Syntax | Description |
 |---------|--------|-------------|
-| `!` | `!l[,n]` | Speed level 1..10. 101..110 is accepted as 1..10. Out of range is ignored. Saved (EEPROM 0x34). |
-| `*` | `*a,f[,n]` | Force level. `a` is ignored, and `f` must be 1..3, otherwise the command is ignored. Saved (EEPROM 0x35). Also clears the `FX` force (EEPROM 0x3B). |
-| `FX` | `FXn[,m]` | Cutting force 1..30, clamped. Saved (EEPROM 0x3B). `m` is ignored. It overrides the `*` level, which becomes 1 below 7, 2 below 19, otherwise 3. |
+| `!` | `!l[,n]` | Speed level 1..10, which gives 10·l mm/s for both pen-down and pen-up moves (acceleration 3000 mm/s², start speed 10 mm/s). 101..110 is accepted as 1..10. Out of range is ignored. Saved (EEPROM 0x34). |
+| `*` | `*a,f[,n]` | Force level. `a` is ignored, and `f` must be 1..3, otherwise the command is ignored. Levels 1/2/3 drive the solenoid D/A at 164/177/203 (factory calibration in EEPROM). Saved (EEPROM 0x35). Also clears the `FX` force (EEPROM 0x3B). |
+| `FX` | `FXn[,m]` | Cutting force 1..30, clamped. It is interpolated through the same calibration points as `*` (D/A 163..207; FX2 ≈ `*1`, FX10 ≈ `*2`, FX27 ≈ `*3`). Saved (EEPROM 0x3B). `m` is ignored. |
 | `FC` | `FCp,q[,n]` | Cutter (drag-knife) offset. `p` = 0..45 is the blade tip offset in units of 0.025 mm (internally `p` × 5, capped at 1.2 mm), saved (EEPROM 0x36). `p` = 0 disables the compensation. `q` = 1..3 (default 1; its effect was not found). Out-of-range values are ignored individually. |
 | `FD` | `FDθ[,n]` | Blade rotation control: the minimum direction change that triggers a blade swivel, 0..600.00 *angle* (default 30°). `n` must be 0..8, otherwise the command is ignored. At a corner larger than this, the knife is lifted and the tip pivoted around the knife axis in 15° steps. |
 | `FE` | `FEp[,n]` | Overcut on (1) or off (0). Saved (EEPROM 0x38). When on, cuts are extended past their end point by the `FF` length. |
@@ -297,6 +310,19 @@ Line types for `L`:
 
 `n` is an *int*. Values with a non-zero high byte are ignored.
 
+How mark search works:
+
+* The optical sensor sits 15 mm from the knife, in −Y. During a search, every move is
+  shifted so that coordinates refer to the point under the sensor.
+* Each registration mark is an L made of two bars.
+* Each bar is found with a coarse scan followed by two fine scans. The bar position is the
+  midpoint of the two detected edges.
+* From the mark corners, the firmware builds an affine transform (rotation and optionally
+  scale), which is then applied to all following plotting.
+* Host flow: `TB50`/`TB51`/`TB52`/`TB53`/`TB54`/`TB55` to configure, `TB99` to enable the
+  transform, `TB23` or `TB123` to search (reply `0` = found), then optionally `FQ5` to
+  confirm.
+
 | Command | Description |
 |---------|-------------|
 | `TB0` | Registration transform off. |
@@ -306,11 +332,11 @@ Line types for `L`:
 | `TB52[,n]` | Mark type: `n` = 1 (or omitted) selects type 1, anything else type 2 (the default). |
 | `TB53,w` | Mark line width, 0.3..1.0 mm. Stored but unused by firmware 2.30. |
 | `TB54[,x[,y]]` | Mark offset. |
-| `TB55,n` | Sets a flag when `n` ≠ 0. Effect not determined. |
+| `TB55,n` | When `n` ≠ 0, the drawing is scaled so that the measured distance between marks matches the nominal distance given with `TB23`/`TB123`. The scale factor must be in 0.667..2.0. |
 | `TB22[,x,y]`, `TB23[,x,y]` | Manual mark search: the tool has been positioned at the first mark. 22 is search type 1 and 23 is type 2. The optional `x,y` is the mark origin. Reply: `0` (width 5) + ETX if the marks were found, non-zero otherwise. |
 | `TB122[,x,y]`, `TB123[,x,y]` | Automatic mark search, same as above. On failure the tool returns to the start, and the page reverts to 1000 × 200 mm. |
-| `TB70` | Calibration. Finds the mark centre by searching its edges in four directions and cuts a cross through it. There is no reply. |
-| `TB72,x,y` | Set the calibration correction, −40..40 each. Saved (EEPROM 0x24, 0x26). Read it back with `TB71`. |
+| `TB70` | Calibration. Finds a printed cross with the sensor and cuts a "+" over it, so the user can measure the sensor-to-knife error and store it with `TB72`. There is no reply. |
+| `TB72,x,y` | Sensor-to-knife offset correction in 0.05 mm steps, −40..40 each (±2 mm). Saved (EEPROM 0x24, 0x26). Read it back with `TB71`. |
 
 ### 7.7 Test and maintenance
 

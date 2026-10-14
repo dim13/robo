@@ -44,40 +44,71 @@ big-endian.
 
 ## `font.bin`
 
-This is the stroke font used by `font_interp` (0xB96A). Offsets are relative to the start of
-the file, which is ROM 0x26794.
+This is the built-in stroke font. `render_font.py` re-implements the firmware's font
+interpreter and draws the glyphs into `font/`:
+
+| File | Content |
+|------|---------|
+| `font_1020.svg` | Characters 0x20–0xFF as the default font 1020 draws them. Note the slashed zero and the italic Greek lowercase at 0xE0–0xF8. |
+| `font_c278.svg` | Raw glyph table 0xFFC278 (font id ≥ 1000). |
+| `font_c298.svg` | Raw glyph table 0xFFC298 (font id 1120). |
+| `font_c2b8.svg` | Raw glyph table 0xFFC2B8 (font id < 1000), drawn 14/8 wider as the plotter does. |
+| `font_rom.svg` | Raw ROM symbol table 0x28954 (symbols, fractions). |
+
+Run `python3 render_font.py [outdir]` to regenerate them. It uses only the standard library.
+
+Offsets below are relative to the start of the file, which is ROM 0x26794.
 
 | ROM | Offset | Content |
 |-----|--------|---------|
-| 0x26794 | 0x0000 | Character code remap (16 bytes) |
-| 0x267A4 | 0x0010 | Glyph metrics tables (4 signed bytes per glyph). `font_metrics` (0xC994) also reads 0x267A8, 0x26BA8, 0x26C58 and 0x26DE0. |
-| 0x26E00 | 0x066C | Glyph programs for the RAM font sets at 0xFFC278, 0xFFC298 and 0xFFC2B8 (see the pointer tables below). |
-| 0x285A0 | 0x1E0C | Sub-glyph table, called by opcodes 0xF5–0xF9. |
-| 0x28954 | 0x21C0 | Index of 8 glyph-group pointers for ROM font 0, followed by its glyphs. |
-| 0x28B54 | 0x23C0 | National character substitution maps (`#$@[\]^_{|}~` variants). |
-| 0x28BCC | 0x2438 | Accented-character composition pairs. |
+| 0x26794 | 0x0000 | Code remap for mode bit 9 (codes < 0x0F) |
+| 0x267A4 | 0x0010 | Metrics: 4 signed bytes per glyph (`font_metrics` 0xC994). Tables at 0x267A4, 0x267A8, 0x26BA8, 0x26C58 and 0x26DE0. |
+| 0x26E00 | 0x066C | Glyph programs of the RAM tables 0xFFC278, 0xFFC298 and 0xFFC2B8 (see the pointer tables below) |
+| 0x2865B | 0x1EC7 | Composite pairs for codes < 0x20 in the c2b8 fonts |
+| 0x28954 | 0x21C0 | ROM symbol table: 8 group pointers, then its glyphs |
+| 0x28974 | 0x21E0 | Sub-glyph pointers for opcodes F5–F9 (base 0x285A0 + 4·opcode) |
+| 0x28B25 | 0x2391 | `'0'` / `'O'` variant table, selected by mode bits 7..5 |
+| 0x28B54 | 0x23C0 | National variants of `#$@[\]^_{|}~`: 12 bytes per row, row = mode & 15 |
+| 0x28BCC | 0x2438 | Composite (base, accent) glyph pairs for national variants below 0x0F |
 
-How glyphs are found and drawn:
+**Glyph lookup.** Every table holds 8 group pointers. A code selects a group with bits 7..5.
+Inside the group, the glyph is reached by skipping `code & 31` records that each end in 0xFF.
 
-* A glyph group is selected by code bits 7..5.
-* Inside the group, the glyph is reached by skipping `code & 31` records that end in 0xFF.
+**Glyph coordinates.**
+* A point byte holds x in the high nibble (advance direction) and y in the low nibble (up).
+* The c278/c298 fonts use an 8 × 14 cell. Both axes are scaled by size/14.
+* The c2b8 font scales x by width/8 instead.
+* The pen starts up, every point after the first draws, and `FE` lifts the pen.
 
-| Opcode | Meaning |
-|--------|---------|
-| 0x00–0xED | Point: x is the high nibble, y the low nibble |
-| 0xEE | Pen up for the next point |
-| 0xEF | Special scaling |
-| 0xF0–0xF4 | Arcs |
-| 0xF5–0xF9 | Call a sub-glyph |
-| 0xFA–0xFD | Curves |
-| 0xFE | Pen down |
-| 0xFF | End or return |
+**Byte code.** `s8` is a signed byte, and angles are in 1/128 of a turn.
 
-The RAM font pointer sets (in `init_data.bin`) each hold 8 group pointers:
+| Byte | Operands | Meaning |
+|------|----------|---------|
+| 00–ED | — | Point (x = high nibble, y = low nibble) |
+| EE | — | The next point draws |
+| EF | g | Jump to glyph g, scaled 5/8 (x) × 19/32 (y) |
+| F0–F4 | c v | Arc of radius (b & 7) + 1 around centre c. Start = ((v >> 5) & 7) · 45°. Span = `s8((v & 0x1F) << 3)`, and 0 means a full turn. |
+| F5–F9 | — | Call a sub-glyph |
+| FA | p | Relative point (signed nibbles) |
+| FA FA | p n | Fine point: p plus a fraction from n (3 + 3 bits, scale 256 >> (n >> 6)) |
+| FA EF | p n v w s | Fine centre. Radius ((v & 0xE0) << 3 \| w) / 256. Start (v & 0x1F) · 4. Span `s8(s)`. |
+| FB | v | Arc continuing from the current point. Radius (v >> 6) + 1. Start (v >> 4 & 3) · 90°. Span `s8(v << 4)`. |
+| FC | c v s | Centre c. Radius (v >> 5) + 1. Start (v & 0x1F) · 4. Span `s8(s)`. |
+| FD | 4 bytes | Signed 6-bit centre, 5-bit radius, 7-bit start, 8-bit span |
+| FE | — | The next point is a move |
+| FF | — | Return, or end of glyph |
+
+**Arc tessellation.** Arcs are drawn as chords, aligned to multiples of 16, 8 or 1
+(in 1/128 turn), depending on the radius and text size. At the default 3 mm size the steps are
+mostly 45° or 22.5°, which is why the sheets look faceted.
+
+**Pointer tables.** The RAM font tables (in `init_data.bin`) each hold 8 group pointers:
 
 * 0xFFC278: 0x26E00 0x26EDD 0x27005 0x2710C 0x271F2 0x2732D 0x2741D 0x2758B
 * 0xFFC298: 0x26E00 0x276EF 0x27860 0x2710C 0x271F2 0x2732D 0x2741D 0x2758B
 * 0xFFC2B8: 0x27968 0x27AB4 0x27C2A 0x27D5A 0x27EC7 0x27FF2 0x280ED 0x284F8
+
+The full interpreter semantics, with addresses, are in `../notes/font.md`.
 
 ## `linetypes.bin`
 
@@ -127,9 +158,9 @@ The RAM font pointer sets (in `init_data.bin`) each hold 8 group pointers:
 MANUFACTURER:Graphtec;MODEL:CC100-20;CLASS:PRINTER;DESCRIPTION:Graphtec CC100-20;
 ```
 
-The length field says 0x004D (77 bytes including itself), but the text is 81 bytes long. A host
-reading exactly the stated length gets `...DESCRIPTION:Graphtec CC`. This was not checked on
-hardware.
+The embedded length field says 0x004D (77 bytes), although the text is 81 bytes. The USB
+request handler ignores it and sends 0x53 (83) bytes, so hosts receive the complete string.
+Only the prefix is wrong.
 
 ## `version.txt`
 

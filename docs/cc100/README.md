@@ -14,14 +14,14 @@ The CPU is a Renesas H8S running in advanced mode (24-bit addresses), with 256 K
 |------|---------|
 | `GP-GL.md` | GP-GL specification as implemented by this firmware. |
 | `symbols.txt` | ~800 names and prototypes (functions and RAM globals), applied by the Ghidra scripts. |
-| `decompiled.c` | Full raw Ghidra output with `symbols.txt` applied (681 functions). |
+| `decompiled.c` | Full raw Ghidra output with `symbols.txt` applied (683 functions). |
 | `functions.txt` | Function list: address, size, callers, callees, name. |
 | `src/*.c`, `src/cc100.h` | Hand-cleaned, readable C. Each function carries its original address. |
 | `notes/*.md` | Analysis notes per subsystem. `notes/dispatch.txt` is the command dispatch table. |
 | `ghidra/H8S` | Ghidra processor module for H8S (see below). |
 | `ghidra/scripts` | Headless scripts: `Setup` (memory map, vectors), `Names` (apply symbols), `Dump` (decompile all), `Funcs`, `Stats`, `Dis`. |
 | `ghidra/build.sh` | Regenerates `decompiled.c` and `functions.txt`. |
-| `assets/` | ROM data cut into files (demo GP-GL job, stroke font, line types, USB descriptors, ...) by `assets/extract.py`. |
+| `assets/` | ROM data cut into files (demo GP-GL job, stroke font, line types, USB descriptors, ...) by `assets/extract.py`. `assets/render_font.py` renders the stroke font to `assets/font/*.svg`. |
 
 Readable sources by area:
 
@@ -32,8 +32,11 @@ Readable sources by area:
 | `src/plot.c` | Drawing commands, line types, curves, factor, rotation, window, clipping, `plot_to` pipeline. |
 | `src/device.c` | `F*`, `TT`, `TB` (registration marks), service commands, built-in demo. |
 | `src/subsys_E.c` | Vectors, startup, cutter-offset compensation, registration geometry, stroke font, USB descriptors and requests. |
-| `src/subsys_F.c` | `main`, power, thermal model, EEPROM driver, solenoid, stepper queue, panel. |
-| `src/subsys_G.c` | Device transform, motion planner, mark sensor; runtime library map (soft-float, math). |
+| `src/subsys_F.c` | Power, thermal model, EEPROM driver, panel, init helpers. |
+| `src/subsys_G.c` | Device transform pipeline; runtime library map (soft-float, math). |
+| `src/boot.c` | Reset, `main`, startup sequence, factory start `boot_wait_key`, the 0x4000 entry table, orphan routines. |
+| `src/motion.c` | Motion planner, acceleration profiles, stepper interrupts, solenoid force and kick, jog. |
+| `src/regmark.c` | Registration marks end to end: sensor driver, edge search, `TB` commands, calibration, geometry. |
 
 ## Ghidra processor module
 

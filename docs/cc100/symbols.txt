@@ -1,5 +1,6 @@
 # CC100 firmware 2.30 symbols: addr name [prototype | data type]
 00000400 reset
+00004000 app_entry_table
 00004100 clip_sort_hits void clip_sort_hits(char mode, long n, long *pts)
 000045e4 regmark_clear_transform
 000046b8 regmark_find_corners void regmark_find_corners(void)
@@ -94,7 +95,7 @@
 0000b904 font_step int font_step(int op)
 0000b950 font_run_glyph void font_run_glyph(int code)
 0000b96a font_interp void font_interp(char *prog)
-0000bb5a font_op_penup int font_op_penup(void)
+0000bb5a font_op_draw_next int font_op_draw_next(void)
 0000bb70 font_op_ef void font_op_ef(void)
 0000bbe2 font_op_arc void font_op_arc(void)
 0000bc76 font_op_call void font_op_call(long *sp, int n)
@@ -102,7 +103,7 @@
 0000bd38 font_op_fb void font_op_fb(void)
 0000bdf0 font_op_fc void font_op_fc(void)
 0000be78 font_op_fd void font_op_fd(void)
-0000bf5a font_op_pendown int font_op_pendown(void)
+0000bf5a font_op_move_next int font_op_move_next(void)
 0000bf6e font_op_return int font_op_return(void)
 0000bfe8 font_op_helper1 void font_op_helper1(void)
 0000c014 font_op_helper2 void font_op_helper2(void)
@@ -392,8 +393,10 @@
 00019acc motion_drain void motion_drain(void)
 00019b9c motion_line_to int motion_line_to(long x, long y, int pen_down)
 00019f8c motion_plan_segment unsigned long motion_plan_segment(long x, long y, int max_angle)
+0001af28 motion_clear_counters void motion_clear_counters(void)
 0001af64 motion_init void motion_init(void)
 0001b162 motion_start_next unsigned long motion_start_next(void)
+0001bb22 hypot_approx long hypot_approx(long a, long b)
 0001bba6 atan_tenths int atan_tenths(long dy, long dx)
 0001bc6a timer_x_isr void timer_x_isr(void)
 0001bcc4 timer_y_isr void timer_y_isr(void)
@@ -518,7 +521,7 @@
 00021620 sensor_scan_diag
 0002195c sensor_init void sensor_init(void)
 000219a0 sensor_pot_shift
-000219fa sensor_pot_step void sensor_pot_step(void)
+000219fa sensor_pot_set_level void sensor_pot_set_level(int level)
 00021a26 sensor_autocal_gain int sensor_autocal_gain(int blink_forever)
 00021af8 svc_n_threshold void svc_n_threshold(void)
 00021b22 svc_a void svc_a(void)
@@ -616,10 +619,18 @@
 00ffb072 rm_xx double
 00ffb07a rm_yy double
 00ffb082 rm_xy double
+00ffb08a rm_yx_fx int
+00ffb08c rm_xx_fx int
+00ffb08e rm_yy_fx int
+00ffb090 rm_xy_fx int
 00ffb092 rm_sx double
 00ffb09a rm_sy double
+00ffb0a2 rm_sx_fx int
+00ffb0a4 rm_sy_fx int
+00ffb0a6 rm_unk_a6 long
 00ffb0aa regmark_active char
 00ffb0ab rm_scale_on char
+00ffb0ac rm_flag_ac char
 00ffb0ae regmark_marks
 00ffb0e8 workbuf_ptrs
 00ffb104 workbuf_sizes
@@ -641,6 +652,8 @@
 00ffb24a distcorr_x double
 00ffb252 distcorr_y double
 00ffb262 steps_per_unit int
+00ffb264 move_last_x long
+00ffb268 move_last_y long
 00ffb282 err_mask_long long
 00ffb284 error_mask short
 00ffb286 error_status byte
@@ -676,6 +689,8 @@
 00ffb372 distcorr_inv_y double
 00ffb37c delay_counter short
 00ffb397 usb_suspended char
+00ffb398 boot_key_ticks int
+00ffb39a boot_key_seen int
 00ffb39c line_pitch_arg long
 00ffb3a0 line_type_arg int
 00ffb3a2 axis_type int
@@ -685,7 +700,19 @@
 00ffb3b4 motor_y_bias long
 00ffb3b8 media_mode char
 00ffb3b9 ur_set char
+00ffb3bc regmark_samples
+00ffb3ec span_x1 long
+00ffb3f0 span_y1 long
+00ffb3f4 span_x2 long
+00ffb3f8 span_y2 long
+00ffb3fc regmark_feed_origin long
 00ffb400 landscape char
+00ffb408 solenoid_press_settle int
+00ffb40a solenoid_prelift_delay int
+00ffb40c solenoid_lift_settle int
+00ffb40e solenoid_level int
+00ffb410 solenoid_down char
+00ffb412 press_profile_sel char
 00ffb414 cur_pen int
 00ffb416 pen_speed int[8]
 00ffb436 pen_force int[8]
@@ -695,6 +722,8 @@
 00ffb486 pen_FE int[8]
 00ffb496 pen_FF_a int[8]
 00ffb4a6 pen_FF_b int[8]
+00ffb4ba force_da_value int
+00ffb4bc force_level int
 00ffb4c8 media_type char
 00ffb4d4 factor_p long
 00ffb4d8 factor_q long
@@ -719,6 +748,8 @@
 00ffb538 mach_last_y long
 00ffb53c dev_x long
 00ffb540 dev_y long
+00ffb54c dev_pos_x long
+00ffb550 dev_pos_y long
 00ffb554 clip_xmin long
 00ffb558 clip_ymin long
 00ffb55c clip_xmax long
@@ -736,10 +767,43 @@
 00ffb5c8 mach_last_outcode int
 00ffb5ca cur_outcode int
 00ffb5de port600010_shadow int
+00ffb5e0 plan_pos_x long
+00ffb5e4 plan_pos_y long
 00ffb5f0 jog_speed_x int
 00ffb5f2 jog_speed_y int
+00ffb600 last_target_x long
+00ffb604 last_target_y long
+00ffb608 last_target_x_bl long
+00ffb60c ramp_steps long
+00ffb610 ramp_time long
+00ffb614 max_subseg_len long
+00ffb61c last_dir_tenths int
+00ffb61e backlash_cur int
+00ffb620 backlash_x int
+00ffb622 jog_ramp_idx int
+00ffb626 start_speed int
+00ffb628 ramp_steps_down long
+00ffb62c ramp_time_down long
+00ffb630 max_subseg_down long
+00ffb634 ramp_steps_up long
+00ffb638 ramp_time_up long
+00ffb63c max_subseg_up long
+00ffb640 speed_ramp long[96]
+00ffb7d0 seg_head long
+00ffb7d4 seg_tail long
+00ffb7d8 speed_down int
+00ffb7da speed_up int
+00ffb7dc accel int
+00ffb7de speed_cur int
+00ffb7e0 speed_start int
+00ffb7e2 seg_ring
+00ffb9f2 seg_blend
+00ffbb92 corner_ramp_idx int[32]
+00ffbbd2 motion_loading int
+00ffbbd4 motion_pen_state int
 00ffbbd6 jog_dir_x char
 00ffbbd7 jog_dir_y char
+00ffbbd8 dir_force_trim char[72]
 00ffbc20 rm_area_xmin long
 00ffbc24 rm_area_ymin long
 00ffbc28 rm_area_xmax long
@@ -768,17 +832,31 @@
 00ffbefe travel_max_y long
 00ffbf0f reply_via_sci char
 00ffbf11 sci_esc_state char
+00ffbf12 axis_x
 00ffbf14 motor_busy_x int
 00ffbf26 motor_pos_x long
+00ffbf56 axis_y
 00ffbf58 motor_busy_y int
 00ffbf6a motor_pos_y long
+00ffbf9c boot_stack_ptr long
 00ffc100 regmark_cfg int
+00ffc102 regmark_offset_x long
+00ffc106 regmark_offset_y long
+00ffc112 regmark_dist_x long
+00ffc116 regmark_dist_y long
 00ffc11a sensor_scan_speed int
 00ffc11c scan_off_x long
 00ffc120 scan_off_y long
 00ffc124 sensor_gain_x int
 00ffc126 sensor_gain_y int
 00ffc128 sensor_baseline int
+00ffc12a sensor_filter_sum long
+00ffc12e sensor_ring
+00ffc20a sensor_ring_tail pointer
+00ffc20e sensor_ring_head pointer
+00ffc212 sensor_ring_mid pointer
+00ffc21a scan_limit_xmax long
+00ffc21e scan_start long
 00ffc222 regmark_scan_mode char
 00ffc223 regmark_length char
 00ffc224 regmark_width char
@@ -791,8 +869,15 @@
 00ffc230 dump_reply_tab
 00ffc2da demo_mode char
 00ffc2ee usb_cfg_pending char
+00ffc2f0 press_profiles
+00ffc368 lift_profile
+00ffc37c force_table int[4]
+00ffc385 media_force_pct char[14]
 00ffc394 home_off_x long
 00ffc398 home_off_y long
+00ffc39e ramp_steps_max long
+00ffc3a2 step_phase_table int[32]
+00ffc3e2 corner_speed_tab int[32]
 00ffc422 deferred_valid char
 00ffc424 jog_keys char
 00ffc43e usb_ep0_state short
@@ -801,3 +886,4 @@
 00ffc4ae usb_ctl_end long
 00ffc800 workbuf
 00ffcf00 sensor_trace int
+00ffefba boot_caller_ret long

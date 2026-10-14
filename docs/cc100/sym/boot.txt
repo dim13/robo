@@ -1,0 +1,8 @@
+# boot / update path (fork I)
+00004000 app_entry_table
+0001af28 motion_clear_counters void motion_clear_counters(void)
+0001bb22 hypot_approx long hypot_approx(long a, long b)
+00ffb398 boot_key_ticks int
+00ffb39a boot_key_seen int
+00ffbf9c boot_stack_ptr long
+00ffefba boot_caller_ret long
