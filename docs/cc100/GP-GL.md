@@ -445,3 +445,10 @@ Things to note in it:
   * `FI` is an endless test plot.
   * `FU` is the track-enhancing roll.
   * `TT` is a soft reset.
+
+## 12. Grammar
+
+`gpgl.ebnf` holds an EBNF grammar of this dialect in Go EBNF notation. It verifies with
+`golang.org/x/exp/ebnf` (start production `Stream`). It describes well-formed input; the
+leniencies of sections 3.1 to 3.3 (skipped bytes, missing parameters read as 0, the
+two-letter preference) are noted in its header comment.

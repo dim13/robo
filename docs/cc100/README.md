@@ -13,6 +13,7 @@ The CPU is a Renesas H8S running in advanced mode (24-bit addresses), with 256 K
 | Path | Content |
 |------|---------|
 | `GP-GL.md` | GP-GL specification as implemented by this firmware. |
+| `gpgl.ebnf` | The same dialect as a Go EBNF grammar (start: `Stream`). |
 | `symbols.txt` | ~800 names and prototypes (functions and RAM globals), applied by the Ghidra scripts. |
 | `decompiled.c` | Full raw Ghidra output with `symbols.txt` applied (683 functions). |
 | `functions.txt` | Function list: address, size, callers, callees, name. |

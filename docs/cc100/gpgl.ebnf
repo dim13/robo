@@ -1,0 +1,147 @@
+/*
+GP-GL as accepted by the Graphtec CC100 (Craft ROBO), firmware 2.30.
+
+Notation is Go EBNF (golang.org/x/exp/ebnf): "x" terminal, [ x ] optional,
+{ x } repetition, a … b range, ( ) grouping.
+
+The grammar describes well-formed input. The interpreter is more lenient:
+
+  - between commands it skips digits, "+", ",", "-", ".", "#", 0x80, space
+    and control characters; unknown command letters are ignored;
+  - a missing parameter reads as 0, extra parameters are skipped;
+  - before a number, any junk is skipped and a "-" in it negates the number;
+  - for a letter that starts both a one- and a two-letter command (D/DP,
+    W/WP, F/FX, ...), the two-letter form wins if the next byte matches.
+
+Command numbers give their kind:
+  Coord  user units (normally 0.05 mm), two decimals kept
+  Int    rounded half away from zero
+  Angle  degrees, two decimals kept
+*/
+
+Stream = { RealTime | Command | ServiceCommand | Filler } .
+
+/* Real-time sequences, handled on receipt and never seen by the interpreter.
+   On USB ESC and its argument must be in the same packet. */
+RealTime = esc ( "\x00" Byte  /* jog keys, active-low bit mask */
+               | "\x01"       /* debug trap */
+               | "\x02"       /* USB: online? "1"/"0"; RS-232: cancel */
+               | "\x03"       /* cancel job */
+               | "\x04"       /* ignored */
+               | "\x05"       /* busy? "1"/"0" */
+               ) .
+
+Filler = Terminator | Sep | " " | "\r" | "\n" | "\t" | "#" | "\x80" .
+
+Terminator = etx .
+Sep        = "," .
+
+/* ---- numbers ---- */
+
+Number = [ "-" | "+" ] ( Digits [ "." { Digit } ] | "." Digits ) .
+Digits = Digit { Digit } .
+Digit  = "0" … "9" .
+Coord  = Number .
+Int    = Number .
+Angle  = Number .
+
+Point    = Coord Sep Coord .
+Points   = Point { Sep Point } .
+Pen      = Int .  /* pen number, parsed and ignored */
+OptSep   = [ Sep ] .
+
+/* ---- commands ---- */
+
+Command = Drawing | LineType | Setup | Query | Tool | Registration
+        | Maintenance | NoOp .
+
+Drawing = Draw | Move | DrawRel | MoveRel | Home | Circle | CircleRel
+        | Circle3 | Ellipse | Curve | CurveRel | Bezier | Axis .
+
+Draw      = "D" Points OptSep .
+Move      = "M" Point OptSep .
+DrawRel   = "E" Points OptSep .
+MoveRel   = "O" Point OptSep .
+Home      = "H" .
+Circle    = "W" Point Sep Coord Sep Coord Sep Angle Sep Angle [ Sep Angle ] OptSep .
+CircleRel = "]" Coord Sep Coord Sep Angle Sep Angle [ Sep Angle ] OptSep .
+Circle3   = "WP" Int Sep Point Sep Point Sep Point [ Sep Angle ] OptSep .
+Ellipse   = ")" Int Sep Point Sep Coord Sep Coord Sep Angle Sep Angle Sep Angle
+            [ Sep Angle ] OptSep .
+Curve     = "Y" Int Sep Points OptSep .
+CurveRel  = "_" Int Sep Points OptSep .
+Bezier    = "BZ" Int Sep Point Sep Point Sep Point Sep Point [ Sep Int ] OptSep .
+Axis      = "X" Int Sep Coord Sep Int [ Sep Coord Sep Coord ] OptSep .
+
+LineType  = UserLine | Line | LineScale .
+Line      = "L" Int OptSep .                            /* -9 … 9 */
+UserLine  = "L100" Sep Int Sep Coord Sep Coord [ Sep Coord ] OptSep .
+LineScale = "B" Coord OptSep .
+
+Setup = LowerLeft | UpperRight | Offset | Factor | Rotate | Clip
+      | SetOrigin | Reorigin | GoOrigin .
+
+LowerLeft  = "\\" Point OptSep .
+UpperRight = "Z" Point OptSep .
+Offset     = "^" Point OptSep .
+Factor     = "&" Int Sep Int Sep Int OptSep .
+Rotate     = "/" Point Sep Angle OptSep .
+Clip       = ">" [ Points ] OptSep .                    /* empty clears */
+SetOrigin  = ( "SO" | "NP" ) [ Int ] .
+Reorigin   = "FJ" .
+GoOrigin   = "FT" .
+
+/* Replies: decimal fields, right-aligned, separated by "," and ended by ETX. */
+Query = "G" | "C" | "?" | "[" | "U" | "@" | "FG" | "FA" | "FL" | "FV"
+      | "FQ" Int | "TB71" | "TB98" .
+
+Tool = Speed | Force | CutForce | CutterOffset | BladeRotation | Overcut
+     | OvercutLength | Touchdown | Orientation | MediaMode | PageLength
+     | MediaType | DistanceCorr | TrackEnhance | TrackRoll | ChartFeed
+     | Reset .
+
+Speed         = "!" Int [ Sep Pen ] OptSep .            /* 1 … 10 */
+Force         = "*" Int Sep Int [ Sep Pen ] OptSep .    /* first ignored, 1 … 3 */
+CutForce      = "FX" Int [ Sep Int ] OptSep .           /* 1 … 30 */
+CutterOffset  = "FC" Int Sep Int [ Sep Pen ] OptSep .   /* 0 … 45, 1 … 3 */
+BladeRotation = "FD" Angle [ Sep Pen ] OptSep .
+Overcut       = "FE" Int [ Sep Pen ] OptSep .           /* 0, 1 */
+OvercutLength = "FF" Int Sep Int [ Sep Pen ] OptSep .   /* 0 … 9 */
+Touchdown     = "FK" [ Int ] OptSep .
+Orientation   = "FN" [ Int ] OptSep .                   /* 0 portrait, 1 landscape */
+MediaMode     = "FM" Int OptSep .
+PageLength    = "FO" [ Coord ] OptSep .
+MediaType     = "FW" Int OptSep .                       /* 1 … 13 */
+DistanceCorr  = "FB" Int Sep Int OptSep .               /* -200 … 200 */
+TrackEnhance  = "FY" Int OptSep .                       /* 0 on, 1 off */
+TrackRoll     = "FU" Point OptSep .
+ChartFeed     = ( "F" | "FS" ) Coord OptSep .
+Reset         = "TT" .
+
+Registration = "TB" ( "0" | "99" | "70"
+                    | "50" [ Sep Int ]
+                    | "51" Sep Coord
+                    | "52" [ Sep Int ]
+                    | "53" Sep Coord
+                    | "54" [ Sep Coord [ Sep Coord ] ]
+                    | "55" Sep Int
+                    | "72" Sep Int Sep Int
+                    | ( "22" | "23" | "122" | "123" ) [ Sep Point ]
+                    ) OptSep .
+
+Maintenance = "FH" | "FI" | Unlock .
+Unlock      = "FPGRFCC1" .  /* enables ServiceCommand until reset */
+
+/* Accepted, parameters discarded by the filler rule. */
+NoOp = "DP" | "MP" | "EP" | "OP" | "RP" | "P" | "K" | "$" | "S" | "Q" | "R"
+     | "I" | "A" | "LP" | "RC" | "N" | "SP" | "SA" | "(" | "(P" | "%" | "T"
+     | "J" | "BS" | "\"" | "ZP" | "FR" | "V" | ":" | ";" | "<" | "'" | "=" .
+
+/* Only after Unlock. */
+ServiceCommand = "a" … "z" [ Int { Sep Int } ] OptSep .
+
+/* ---- bytes ---- */
+
+esc  = "\x1b" .
+etx  = "\x03" .
+Byte = "\x00" … "\xff" .
