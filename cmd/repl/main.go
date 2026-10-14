@@ -16,7 +16,9 @@ func main() {
 	}
 	defer dev.Close()
 
-	robo.Initialize(dev, 113, robo.Portrait)
+	if err := robo.Initialize(dev, 113, robo.Portrait); err != nil {
+		log.Fatal("init: ", err)
+	}
 	robo.A4.Sub(robo.Margin).UpperRight(dev)
 	robo.Triple{U: 100, V: 100, W: 100}.Factor(dev)
 

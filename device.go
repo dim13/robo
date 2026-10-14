@@ -1,6 +1,8 @@
 package robo
 
 import (
+	"bufio"
+	"errors"
 	"io"
 
 	"github.com/google/gousb"
@@ -10,7 +12,7 @@ type USB struct {
 	ctx  *gousb.Context
 	dev  *gousb.Device
 	intf *gousb.Interface
-	io.Reader
+	*bufio.Reader
 	io.Writer
 	done func()
 }
@@ -25,22 +27,37 @@ const (
 	silhouette_portrait = 0x1123
 )
 
+var ErrNotFound = errors.New("device not found")
+
 func Open() (USB, error) {
 	ctx := gousb.NewContext()
 	dev, err := ctx.OpenDeviceWithVIDPID(graphtec, craftrobo)
 	if err != nil {
+		ctx.Close()
 		return USB{}, err
+	}
+	if dev == nil {
+		ctx.Close()
+		return USB{}, ErrNotFound
 	}
 	intf, done, err := dev.DefaultInterface()
 	if err != nil {
+		dev.Close()
+		ctx.Close()
 		return USB{}, err
 	}
 	in, err := intf.InEndpoint(2)
 	if err != nil {
+		done()
+		dev.Close()
+		ctx.Close()
 		return USB{}, err
 	}
 	out, err := intf.OutEndpoint(1)
 	if err != nil {
+		done()
+		dev.Close()
+		ctx.Close()
 		return USB{}, err
 	}
 	return USB{
@@ -48,7 +65,7 @@ func Open() (USB, error) {
 		dev:    dev,
 		intf:   intf,
 		done:   done,
-		Reader: in,
+		Reader: bufio.NewReader(in),
 		Writer: out,
 	}, nil
 }

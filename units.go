@@ -1,6 +1,10 @@
 package robo
 
-import "fmt"
+import (
+	"fmt"
+	"math"
+	"strconv"
+)
 
 const (
 	MM = Unit(20.0)
@@ -20,12 +24,17 @@ var (
 
 type Unit float64
 
+// String formats u for the plotter: it keeps two decimals and drops the
+// sign of -0.x, so values in (-1, 0) are rounded to an integer.
 func (u Unit) String() string {
-	if u == Unit(int(u)) {
-		return fmt.Sprint(int(u))
-	} else {
-		return fmt.Sprintf("%.3f", u)
+	f := math.Round(float64(u)*100) / 100
+	if f > -1 && f < 0 {
+		f = math.Round(f)
 	}
+	if f == 0 {
+		f = 0 // no "-0"
+	}
+	return strconv.FormatFloat(f, 'f', -1, 64)
 }
 
 func parseUnit(s string) (u Unit) {

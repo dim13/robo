@@ -13,5 +13,9 @@ func main() {
 		log.Fatal(err)
 	}
 	defer dev.Close()
-	fmt.Println(robo.Version(dev))
+	ver, err := robo.Version(dev)
+	if err != nil {
+		log.Fatal("version: ", err)
+	}
+	fmt.Println(ver)
 }
