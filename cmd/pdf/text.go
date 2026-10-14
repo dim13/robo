@@ -8,16 +8,12 @@ import (
 	"unicode"
 	"unicode/utf16"
 
-	"github.com/dim13/robo"
+	"github.com/dim13/robo/hershey"
 	"rsc.io/pdf"
 )
 
-// Hershey glyph metrics: baseline at X = 50, cap height 42 of an em of
-// about 60 units.
-const (
-	baseline = 50
-	em       = 60
-)
+// em is the Hershey em: cap height 42 of about 60 units.
+const em = 60
 
 // font maps character codes to text and advance widths (1/1000 em).
 type font struct {
@@ -109,7 +105,7 @@ func (p *painter) adjust(n float64) {
 }
 
 func (p *painter) glyph(r rune, trm matrix) {
-	g, ok := robo.Lookup(r)
+	g, ok := hershey.Lookup(r)
 	if !ok {
 		if r != ' ' {
 			p.missing++
@@ -128,8 +124,8 @@ func (p *painter) glyph(r rune, trm matrix) {
 	}
 }
 
-func glyphPoint(q robo.Point, trm matrix) point {
-	return trm.apply(float64(q.Y)/em, (baseline-float64(q.X))/em)
+func glyphPoint(q hershey.Point, trm matrix) point {
+	return trm.apply(float64(q.Y)/em, float64(hershey.Baseline-q.X)/em)
 }
 
 // textOp executes a text operator; operands are raw PDF values.

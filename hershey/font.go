@@ -1,6 +1,5 @@
-package robo
+package hershey
 
-var height = Unit(72)
 var font = Font{
 	' ': Glyph{
 		S: Set{},

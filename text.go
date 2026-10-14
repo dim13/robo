@@ -4,56 +4,52 @@ import (
 	"bufio"
 	"io"
 	"log"
+
+	"github.com/dim13/robo/hershey"
 )
-
-type Font map[rune]Glyph
-
-type Glyph struct {
-	S Set
-	W Unit
-}
-
-type Set []Path
-
-// Lookup returns the Hershey glyph for r. Glyph X grows downwards from the top
-// of the line with the baseline at 50, Y is the advance direction.
-func Lookup(r rune) (Glyph, bool) {
-	g, ok := font[r]
-	return g, ok
-}
 
 func Print(c io.Writer, in io.Reader, scale Unit) {
 	var off Point
 
 	scanner := bufio.NewScanner(in)
 	for scanner.Scan() {
-		font.putchar(c, scanner.Text(), scale, &off)
+		putchar(c, scanner.Text(), scale, &off)
 	}
 	if err := scanner.Err(); err != nil {
 		log.Fatal(err)
 	}
 }
 
-func (f Font) putchar(c io.Writer, s string, scale Unit, off *Point) {
+func putchar(c io.Writer, s string, scale Unit, off *Point) {
+	height := hershey.Height * scale
 	for _, ch := range s {
-		gl, ok := f[ch]
+		gl, ok := hershey.Lookup(ch)
+		w := Unit(gl.W) * scale
 		if ok {
-			if off.Y+gl.W*scale >= 4000 {
-				off.X += height * scale
+			if off.Y+w >= 4000 {
+				off.X += height
 				off.Y = 0
 			}
 			off.Origin(c)
 			for _, p := range gl.S {
-				p.Scale(scale).Line(c)
-				//p.Scale(scale).Curve(c, 0)
+				path(p).Scale(scale).Line(c)
 			}
-			off.Y += gl.W * scale
+			off.Y += w
 		} else if ch == '\t' {
-			tab := 8 * f['W'].W * scale // widest char
+			wide, _ := hershey.Lookup('W')
+			tab := 8 * Unit(wide.W) * scale // widest char
 			pos := int(off.Y / tab)
 			off.Y = Unit(pos+1) * tab
 		}
 	}
-	off.X += height * scale
+	off.X += height
 	off.Y = 0
+}
+
+func path(p hershey.Path) Path {
+	r := make(Path, len(p))
+	for i, q := range p {
+		r[i] = Point{X: Unit(q.X), Y: Unit(q.Y)}
+	}
+	return r
 }
