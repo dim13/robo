@@ -1,0 +1,91 @@
+# H8S additions: STM/LDM (multiple register push/pop)
+
+:stm.l "(er0-er1)", "@-sp" is op16=0x0110; op16=0x6DF0 { push32(er0); push32(er1); }
+:stm.l "(er2-er3)", "@-sp" is op16=0x0110; op16=0x6DF2 { push32(er2); push32(er3); }
+:stm.l "(er4-er5)", "@-sp" is op16=0x0110; op16=0x6DF4 { push32(er4); push32(er5); }
+:stm.l "(er6-sp)",  "@-sp" is op16=0x0110; op16=0x6DF6 { push32(er6); }
+:stm.l "(er0-er2)", "@-sp" is op16=0x0120; op16=0x6DF0 { push32(er0); push32(er1); push32(er2); }
+:stm.l "(er4-er6)", "@-sp" is op16=0x0120; op16=0x6DF4 { push32(er4); push32(er5); push32(er6); }
+:stm.l "(er0-er3)", "@-sp" is op16=0x0130; op16=0x6DF0 { push32(er0); push32(er1); push32(er2); push32(er3); }
+
+:ldm.l "@sp+", "(er0-er1)" is op16=0x0110; op16=0x6D71 { pop32(er1); pop32(er0); }
+:ldm.l "@sp+", "(er2-er3)" is op16=0x0110; op16=0x6D73 { pop32(er3); pop32(er2); }
+:ldm.l "@sp+", "(er4-er5)" is op16=0x0110; op16=0x6D75 { pop32(er5); pop32(er4); }
+:ldm.l "@sp+", "(er0-er2)" is op16=0x0120; op16=0x6D72 { pop32(er2); pop32(er1); pop32(er0); }
+:ldm.l "@sp+", "(er4-er6)" is op16=0x0120; op16=0x6D76 { pop32(er6); pop32(er5); pop32(er4); }
+:ldm.l "@sp+", "(er0-er3)" is op16=0x0130; op16=0x6D73 { pop32(er3); pop32(er2); pop32(er1); pop32(er0); }
+
+# EXR
+define register offset=0x40 size=1 [ exr ];
+
+:stc.b "exr", RD8 is op=0x02; op_lo=0x1 & RD8 { RD8 = exr; }
+:ldc.b RD8, "exr" is op=0x03; op_lo=0x1 & RD8 { exr = RD8; }
+:ldc.b IMM8, "exr" is op16=0x0141; op=0x07; IMM8 { exr = IMM8; }
+:orc IMM8, "exr"   is op16=0x0141; op=0x04; IMM8 { exr = exr | IMM8; }
+:xorc IMM8, "exr"  is op16=0x0141; op=0x05; IMM8 { exr = exr ^ IMM8; }
+:andc IMM8, "exr"  is op16=0x0141; op=0x06; IMM8 { exr = exr & IMM8; }
+
+# Shifts and rotates by 2
+:shll.b "#2", RD8  is op=0x10; op_lo=0x4 & RD8  { instr_shift_left(RD8);  instr_shift_left(RD8); }
+:shll.w "#2", RD16 is op=0x10; op_lo=0x5 & RD16 { instr_shift_left(RD16); instr_shift_left(RD16); }
+:shll.l "#2", RD32 is op=0x10; op_lo=0x7 & RD32 { instr_shift_left(RD32); instr_shift_left(RD32); }
+:shal.b "#2", RD8  is op=0x10; op_lo=0xC & RD8  { instr_shift_aleft(RD8);  instr_shift_aleft(RD8); }
+:shal.w "#2", RD16 is op=0x10; op_lo=0xD & RD16 { instr_shift_aleft(RD16); instr_shift_aleft(RD16); }
+:shal.l "#2", RD32 is op=0x10; op_lo=0xF & RD32 { instr_shift_aleft(RD32); instr_shift_aleft(RD32); }
+:shlr.b "#2", RD8  is op=0x11; op_lo=0x4 & RD8  { instr_shift_right(RD8);  instr_shift_right(RD8); }
+:shlr.w "#2", RD16 is op=0x11; op_lo=0x5 & RD16 { instr_shift_right(RD16); instr_shift_right(RD16); }
+:shlr.l "#2", RD32 is op=0x11; op_lo=0x7 & RD32 { instr_shift_right(RD32); instr_shift_right(RD32); }
+:shar.b "#2", RD8  is op=0x11; op_lo=0xC & RD8  { $(C) = (RD8 & 2) != 0;  RD8 = RD8 s>> 2;   update_ZNV(RD8); }
+:shar.w "#2", RD16 is op=0x11; op_lo=0xD & RD16 { $(C) = (RD16 & 2) != 0; RD16 = RD16 s>> 2; update_ZNV(RD16); }
+:shar.l "#2", RD32 is op=0x11; op_lo=0xF & RD32 { $(C) = (RD32 & 2) != 0; RD32 = RD32 s>> 2; update_ZNV(RD32); }
+:rotxl.b "#2", RD8  is op=0x12; op_lo=0x4 & RD8  { instr_rotxl(RD8);  instr_rotxl(RD8); }
+:rotxl.w "#2", RD16 is op=0x12; op_lo=0x5 & RD16 { instr_rotxl(RD16); instr_rotxl(RD16); }
+:rotxl.l "#2", RD32 is op=0x12; op_lo=0x7 & RD32 { instr_rotxl(RD32); instr_rotxl(RD32); }
+:rotl.b "#2", RD8   is op=0x12; op_lo=0xC & RD8  { instr_rotl(RD8);   instr_rotl(RD8); }
+:rotl.w "#2", RD16  is op=0x12; op_lo=0xD & RD16 { instr_rotl(RD16);  instr_rotl(RD16); }
+:rotl.l "#2", RD32  is op=0x12; op_lo=0xF & RD32 { instr_rotl(RD32);  instr_rotl(RD32); }
+:rotxr.b "#2", RD8  is op=0x13; op_lo=0x4 & RD8  { instr_rotxr(RD8);  instr_rotxr(RD8); }
+:rotxr.w "#2", RD16 is op=0x13; op_lo=0x5 & RD16 { instr_rotxr(RD16); instr_rotxr(RD16); }
+:rotxr.l "#2", RD32 is op=0x13; op_lo=0x7 & RD32 { instr_rotxr(RD32); instr_rotxr(RD32); }
+:rotr.b "#2", RD8   is op=0x13; op_lo=0xC & RD8  { instr_rotr(RD8);   instr_rotr(RD8); }
+:rotr.w "#2", RD16  is op=0x13; op_lo=0xD & RD16 { instr_rotr(RD16);  instr_rotr(RD16); }
+:rotr.l "#2", RD32  is op=0x13; op_lo=0xF & RD32 { instr_rotr(RD32);  instr_rotr(RD32); }
+
+# Bit operations on @aa:16 and @aa:32
+PTR32B: "@"^addr^":32" is imm32 [ addr = 0 + imm32; ] { export *[ram]:1 addr; }
+
+:btst BIT_IMM3, PTR16B is op16=0x6A10; PTR16B; op=0x73; bit_lo=0 & BIT_IMM3 { instr_bit_test(PTR16B, BIT_IMM3); }
+:btst BIT_IMM3, PTR32B is op16=0x6A30; PTR32B; op=0x73; bit_lo=0 & BIT_IMM3 { instr_bit_test(PTR32B, BIT_IMM3); }
+:btst BIT_RS8, PTR16B is op16=0x6A10; PTR16B; op=0x63; BIT_RS8 { instr_bit_test(PTR16B, BIT_RS8); }
+:btst BIT_RS8, PTR32B is op16=0x6A30; PTR32B; op=0x63; BIT_RS8 { instr_bit_test(PTR32B, BIT_RS8); }
+:b^BIT_INV^"and" BIT_IMM3, PTR16B is op16=0x6A10; PTR16B; op=0x76; BIT_INV & BIT_IMM3 { instr_bit_and(PTR16B, BIT_IMM3, BIT_INV); }
+:b^BIT_INV^"and" BIT_IMM3, PTR32B is op16=0x6A30; PTR32B; op=0x76; BIT_INV & BIT_IMM3 { instr_bit_and(PTR32B, BIT_IMM3, BIT_INV); }
+:b^BIT_INV^"or" BIT_IMM3, PTR16B is op16=0x6A10; PTR16B; op=0x74; BIT_INV & BIT_IMM3 { instr_bit_or(PTR16B, BIT_IMM3, BIT_INV); }
+:b^BIT_INV^"or" BIT_IMM3, PTR32B is op16=0x6A30; PTR32B; op=0x74; BIT_INV & BIT_IMM3 { instr_bit_or(PTR32B, BIT_IMM3, BIT_INV); }
+:b^BIT_INV^"xor" BIT_IMM3, PTR16B is op16=0x6A10; PTR16B; op=0x75; BIT_INV & BIT_IMM3 { instr_bit_xor(PTR16B, BIT_IMM3, BIT_INV); }
+:b^BIT_INV^"xor" BIT_IMM3, PTR32B is op16=0x6A30; PTR32B; op=0x75; BIT_INV & BIT_IMM3 { instr_bit_xor(PTR32B, BIT_IMM3, BIT_INV); }
+:b^BIT_INV^"ld" BIT_IMM3, PTR16B is op16=0x6A10; PTR16B; op=0x77; BIT_INV & BIT_IMM3 { instr_bit_load(PTR16B, BIT_IMM3, BIT_INV); }
+:b^BIT_INV^"ld" BIT_IMM3, PTR32B is op16=0x6A30; PTR32B; op=0x77; BIT_INV & BIT_IMM3 { instr_bit_load(PTR32B, BIT_IMM3, BIT_INV); }
+:bset BIT_IMM3, PTR16B is op16=0x6A18; PTR16B; op=0x70; bit_lo=0 & BIT_IMM3 { instr_bit_set(PTR16B, BIT_IMM3); }
+:bset BIT_IMM3, PTR32B is op16=0x6A38; PTR32B; op=0x70; bit_lo=0 & BIT_IMM3 { instr_bit_set(PTR32B, BIT_IMM3); }
+:bset BIT_RS8, PTR16B is op16=0x6A18; PTR16B; op=0x60; BIT_RS8 { instr_bit_set(PTR16B, BIT_RS8); }
+:bset BIT_RS8, PTR32B is op16=0x6A38; PTR32B; op=0x60; BIT_RS8 { instr_bit_set(PTR32B, BIT_RS8); }
+:bnot BIT_IMM3, PTR16B is op16=0x6A18; PTR16B; op=0x71; bit_lo=0 & BIT_IMM3 { instr_bit_not(PTR16B, BIT_IMM3); }
+:bnot BIT_IMM3, PTR32B is op16=0x6A38; PTR32B; op=0x71; bit_lo=0 & BIT_IMM3 { instr_bit_not(PTR32B, BIT_IMM3); }
+:bnot BIT_RS8, PTR16B is op16=0x6A18; PTR16B; op=0x61; BIT_RS8 { instr_bit_not(PTR16B, BIT_RS8); }
+:bnot BIT_RS8, PTR32B is op16=0x6A38; PTR32B; op=0x61; BIT_RS8 { instr_bit_not(PTR32B, BIT_RS8); }
+:bclr BIT_IMM3, PTR16B is op16=0x6A18; PTR16B; op=0x72; bit_lo=0 & BIT_IMM3 { instr_bit_clear(PTR16B, BIT_IMM3); }
+:bclr BIT_IMM3, PTR32B is op16=0x6A38; PTR32B; op=0x72; bit_lo=0 & BIT_IMM3 { instr_bit_clear(PTR32B, BIT_IMM3); }
+:bclr BIT_RS8, PTR16B is op16=0x6A18; PTR16B; op=0x62; BIT_RS8 { instr_bit_clear(PTR16B, BIT_RS8); }
+:bclr BIT_RS8, PTR32B is op16=0x6A38; PTR32B; op=0x62; BIT_RS8 { instr_bit_clear(PTR32B, BIT_RS8); }
+:b^BIT_INV^"st" BIT_IMM3, PTR16B is op16=0x6A18; PTR16B; op=0x67; BIT_INV & BIT_IMM3 { instr_bit_store(PTR16B, BIT_IMM3, BIT_INV); }
+:b^BIT_INV^"st" BIT_IMM3, PTR32B is op16=0x6A38; PTR32B; op=0x67; BIT_INV & BIT_IMM3 { instr_bit_store(PTR32B, BIT_IMM3, BIT_INV); }
+
+# Compiler idiom: 16-bit frame adjust on r7, treat as full sp update so stack tracking works
+:add.w IMM16, "r7" is op=0x79; op_lo=0x1 & nib_hi=7; IMM16 { sp = sp + sext(IMM16); }
+:sub.w IMM16, "r7" is op=0x79; op_lo=0x3 & nib_hi=7; IMM16 { sp = sp - sext(IMM16); }
+
+# Compiler idiom: "mov.l er6,erN; add.w #-off,rN" forms &local. Negative 16-bit add is treated
+# as a sign-extended 32-bit add so the decompiler sees a stack address (low word is identical).
+RNEG: rd16 is rd16 & bit_hi=0 & rd32 { export rd32; }
+:add.w "#"^simm16, rd16 is op=0x79; op_lo=0x1 & rd16 & RNEG; simm16 & imm16 >= 0x8000 { RNEG = RNEG + sext(simm16:2); }

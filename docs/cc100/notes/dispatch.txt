@@ -1,0 +1,34 @@
+CC100 fw 2.30 -- GP-GL command dispatcher gpgl_loop @ 0x0000cbf2 (handler addresses)
+
+Helpers (preliminary):
+  0x11228 peek()       next input byte, blocks; idle work while waiting
+  0x11368 getc()       consume byte (returns peeked byte)
+  0x0cb3a end_of_params()  1 if next char is terminator/command letter, 0 if more numbers follow (skips ',' and whitespace)
+  0x11902 is_term(c)   c == term1 (0xffb359) || c == term2 (0xffb35a)
+  0x11a36 read_number_raw(), 0x11b72 read_int() (rounding), 0x11bc6 read_coord() (unit/step conversion via 0xffb262)
+  0x13ab2 read_point(&x,&y); 0x1db80 plot_to(x,y,pen)
+  0x10308 set_error(bits)  (0xffb284 = error mask, 0xffb286 = error status)
+  0x11936 cmd_class(c)  ; 0x0ffbc empty hook (flush/sync?) ; 0x0d448 = hook ; 0x0d458 = hook + 0x1db52
+  0x1db52 flush/wait motion?  0x113e4/0x133ee/0x133be reply/output?  0x12e66/0x12e88 idle/poll
+  0x23854 __movblk(src,dst,n in er2)  0x22xxx-0x23xxx runtime library (soft-float, long mul/div)
+
+Loop: c = getc(); ESC(0x1b)/FS(0x1c) followed by one byte are swallowed here (handled at interrupt level?).
+If flag 0xffb22e != 0 and 'a'<=c<='z' -> lowercase service commands:
+  a 21b22 | b 113e4+133ee | c 19758 | d 11b72->table 0x28d28 -> 0xffb262 (unit), 18f0e | e 101fe | f 11b72,113e4,133ee
+  g 16bc0 | h 19764 | i 174fc | j 12ad0 | k 1108a,1db52,113e4,133be(0xffbf26),133ee(0xffbf6a) | l 11b72 -> 0xffb396
+  m 17556 | n 21af8 | o 0aab2 | p toggle 0xffc2d8, port 0x600010 (=0xf / 10), 17c1c | q loop forever 1d6f8/12e66
+  t 21b96 | y 113e4,133ee(0xffbf9c) | z 1799e
+Otherwise: 0xffb22c = c; skip 0x80; c>0x5f -> set_error; if cmd_class(c)<0 or c=='#' -> read next.
+  '?' 1780e | '@' 1769e | 'A' 10076 | 'C' 17740 | 'G' 176d6 | 'H' 13c22 | 'U' 17752 | 'V' (ignored)
+  '!' 074bc | '"' 102d4 | '$' 10082 | '%' 1006a | '&' 07522 | '\'' nop | ')' 081f8 | '*' 07570 | '/' 075e2
+  ':' ';' '<' '=' nop | '>' 1112c | 'I' 1003a | 'J' 13c58 | 'K' 10010 | 'P' 10010 | 'Q' 1009a
+  'W' 08c36 | 'X' 13eb4 | 'Y' 08cf8 | '[' 177b0 | '\\' 177da | ']' 08d14 | '_' 08df8
+  Two-char (peek second):
+  (P 1002e | DP 0ffd4 | EP 0ffe6 | LP 0fff8 | MP 0ffd4 | OP 0ffe6 | RP 10004 | RC 10022 | SP 1008e | SA 10052
+  ZP 0d412 | FD 0a316 | FR 0d412 | FS 13c06 (no getc) | FC 0a268 | FE 0a3cc | FF 0a46e | FK 0a580
+  NP,SO 13ffa | TB 1f6cc | FG 0ff4e | FA 0767a | FB 076be | FH 141d2 | FI 14246 | FJ 07832 | FL 07a3a
+  FM 07a64 | FN 201f8 | FO 07c82 | FP 0d46c | FX 07f7a | FY 14b12 | TT 08002 | FQ 07d46 | FT 148ce
+  FU 148e8 | FV 07ec8 | FW 07f1a
+  Single-char fallbacks: '(' 100be | 'D' 13bca | 'E' 13be8 | 'L' 13c68 | 'M' 13d3e | 'O' 13d50
+  'R' 100b2 | 'S' 100a6 | 'T' 0766e | '^' 17838 | 'B' 13b7e | 'F' 13c06 | 'N' 10046 | 'Z' 1777c
+  else set_error.

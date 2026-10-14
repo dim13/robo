@@ -1,0 +1,95 @@
+# Device / Graphtec-specific commands (fork D)
+# reply helpers
+000113e4 reply_begin void reply_begin(void)
+0001141e reply_putc void reply_putc(char c)
+000114ba reply_send void reply_send(void)
+00013252 reply_number void reply_number(int width, long value)
+000133be reply_number_comma void reply_number_comma(int width, long value)
+000133ee reply_number_end void reply_number_end(int width, long value)
+# serial EEPROM (addresses are 0x300000 + byte offset)
+000125f4 eeprom_read_byte_raw
+00012528 eeprom_read_word_raw
+00012654 eeprom_write_word_raw
+0001270c eeprom_write_byte_raw
+000127d8 eeprom_read_byte unsigned char eeprom_read_byte(long addr)
+0001287a eeprom_read_word int eeprom_read_word(long addr)
+00012786 eeprom_write_byte void eeprom_write_byte(char value, long addr)
+00012828 eeprom_write_word void eeprom_write_word(int value, long addr)
+00011f7e eeprom_factory_reset
+# F* commands
+0000ff4e cmd_FG_version void cmd_FG_version(void)
+0000767a cmd_FA_get_distance_corr void cmd_FA_get_distance_corr(void)
+000076be cmd_FB_set_distance_corr void cmd_FB_set_distance_corr(void)
+00007832 cmd_FJ void cmd_FJ(void)
+00007a3a cmd_FL_get_media_mode void cmd_FL_get_media_mode(void)
+00007a64 cmd_FM_set_media_mode void cmd_FM_set_media_mode(void)
+00007aa4 set_media_mode void set_media_mode(char mode)
+00007c82 cmd_FO_page_length void cmd_FO_page_length(void)
+00007d46 cmd_FQ_query void cmd_FQ_query(void)
+00007ec8 cmd_FV_get_media void cmd_FV_get_media(void)
+00007f1a cmd_FW_set_media void cmd_FW_set_media(void)
+00007f7a cmd_FX_force void cmd_FX_force(void)
+00008002 cmd_TT void cmd_TT(void)
+0000d46c cmd_FP void cmd_FP(void)
+00014068 draw_test_cut_mark void draw_test_cut_mark(void)
+000141d2 cmd_FH_test_cut void cmd_FH_test_cut(void)
+00014246 cmd_FI_test_plot_loop void cmd_FI_test_plot_loop(void)
+000148ce cmd_FT_origin void cmd_FT_origin(void)
+000148e8 cmd_FU_track_feed void cmd_FU_track_feed(void)
+00014b12 cmd_FY_track_enhance void cmd_FY_track_enhance(void)
+000201f8 cmd_FN_orientation void cmd_FN_orientation(void)
+00020268 set_orientation void set_orientation(char landscape)
+# TB (registration marks)
+0001f6cc cmd_TB void cmd_TB(void)
+0001f79c regmark_set_orientation void regmark_set_orientation(char landscape)
+0001f8aa cmd_TB50_orientation void cmd_TB50_orientation(void)
+0001f90a cmd_TB98_query void cmd_TB98_query(void)
+0001f930 regmark_enable char regmark_enable(int on)
+0001f956 cmd_TB51_mark_length void cmd_TB51_mark_length(void)
+0001f9a0 cmd_TB52_mark_type void cmd_TB52_mark_type(void)
+0001f9ee cmd_TB53_mark_width void cmd_TB53_mark_width(void)
+0001fa30 cmd_TB54_mark_offset void cmd_TB54_mark_offset(void)
+0001fa6c cmd_TB55_flag void cmd_TB55_flag(void)
+0001fa9c cmd_TB70_calibrate void cmd_TB70_calibrate(void)
+0001fab4 cmd_TB71_get_calibration void cmd_TB71_get_calibration(void)
+0001faf8 cmd_TB72_set_calibration void cmd_TB72_set_calibration(void)
+0001fb80 cmd_TB2x_search_manual void cmd_TB2x_search_manual(int type)
+0001fbe6 cmd_TB12x_search_auto void cmd_TB12x_search_auto(int type)
+0001fc4c regmark_calibrate int regmark_calibrate(void)
+0001575a regmark_search_manual void regmark_search_manual(void)
+00015fb2 regmark_search_auto void regmark_search_auto(void)
+00020616 regmark_init void regmark_init(void)
+000206d6 regmark_load_calibration void regmark_load_calibration(void)
+000045e4 regmark_clear_transform
+# service mode (lowercase commands, enabled by FPGRFCC1)
+0000d512 demo_run void demo_run(void)
+00016bc0 svc_g_param void svc_g_param(void)
+000175de svc_g18_track_passes void svc_g18_track_passes(void)
+00021b22 svc_a void svc_a(void)
+00021b96 svc_t_sensor void svc_t_sensor(void)
+00021af8 svc_n_threshold void svc_n_threshold(void)
+000174fc svc_i_feed_test void svc_i_feed_test(void)
+00017556 svc_m_burn_in void svc_m_burn_in(void)
+00012ad0 svc_j_counters void svc_j_counters(void)
+0001799e svc_z_port void svc_z_port(void)
+# data
+00028cec fw_version_string char[10]
+0000db9a demo_pattern_gpgl
+00ffb22e service_mode char
+00ffb3b8 media_mode char
+00ffb400 landscape char
+00ffb0aa regmark_active char
+00ffb122 cut_force int
+00ffb3af track_enhance_off char
+00ffb4c8 media_type char
+00ffb50c page_length long
+00ffb510 page_width long
+00ffc100 regmark_cfg int
+00ffc223 regmark_length char
+00ffc224 regmark_width char
+00ffc225 regmark_result char
+00ffc2da demo_mode char
+00ffb359 term1 char
+00ffb35a term2 char
+00ffb2f3 tx_buf
+00ffb2ea tx_len int

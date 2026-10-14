@@ -1,0 +1,99 @@
+# control / query / interface commands (fork C)
+00011228 rx_peek unsigned int rx_peek(void)
+00011368 rx_getc unsigned int rx_getc(void)
+0000cb3a end_of_params int end_of_params(void)
+00011902 is_terminator int is_terminator(unsigned int c)
+00011936 cmd_class int cmd_class(unsigned char c)
+0001199e read_digit int read_digit(void)
+00011a36 read_number long read_number(void)
+00011b72 read_int long read_int(void)
+00011bc6 read_coord long read_coord(void)
+00011d50 read_angle long read_angle(void)
+00010308 set_error void set_error(unsigned int bits)
+000131c0 init_terminators void init_terminators(void)
+000113e4 reply_begin void reply_begin(int nfields)
+0001141e reply_putc void reply_putc(char c)
+000114ba reply_send void reply_send(void)
+00013252 reply_number void reply_number(int width, long value)
+000133be reply_number_comma void reply_number_comma(int width, long value)
+000133ee reply_number_end void reply_number_end(int width, long value)
+00017648 reply_point void reply_point(int cmd, long x, long y)
+00023052 __divmodsi4 long __divmodsi4(long a, long b)
+000127d8 eeprom_read_byte unsigned char eeprom_read_byte(long addr)
+00012786 eeprom_write_byte void eeprom_write_byte(unsigned char value, long addr)
+00018020 apply_pen_params void apply_pen_params(void)
+000180b2 apply_force void apply_force(void)
+000180ec set_force_level void set_force_level(char level)
+00018262 gin_pen_state long gin_pen_state(void)
+0001e7a8 window_outcode int window_outcode(long *pt)
+000074bc cmd_speed void cmd_speed(void)
+00007570 cmd_force void cmd_force(void)
+000102d4 cmd_error_mask void cmd_error_mask(void)
+00013c06 cmd_chart_feed void cmd_chart_feed(void)
+0001780e cmd_read_offset void cmd_read_offset(void)
+0001769e cmd_read_status2 void cmd_read_status2(void)
+00017740 cmd_call_gin void cmd_call_gin(void)
+000176d6 cmd_gin void cmd_gin(int cmd)
+00017752 cmd_read_upper_right void cmd_read_upper_right(void)
+000177b0 cmd_read_lower_left void cmd_read_lower_left(void)
+00013ffa cmd_set_origin void cmd_set_origin(void)
+00014008 set_origin_here void set_origin_here(void)
+00008002 cmd_TT void cmd_TT(void)
+0000a268 cmd_FC void cmd_FC(void)
+0000a316 cmd_FD void cmd_FD(void)
+0000a3cc cmd_FE void cmd_FE(void)
+0000a46e cmd_FF void cmd_FF(void)
+0000a580 cmd_FK void cmd_FK(void)
+0001829e set_speed void set_speed(int speed)
+00018316 set_force void set_force(int force)
+000183c0 set_cutter_offset void set_cutter_offset(int offset)
+00018440 set_cutter_offset_q void set_cutter_offset_q(int q)
+000184a4 set_blade_rotation void set_blade_rotation(long angle100)
+0001850a set_FE void set_FE(int on)
+00018598 set_FF void set_FF(long ab)
+0001dacc set_carriage_origin long set_carriage_origin(long x, long y)
+00014ef0 home_carriage void home_carriage(void)
+000104e6 load_cutter_offset void load_cutter_offset(void)
+# no-op stubs reached from the dispatcher
+00010010 cmd_nop_KP void cmd_nop_KP(void)
+0001003a cmd_nop_I void cmd_nop_I(void)
+00010076 cmd_nop_A void cmd_nop_A(void)
+00010082 cmd_nop_dollar void cmd_nop_dollar(void)
+0001009a cmd_nop_Q void cmd_nop_Q(void)
+000100a6 cmd_nop_S void cmd_nop_S(void)
+000100b2 cmd_nop_R void cmd_nop_R(void)
+0000766e cmd_nop_T void cmd_nop_T(void)
+0000fff8 cmd_nop_LP void cmd_nop_LP(void)
+00010022 cmd_nop_RC void cmd_nop_RC(void)
+0001008e cmd_nop_SP void cmd_nop_SP(void)
+00010052 cmd_nop_SA void cmd_nop_SA(void)
+0001005e chart_feed_hook void chart_feed_hook(void)
+00ffb282 err_mask_long long
+00ffb286 error_status byte
+00ffb359 term1 char
+00ffb35a term2 char
+00ffb262 steps_per_unit int
+00ffb360 num_frac1 int
+00ffb362 num_frac2 int
+00ffb3aa chart_feed_len long
+00ffb414 cur_pen int
+00ffb416 pen_speed int[8]
+00ffb436 pen_force int[8]
+00ffb446 pen_cutter_offset int[8]
+00ffb456 pen_cutter_q int[8]
+00ffb466 pen_blade_rot long[8]
+00ffb486 pen_FE int[8]
+00ffb496 pen_FF_a int[8]
+00ffb4a6 pen_FF_b int[8]
+00ffb122 cut_force int
+00ffb2bc fk_flag byte
+00ffb2be pen_params_dirty byte
+00ffb4e0 offset_x long
+00ffb4e4 offset_y long
+00ffb564 win_ll_x long
+00ffb568 win_ll_y long
+00ffb56c win_ur_x long
+00ffb570 win_ur_y long
+00ffb584 cur_x long
+00ffb588 cur_y long
+00ffb5ca cur_outcode int

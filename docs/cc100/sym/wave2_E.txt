@@ -1,0 +1,174 @@
+# fork E (wave 2): 0x00400-0x10fff
+# --- clip-polygon support (called from plot_clip_poly 0x1eb88)
+00004100 clip_sort_hits void clip_sort_hits(char mode, long n, long *pts)
+00006140 clip_segment_hits void clip_segment_hits(long poly_top, long *out, long x0, long y0, long x1, long y1, int *n_hits, int *n_touch, int *flags)
+00006950 clip_edge_local long clip_edge_local(void)
+# --- registration-mark geometry
+000046b8 regmark_find_corners void regmark_find_corners(void)
+000048ba regmark_line_intersect void regmark_line_intersect(int *parallel)
+00005082 regmark_axis_intersect void regmark_axis_intersect(int *parallel)
+00005452 regmark_get_mark void regmark_get_mark(int idx, long *x, long *y)
+000054e4 regmark_compute_transform void regmark_compute_transform(void)
+00005bc0 regmark_scale_x long regmark_scale_x(void)
+00005d40 regmark_scale_y long regmark_scale_y(void)
+00005ec0 regmark_scale_fail_hook void regmark_scale_fail_hook(void)
+00005ecc regmark_extend_segment void regmark_extend_segment(long *p1, long *p2)
+# --- work buffer layout (6 KiB at 0xffc800)
+00006aac workbuf_layout void workbuf_layout(void)
+00006ba8 workbuf_fix_sizes void workbuf_fix_sizes(void)
+00006c3c workbuf_init void workbuf_init(void)
+# --- misc geometry / helpers
+00006c76 approx_dist long approx_dist(long dx, long dy)
+00007378 labs_ long labs_(long v)
+00007984 set_area_extent void set_area_extent(long x, long y)
+0000834c circle3_draw void circle3_draw(long x1, long y1, long x2, long y2, long x3, long y3)
+00009824 arc_draw_float void arc_draw_float(long *arc)
+00009d24 spline_segment void spline_segment(long *xs, long *ys, int pen)
+00009ebc spline_coeffs long spline_coeffs(long *coef, long *p)
+00009fc4 spline_eval_fx long spline_eval_fx(long *coef, unsigned int t)
+0000a12a fx_mul16 long fx_mul16(long a, int b)
+0000d4c8 move_mm void move_mm(long x_mm, long y_mm)
+# --- hardware init
+0000739c hw_init_bus_ports void hw_init_bus_ports(int keep_port)
+00007636 cmd_term_unused void cmd_term_unused(void)
+# --- service command 'o': data dump mode (prints every received byte)
+0000a5b8 dump_getc unsigned int dump_getc(void)
+0000a5de dump_reply void dump_reply(int idx)
+0000a676 dump_set_term void dump_set_term(void)
+0000a696 dump_skip_label void dump_skip_label(void)
+0000a6d2 dump_skip_frame void dump_skip_frame(char c)
+0000a6fc dump_cmd_T void dump_cmd_T(void)
+0000a792 dump_cmd_F void dump_cmd_F(void)
+0000a8a6 dump_loop void dump_loop(void)
+0000a9d2 dump_home void dump_home(void)
+0000aa14 dump_banner void dump_banner(void)
+0000aa9a dump_start void dump_start(void)
+0000aab2 svc_o_dump_mode void svc_o_dump_mode(void)
+0000aad4 dump_advance void dump_advance(int wide)
+0000ab7a dump_hex_byte void dump_hex_byte(unsigned char c)
+0000ac58 dump_format_char int dump_format_char(unsigned char c)
+0000acd6 dump_print_char void dump_print_char(unsigned char c)
+# --- built-in stroke font
+0000adae font_defaults void font_defaults(void)
+0000ae22 font_select int font_select(int id)
+0000ae44 font_draw_char void font_draw_char(unsigned char c)
+0000ae5c font_draw_string void font_draw_string(char *s)
+0000aed6 font_print void font_print(char *s)
+0000aef2 font_scale_point void font_scale_point(void)
+0000b14a font_begin int font_begin(void)
+0000b212 font_setup_matrix void font_setup_matrix(void)
+0000b352 font_glyph void font_glyph(unsigned char c)
+0000b7ec font_find_glyph char *font_find_glyph(int code)
+0000b84a font_find_glyph2 char *font_find_glyph2(unsigned int code)
+0000b890 font_lookup char *font_lookup(unsigned int code, long table)
+0000b904 font_step int font_step(int op)
+0000b950 font_run_glyph void font_run_glyph(int code)
+0000b96a font_interp void font_interp(char *prog)
+0000bb5a font_op_penup int font_op_penup(void)
+0000bb70 font_op_ef void font_op_ef(void)
+0000bbe2 font_op_arc void font_op_arc(void)
+0000bc76 font_op_call void font_op_call(long *sp, int n)
+0000bcae font_op_fa void font_op_fa(void)
+0000bd38 font_op_fb void font_op_fb(void)
+0000bdf0 font_op_fc void font_op_fc(void)
+0000be78 font_op_fd void font_op_fd(void)
+0000bf5a font_op_pendown int font_op_pendown(void)
+0000bf6e font_op_return int font_op_return(void)
+0000bfe8 font_op_helper1 void font_op_helper1(void)
+0000c014 font_op_helper2 void font_op_helper2(void)
+0000c0a8 font_op_helper3 void font_op_helper3(void)
+0000c160 font_arc_step void font_arc_step(void)
+0000c24c font_continue void font_continue(void)
+0000c2b0 font_arc void font_arc(void)
+0000c412 font_read_xy void font_read_xy(void)
+0000c450 font_unpack_xy void font_unpack_xy(unsigned int b, long unused, long *out)
+0000c494 font_read_byte void font_read_byte(char **pp, long unused, unsigned long *out)
+0000c4d8 font_draw_to void font_draw_to(long *pt)
+0000c5fc font_map_code unsigned long font_map_code(unsigned long code)
+0000c93a font_metrics_a void font_metrics_a(unsigned char c, int *out)
+0000c968 font_metrics_b void font_metrics_b(unsigned char c, int *out)
+0000c994 font_metrics unsigned long font_metrics(unsigned long code, int *out)
+# --- dispatcher hooks / empty handlers
+0000d448 hook_pen_param void hook_pen_param(void)
+0000d458 hook_sync void hook_sync(void)
+0000ffbc hook_nop void hook_nop(void)
+0000ffc8 hook_B void hook_B(void)
+0000ffd4 cmd_nop_DP_MP void cmd_nop_DP_MP(void)
+0000ffe6 cmd_nop_EP_OP void cmd_nop_EP_OP(void)
+00010004 cmd_nop_RP void cmd_nop_RP(void)
+0001002e cmd_nop_userpat void cmd_nop_userpat(void)
+00010046 cmd_nop_N void cmd_nop_N(void)
+0001006a cmd_nop_hatch void cmd_nop_hatch(void)
+000100be cmd_nop_paren void cmd_nop_paren(void)
+000100ca term_changed_hook void term_changed_hook(char t)
+# --- distance correction (FA/FB)
+0000f096 distcorr_compute void distcorr_compute(void)
+0000f330 distcorr_apply_page void distcorr_apply_page(void)
+0000f4b2 distcorr_to_user void distcorr_to_user(long *pt)
+0000f61e distcorr_to_device void distcorr_to_device(long *pt)
+# --- USB function controller (handlers reached through table 0x290d2)
+0000f78a usb_ep_in_fill unsigned int usb_ep_in_fill(long unused, unsigned int ep)
+0000f8ee usb_ep_in_start void usb_ep_in_start(void)
+0000f942 usb_ep0_setup long usb_ep0_setup(long unused, unsigned char ep)
+0000f9f8 usb_ep0_in void usb_ep0_in(unsigned long status, unsigned char ep)
+0000fa9c usb_ep0_out unsigned long usb_ep0_out(unsigned long status, unsigned char ep)
+0000fb6c usb_std_request long usb_std_request(long unused)
+0000fdf6 usb_vendor_request char usb_vendor_request(void)
+0000fe12 usb_class_request char *usb_class_request(void)
+# --- service / misc
+000101fe svc_e_calc void svc_e_calc(void)
+000102ae plot_soft_reset void plot_soft_reset(int keep_term)
+00010332 pen_tables_init void pen_tables_init(void)
+0001054c select_pen_params long select_pen_params(void)
+# --- cutter (blade) offset compensation, angles in 1/1000 degree
+00010686 cutoff_on_move unsigned long cutoff_on_move(long x, long y, int pen)
+00010718 cutoff_swivel void cutoff_swivel(long angle)
+00010c1e cutoff_set_lead void cutoff_set_lead(long angle, int pen)
+00010ca4 cutoff_move void cutoff_move(long dx, long dy, int pen)
+00010ce0 cutoff_end void cutoff_end(long x, long y, int pen)
+00010d90 cutoff_blade_init void cutoff_blade_init(int pen)
+00010f4e cutoff_need_move long cutoff_need_move(long x, long y, int pen)
+00010fba cutoff_overcut_restore void cutoff_overcut_restore(void)
+00010fd8 cutoff_overcut void cutoff_overcut(void)
+# --- RAM globals
+00ffb000 usb_setup_pkt
+00ffb06a regmark_dir_x double
+00ffb072 regmark_dir_y double
+00ffb0ae regmark_marks
+00ffb0e8 workbuf_ptrs
+00ffb104 workbuf_sizes
+00ffb16e dump_term1 char
+00ffb16f dump_term2 char
+00ffb170 dump_x long
+00ffb174 dump_y long
+00ffb178 dump_active char
+00ffb179 dump_text
+00ffb184 font_width long
+00ffb188 font_height long
+00ffb18c font_line_pitch long
+00ffb190 font_char_pitch long
+00ffb1a0 font_id short
+00ffb24a distcorr_x double
+00ffb252 distcorr_y double
+00ffb288 cutoff_radius long
+00ffb28c cutoff_min_angle long
+00ffb290 cutoff_angle_prev long
+00ffb294 cutoff_angle long
+00ffb2a8 cutoff_tip_x long
+00ffb2ac cutoff_tip_y long
+00ffb2ba overcut_len short
+00ffb2bd cutoff_mode char
+00ffb2bf overcut_pending char
+00ffb2c2 blade_init_active char
+00ffb2ec usb_tx_remaining short
+00ffb2ee usb_tx_offset short
+00ffb36a distcorr_inv_x double
+00ffb372 distcorr_inv_y double
+00ffb4f0 regmark_off_x long
+00ffb4f4 regmark_off_y long
+00ffc230 dump_reply_tab
+00ffc43e usb_ep0_state short
+00ffc4a2 usb_ctl_ptr long
+00ffc4a6 usb_ctl_buf long
+00ffc4ae usb_ctl_end long
+00ffc800 workbuf

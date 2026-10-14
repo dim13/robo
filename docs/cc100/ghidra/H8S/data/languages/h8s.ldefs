@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<language_definitions>
+	<language id="H8S:BE:32:advanced" processor="H8S" endian="big" size="32"
+	          version="1.0" variant="advanced"
+	          slafile="h8s_advanced.sla" processorspec="h8s.pspec">
+		<description>Renesas H8S (advanced mode)</description>
+		<compiler name="default" spec="h8s.cspec" id="default" />
+	</language>
+</language_definitions>

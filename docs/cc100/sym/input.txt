@@ -1,0 +1,66 @@
+# input layer / parser core (fork A)
+0000cb3a end_of_params int end_of_params(void)
+00011228 rx_peek int rx_peek(void)
+00011368 rx_getc int rx_getc(void)
+00011902 is_terminator int is_terminator(int c)
+00011936 cmd_class int cmd_class(unsigned char c)
+0001199e read_digit int read_digit(void)
+00011a36 read_number long read_number(void)
+00011b72 read_int long read_int(void)
+00011bc6 read_coord long read_coord(void)
+00013ab2 read_point void read_point(long *x, long *y)
+00010308 set_error void set_error(int bits)
+000102d4 cmd_error_mask void cmd_error_mask(void)
+0000d46c cmd_FP int cmd_FP(void)
+000113e4 reply_begin int reply_begin(void)
+0001141e reply_putc void reply_putc(char c)
+00013252 reply_number void reply_number(int width, long value)
+000133be reply_number_comma void reply_number_comma(int width, long value)
+000133ee reply_number_end void reply_number_end(int width, long value)
+000114ba reply_send void reply_send(void)
+0001145a usb_reply_send void usb_reply_send(void)
+00011556 usb_bulk_out_rx void usb_bulk_out_rx(void)
+000220b2 usb_isr void usb_isr(void)
+00011796 usb_rx_flow_check void usb_rx_flow_check(void)
+0001181c rx_flush void rx_flush(void)
+00011852 rx_flush_masked void rx_flush_masked(void)
+00011882 rx_init void rx_init(void)
+000131c0 init_terminators void init_terminators(void)
+00012264 load_step_size char load_step_size(void)
+0001f592 sci0_eri_isr void sci0_eri_isr(void)
+0001f4a4 sci0_rxi_isr void sci0_rxi_isr(void)
+0001f5c6 sci0_txi_isr void sci0_txi_isr(void)
+00012d7a timer_tick_isr void timer_tick_isr(void)
+00012e66 delay_ticks void delay_ticks(int ticks)
+00012e88 delay_ticks_jog void delay_ticks_jog(int ticks)
+00012a88 idle_timer_reset void idle_timer_reset(void)
+00012ab4 idle_timer_reset2 void idle_timer_reset2(void)
+0002381e __mulsi3 long __mulsi3(long a, long b)
+00023052 __divmodsi4 long __divmodsi4(long a, long b)
+00023078 __udivmodsi4 long __udivmodsi4(long a, long b)
+00023836 __dcopy void __dcopy(void *src, void *dst)
+# RAM
+00ffb22c last_cmd short
+00ffb22e service_mode char
+00ffb262 steps_per_unit short
+00ffb284 error_mask short
+00ffb286 error_status char
+00ffb2d6 rx_buf_base pointer
+00ffb2da rx_buf_size long
+00ffb2de rx_wr_ptr pointer
+00ffb2e2 rx_rd_ptr pointer
+00ffb2e6 rx_count long
+00ffb2ea tx_len short
+00ffb2f3 tx_buf char
+00ffb357 tx_busy char
+00ffb359 term1 char
+00ffb35a term2 char
+00ffb35e rx_starved char
+00ffb360 num_frac1 short
+00ffb362 num_frac2 short
+00ffb37c delay_counter short
+00ffb397 usb_suspended char
+00ffbf0f reply_via_sci char
+00ffbf11 sci_esc_state char
+00ffc226 cancel_request char
+00ffc424 jog_keys char

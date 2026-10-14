@@ -1,0 +1,803 @@
+# CC100 firmware 2.30 symbols: addr name [prototype | data type]
+00000400 reset
+00004100 clip_sort_hits void clip_sort_hits(char mode, long n, long *pts)
+000045e4 regmark_clear_transform
+000046b8 regmark_find_corners void regmark_find_corners(void)
+000048ba regmark_line_intersect void regmark_line_intersect(int *parallel)
+00005082 regmark_axis_intersect void regmark_axis_intersect(int *parallel)
+00005452 regmark_get_mark void regmark_get_mark(int idx, long *x, long *y)
+000054e4 regmark_compute_transform void regmark_compute_transform(void)
+00005bc0 regmark_scale_x long regmark_scale_x(void)
+00005d40 regmark_scale_y long regmark_scale_y(void)
+00005ec0 regmark_scale_fail_hook void regmark_scale_fail_hook(void)
+00005ecc regmark_extend_segment void regmark_extend_segment(long *p1, long *p2)
+00006140 clip_segment_hits void clip_segment_hits(long poly_top, long *out, long x0, long y0, long x1, long y1, int *n_hits, int *n_touch, int *flags)
+00006950 clip_edge_local long clip_edge_local(void)
+00006aac workbuf_layout void workbuf_layout(void)
+00006ba8 workbuf_fix_sizes void workbuf_fix_sizes(void)
+00006c3c workbuf_init void workbuf_init(void)
+00006c76 approx_dist long approx_dist(long dx, long dy)
+00006cda bezier_draw void bezier_draw(int a, long nseg, double x1, double y1, double x2, double y2, double x3, double y3, double x4, double y4)
+000071d6 cmd_BZ void cmd_BZ(void)
+00007378 labs_ long labs_(long v)
+0000739c hw_init_bus_ports void hw_init_bus_ports(int keep_port)
+000074bc cmd_speed void cmd_speed(void)
+00007522 cmd_factor void cmd_factor(void)
+00007570 cmd_force void cmd_force(void)
+000075e2 cmd_rotate void cmd_rotate(void)
+00007636 cmd_term_unused void cmd_term_unused(void)
+0000766e cmd_nop_T void cmd_nop_T(void)
+0000767a cmd_FA_get_distance_corr void cmd_FA_get_distance_corr(void)
+000076be cmd_FB_set_distance_corr void cmd_FB_set_distance_corr(void)
+00007832 cmd_FJ void cmd_FJ(void)
+00007984 set_area_extent void set_area_extent(long x, long y)
+00007a3a cmd_FL_get_media_mode void cmd_FL_get_media_mode(void)
+00007a64 cmd_FM_set_media_mode void cmd_FM_set_media_mode(void)
+00007aa4 set_media_mode void set_media_mode(char mode)
+00007c82 cmd_FO_page_length void cmd_FO_page_length(void)
+00007d46 cmd_FQ_query void cmd_FQ_query(void)
+00007ec8 cmd_FV_get_media void cmd_FV_get_media(void)
+00007f1a cmd_FW_set_media void cmd_FW_set_media(void)
+00007f7a cmd_FX_force void cmd_FX_force(void)
+00008002 cmd_TT void cmd_TT(void)
+0000806a read_opt_angle long read_opt_angle(void)
+0000808c curve_cmd void curve_cmd(int relative, long x0, long y0)
+000081f8 cmd_ellipse void cmd_ellipse(void)
+0000828e cmd_WP void cmd_WP(void)
+0000834c circle3_draw void circle3_draw(long x1, long y1, long x2, long y2, long x3, long y3)
+00008c36 cmd_W void cmd_W(void)
+00008cf8 cmd_Y void cmd_Y(void)
+00008d14 cmd_rel_circle void cmd_rel_circle(void)
+00008df8 cmd_rel_curve void cmd_rel_curve(void)
+00008e22 arc_prepare int arc_prepare(void *arc)
+00009070 arc_draw void arc_draw(void *arc, char flag)
+000092e8 ellipse_draw void ellipse_draw(void *ell)
+00009824 arc_draw_float void arc_draw_float(long *arc)
+00009992 spline_feed void spline_feed(int op, long x, long y)
+00009d24 spline_segment void spline_segment(long *xs, long *ys, int pen)
+00009ebc spline_coeffs long spline_coeffs(long *coef, long *p)
+00009fc4 spline_eval_fx long spline_eval_fx(long *coef, unsigned int t)
+0000a12a fx_mul16 long fx_mul16(long a, int b)
+0000a268 cmd_FC void cmd_FC(void)
+0000a316 cmd_FD void cmd_FD(void)
+0000a3cc cmd_FE void cmd_FE(void)
+0000a46e cmd_FF void cmd_FF(void)
+0000a580 cmd_FK void cmd_FK(void)
+0000a5b8 dump_getc unsigned int dump_getc(void)
+0000a5de dump_reply void dump_reply(int idx)
+0000a676 dump_set_term void dump_set_term(void)
+0000a696 dump_skip_label void dump_skip_label(void)
+0000a6d2 dump_skip_frame void dump_skip_frame(char c)
+0000a6fc dump_cmd_T void dump_cmd_T(void)
+0000a792 dump_cmd_F void dump_cmd_F(void)
+0000a8a6 dump_loop void dump_loop(void)
+0000a9d2 dump_home void dump_home(void)
+0000aa14 dump_banner void dump_banner(void)
+0000aa9a dump_start void dump_start(void)
+0000aab2 svc_o_dump_mode void svc_o_dump_mode(void)
+0000aad4 dump_advance void dump_advance(int wide)
+0000ab7a dump_hex_byte void dump_hex_byte(unsigned char c)
+0000ac58 dump_format_char int dump_format_char(unsigned char c)
+0000acd6 dump_print_char void dump_print_char(unsigned char c)
+0000adae font_defaults void font_defaults(void)
+0000ae22 font_select int font_select(int id)
+0000ae44 font_draw_char void font_draw_char(unsigned char c)
+0000ae5c font_draw_string void font_draw_string(char *s)
+0000aed6 font_print void font_print(char *s)
+0000aef2 font_scale_point void font_scale_point(void)
+0000b14a font_begin int font_begin(void)
+0000b212 font_setup_matrix void font_setup_matrix(void)
+0000b352 font_glyph void font_glyph(unsigned char c)
+0000b7ec font_find_glyph char * font_find_glyph(int code)
+0000b84a font_find_glyph2 char * font_find_glyph2(unsigned int code)
+0000b890 font_lookup char * font_lookup(unsigned int code, long table)
+0000b904 font_step int font_step(int op)
+0000b950 font_run_glyph void font_run_glyph(int code)
+0000b96a font_interp void font_interp(char *prog)
+0000bb5a font_op_penup int font_op_penup(void)
+0000bb70 font_op_ef void font_op_ef(void)
+0000bbe2 font_op_arc void font_op_arc(void)
+0000bc76 font_op_call void font_op_call(long *sp, int n)
+0000bcae font_op_fa void font_op_fa(void)
+0000bd38 font_op_fb void font_op_fb(void)
+0000bdf0 font_op_fc void font_op_fc(void)
+0000be78 font_op_fd void font_op_fd(void)
+0000bf5a font_op_pendown int font_op_pendown(void)
+0000bf6e font_op_return int font_op_return(void)
+0000bfe8 font_op_helper1 void font_op_helper1(void)
+0000c014 font_op_helper2 void font_op_helper2(void)
+0000c0a8 font_op_helper3 void font_op_helper3(void)
+0000c160 font_arc_step void font_arc_step(void)
+0000c24c font_continue void font_continue(void)
+0000c2b0 font_arc void font_arc(void)
+0000c412 font_read_xy void font_read_xy(void)
+0000c450 font_unpack_xy void font_unpack_xy(unsigned int b, long unused, long *out)
+0000c494 font_read_byte void font_read_byte(char **pp, long unused, unsigned long *out)
+0000c4d8 font_draw_to void font_draw_to(long *pt)
+0000c5fc font_map_code unsigned long font_map_code(unsigned long code)
+0000c93a font_metrics_a void font_metrics_a(unsigned char c, int *out)
+0000c968 font_metrics_b void font_metrics_b(unsigned char c, int *out)
+0000c994 font_metrics unsigned long font_metrics(unsigned long code, int *out)
+0000cb3a end_of_params int end_of_params(void)
+0000cbf2 gpgl_loop void gpgl_loop(void)
+0000d412 skip_command void skip_command(void)
+0000d448 hook_pen_param void hook_pen_param(void)
+0000d458 hook_sync void hook_sync(void)
+0000d46c cmd_FP void cmd_FP(void)
+0000d4c8 move_mm void move_mm(long x_mm, long y_mm)
+0000d512 demo_run void demo_run(void)
+0000db9a demo_pattern_gpgl
+0000f096 distcorr_compute void distcorr_compute(void)
+0000f330 distcorr_apply_page void distcorr_apply_page(void)
+0000f4b2 distcorr_to_user void distcorr_to_user(long *pt)
+0000f61e distcorr_to_device void distcorr_to_device(long *pt)
+0000f78a usb_ep_in_fill unsigned int usb_ep_in_fill(long unused, unsigned int ep)
+0000f8ee usb_ep_in_start void usb_ep_in_start(void)
+0000f942 usb_ep0_setup long usb_ep0_setup(long unused, unsigned char ep)
+0000f9f8 usb_ep0_in void usb_ep0_in(unsigned long status, unsigned char ep)
+0000fa9c usb_ep0_out unsigned long usb_ep0_out(unsigned long status, unsigned char ep)
+0000fb6c usb_std_request long usb_std_request(long unused)
+0000fdf6 usb_vendor_request char usb_vendor_request(void)
+0000fe12 usb_class_request char * usb_class_request(void)
+0000ff4e cmd_FG_version void cmd_FG_version(void)
+0000ffbc hook_nop void hook_nop(void)
+0000ffc8 hook_B void hook_B(void)
+0000ffd4 cmd_nop_DP_MP void cmd_nop_DP_MP(void)
+0000ffe6 cmd_nop_EP_OP void cmd_nop_EP_OP(void)
+0000fff8 cmd_nop_LP void cmd_nop_LP(void)
+00010004 cmd_nop_RP void cmd_nop_RP(void)
+00010010 cmd_nop_KP void cmd_nop_KP(void)
+00010022 cmd_nop_RC void cmd_nop_RC(void)
+0001002e cmd_nop_userpat void cmd_nop_userpat(void)
+0001003a cmd_nop_I void cmd_nop_I(void)
+00010046 cmd_nop_N void cmd_nop_N(void)
+00010052 cmd_nop_SA void cmd_nop_SA(void)
+0001005e chart_feed_hook void chart_feed_hook(void)
+0001006a cmd_nop_hatch void cmd_nop_hatch(void)
+00010076 cmd_nop_A void cmd_nop_A(void)
+00010082 cmd_nop_dollar void cmd_nop_dollar(void)
+0001008e cmd_nop_SP void cmd_nop_SP(void)
+0001009a cmd_nop_Q void cmd_nop_Q(void)
+000100a6 cmd_nop_S void cmd_nop_S(void)
+000100b2 cmd_nop_R void cmd_nop_R(void)
+000100be cmd_nop_paren void cmd_nop_paren(void)
+000100ca term_changed_hook void term_changed_hook(char t)
+000100e2 angle_to_sincos void angle_to_sincos(long centideg, float *sincos)
+00010180 hypot_l long hypot_l(long dx, long dy)
+000101fe svc_e_calc void svc_e_calc(void)
+000102ae plot_soft_reset void plot_soft_reset(int keep_term)
+000102d4 cmd_error_mask void cmd_error_mask(void)
+00010308 set_error void set_error(unsigned int bits)
+00010332 pen_tables_init void pen_tables_init(void)
+000104e6 load_cutter_offset void load_cutter_offset(void)
+0001054c select_pen_params long select_pen_params(void)
+00010686 cutoff_on_move unsigned long cutoff_on_move(long x, long y, int pen)
+00010718 cutoff_swivel void cutoff_swivel(long angle)
+00010c1e cutoff_set_lead void cutoff_set_lead(long angle, int pen)
+00010ca4 cutoff_move void cutoff_move(long dx, long dy, int pen)
+00010ce0 cutoff_end void cutoff_end(long x, long y, int pen)
+00010d90 cutoff_blade_init void cutoff_blade_init(int pen)
+00010f4e cutoff_need_move long cutoff_need_move(long x, long y, int pen)
+00010fba cutoff_overcut_restore void cutoff_overcut_restore(void)
+00010fd8 cutoff_overcut void cutoff_overcut(void)
+0001108a motion_flush void motion_flush(void)
+000110ba clip_reset void clip_reset(void)
+00011102 clip_begin void clip_begin(void)
+0001112c cmd_clip void cmd_clip(void)
+00011228 rx_peek unsigned int rx_peek(void)
+00011368 rx_getc unsigned int rx_getc(void)
+000113e4 reply_begin void reply_begin(int nfields)
+0001141e reply_putc void reply_putc(char c)
+0001145a usb_reply_send void usb_reply_send(void)
+000114ba reply_send void reply_send(void)
+00011556 usb_bulk_out_rx void usb_bulk_out_rx(void)
+00011796 usb_rx_flow_check void usb_rx_flow_check(void)
+0001181c rx_flush void rx_flush(void)
+00011852 rx_flush_masked void rx_flush_masked(void)
+00011882 rx_init void rx_init(void)
+00011902 is_terminator int is_terminator(unsigned int c)
+00011936 cmd_class int cmd_class(unsigned char c)
+0001199e read_digit int read_digit(void)
+00011a36 read_number long read_number(void)
+00011b72 read_int long read_int(void)
+00011bc6 read_coord long read_coord(void)
+00011d50 read_angle long read_angle(void)
+00011dc2 eeprom_format void eeprom_format(int version)
+00011e3e eeprom_load_defaults void eeprom_load_defaults(void)
+00011f7e eeprom_factory_reset
+00012034 eeprom_format_hook void eeprom_format_hook(void)
+00012040 load_axis_correction void load_axis_correction(void)
+000121aa clear_device_offsets long clear_device_offsets(void)
+000121da settings_load long settings_load(void)
+00012264 load_step_size char load_step_size(void)
+0001228e load_config_word void load_config_word(void)
+000122c0 config_word_read void config_word_read(void)
+00012302 config_word_save void config_word_save(void)
+00012332 eeprom_check_format void eeprom_check_format(void)
+00012380 uwire_sk void uwire_sk(char level)
+000123a0 uwire_cs void uwire_cs(char level)
+000123c0 uwire_di void uwire_di(char level)
+000123e0 uwire_shift_out void uwire_shift_out(int nbits, unsigned long bits)
+00012440 uwire_command void uwire_command(int nbits, unsigned long bits)
+0001246a eeprom_ewen void eeprom_ewen(void)
+00012492 eeprom_ewds void eeprom_ewds(void)
+000124ba eeprom_erase_all void eeprom_erase_all(void)
+00012528 eeprom_read_word_raw
+000125f4 eeprom_read_byte_raw
+00012654 eeprom_write_word_raw
+0001270c eeprom_write_byte_raw
+00012786 eeprom_write_byte void eeprom_write_byte(unsigned char value, long addr)
+000127d8 eeprom_read_byte unsigned char eeprom_read_byte(long addr)
+00012828 eeprom_write_word void eeprom_write_word(int value, long addr)
+0001287a eeprom_read_word int eeprom_read_word(long addr)
+000128ca eeprom_write_long void eeprom_write_long(long value, long addr)
+00012922 eeprom_read_long long eeprom_read_long(long addr)
+0001298a eeprom_set_bit void eeprom_set_bit(char bit, long addr)
+000129c0 eeprom_clear_bit void eeprom_clear_bit(char bit, long addr)
+000129f8 eeprom_toggle_bit void eeprom_toggle_bit(char bit, long addr)
+00012a2e tick_timer_init void tick_timer_init(void)
+00012a88 idle_timer_reset void idle_timer_reset(void)
+00012ab4 idle_timer_reset2 void idle_timer_reset2(void)
+00012ad0 svc_j_counters void svc_j_counters(void)
+00012b18 thermal_protect void thermal_protect(void)
+00012d7a timer_tick_isr void timer_tick_isr(void)
+00012e66 delay_ticks void delay_ticks(int ticks)
+00012e88 delay_ticks_jog void delay_ticks_jog(int ticks)
+00012ec0 power_off void power_off(int error)
+00012f64 power_down_hw void power_down_hw(void)
+00012fb8 power_up_hw int power_up_hw(void)
+00012ff2 power_key_isr void power_key_isr(void)
+00013164 spin_delay void spin_delay(int n)
+0001318a spin_nop void spin_nop(void)
+000131c0 init_terminators void init_terminators(void)
+000131f2 set_lower_left void set_lower_left(long x, long y)
+0001321e set_upper_right int set_upper_right(long x, long y)
+00013252 reply_number void reply_number(int width, long value)
+000133be reply_number_comma void reply_number_comma(int width, long value)
+000133ee reply_number_end void reply_number_end(int width, long value)
+00013436 settings_apply void settings_apply(void)
+0001344e test_key_led void test_key_led(void)
+00013486 test_key_port void test_key_port(void)
+000134be test_motion_xy void test_motion_xy(void)
+00013516 test_motion_loop void test_motion_loop(void)
+0001355e test_circle void test_circle(void)
+000136b4 test_jog void test_jog(void)
+000136f6 test_sincos_bench void test_sincos_bench(void)
+00013736 factory_test_select void factory_test_select(void)
+000137c4 enter_gpgl void enter_gpgl(void)
+000137ec boot_wait_key void boot_wait_key(void)
+00013940 main
+000139ce warm_restart void warm_restart(void)
+00013a28 muldiv_l long muldiv_l(long a, long b, long c)
+00013a64 muldiv_test void muldiv_test(void)
+00013a8c reset_line_type void reset_line_type(void)
+00013ab2 read_point void read_point(long *x, long *y)
+00013ada plot_abs void plot_abs(int pen)
+00013b16 plot_rel void plot_rel(int pen)
+00013b7e cmd_B void cmd_B(void)
+00013bca cmd_D void cmd_D(void)
+00013be8 cmd_E void cmd_E(void)
+00013c06 cmd_chart_feed void cmd_chart_feed(void)
+00013c22 cmd_H void cmd_H(void)
+00013c58 cmd_J void cmd_J(void)
+00013c68 cmd_L void cmd_L(void)
+00013d3e cmd_M void cmd_M(void)
+00013d50 cmd_O void cmd_O(void)
+00013d62 axis_draw_rel void axis_draw_rel(long d, long t)
+00013dc2 axis_tick_exact void axis_tick_exact(long x0, long y0, long q, int n, int r)
+00013eb4 cmd_X void cmd_X(void)
+00013ffa cmd_set_origin void cmd_set_origin(void)
+00014008 set_origin_here void set_origin_here(void)
+00014068 draw_test_cut_mark void draw_test_cut_mark(void)
+000141d2 cmd_FH_test_cut void cmd_FH_test_cut(void)
+00014246 cmd_FI_test_plot_loop void cmd_FI_test_plot_loop(void)
+000146ee burnin_circles void burnin_circles(long x)
+0001476a burnin_rect void burnin_rect(long x)
+00014806 burnin_circle_at void burnin_circle_at(long x, long y)
+000148ce cmd_FT_origin void cmd_FT_origin(void)
+000148e8 cmd_FU_track_feed void cmd_FU_track_feed(void)
+00014b12 cmd_FY_track_enhance void cmd_FY_track_enhance(void)
+00014b5e axis_profile_step void axis_profile_step(void *axis)
+00014ef0 home_carriage void home_carriage(void)
+00014ff4 page_limits_update void page_limits_update(void)
+000150dc page_limits_apply void page_limits_apply(int arg)
+000151be origin_reset void origin_reset(int arg)
+00015212 regmark_find_type1 char regmark_find_type1(void)
+000154ca regmark_find_type2 char regmark_find_type2(void)
+0001575a regmark_search_manual void regmark_search_manual(void)
+0001596c regmark_goto_origin void regmark_goto_origin(void)
+00015a1a regmark_compute_spans void regmark_compute_spans(void)
+00015b16 regmark_origin_margin long regmark_origin_margin(void)
+00015bbc regmark_scan_first long regmark_scan_first(void)
+00015fb2 regmark_search_auto void regmark_search_auto(void)
+00016130 muldiv long muldiv(long a, long b, long c)
+000161ae div64_32 long div64_32(long hi, long lo)
+0001631a cmp64 int cmp64(long ahi, long alo, long bhi, long blo)
+000164c6 vector_angle int vector_angle(long *v)
+000165b0 isqrt32 unsigned long isqrt32(unsigned long x)
+00016700 d_sqrt void d_sqrt(void *res, void *unused, void *out, unsigned long hi, unsigned long lo)
+00016bc0 svc_g_param void svc_g_param(void)
+00016c8e svc_g0_cfg_bit1 void svc_g0_cfg_bit1(void)
+00016cfc svc_g1_cfg_bit6 void svc_g1_cfg_bit6(void)
+00016d6a svc_g2_axis_correction void svc_g2_axis_correction(void)
+00016e22 svc_g3_cfg_bit7 void svc_g3_cfg_bit7(void)
+00016e90 svc_g4_motion_param void svc_g4_motion_param(void)
+00016f0c svc_g5_cfg_bit4 void svc_g5_cfg_bit4(void)
+00016f7a svc_g6_step_size void svc_g6_step_size(void)
+00016ff8 svc_g7_solenoid_profile void svc_g7_solenoid_profile(void)
+00017082 svc_g10_power_save void svc_g10_power_save(void)
+000170e8 svc_g11_force_table void svc_g11_force_table(void)
+000171b2 svc_g12_regmark_param void svc_g12_regmark_param(void)
+00017220 svc_g13_regmark_nibbles void svc_g13_regmark_nibbles(void)
+000172dc svc_g14_sensor_offset void svc_g14_sensor_offset(void)
+00017386 svc_g15_regmark_calibrate void svc_g15_regmark_calibrate(void)
+000173b4 axis_correction_pattern void axis_correction_pattern(void)
+000174fc svc_i_feed_test void svc_i_feed_test(void)
+00017556 svc_m_burn_in void svc_m_burn_in(void)
+000175de svc_g18_track_passes void svc_g18_track_passes(void)
+00017648 reply_point void reply_point(int cmd, long x, long y)
+0001769e cmd_read_status2 void cmd_read_status2(void)
+000176d6 cmd_gin void cmd_gin(int cmd)
+00017740 cmd_call_gin void cmd_call_gin(void)
+00017752 cmd_read_upper_right void cmd_read_upper_right(void)
+0001777c cmd_upper_right void cmd_upper_right(void)
+000177b0 cmd_read_lower_left void cmd_read_lower_left(void)
+000177da cmd_lower_left void cmd_lower_left(void)
+0001780e cmd_read_offset void cmd_read_offset(void)
+00017838 cmd_offset void cmd_offset(void)
+000178c4 load_force_table void load_force_table(void)
+00017900 solenoid_init int solenoid_init(void)
+00017992 pen_select_hook void pen_select_hook(void)
+0001799e svc_z_port void svc_z_port(void)
+00017c1c solenoid_set char solenoid_set(int level)
+00017e8e pen_reset void pen_reset(void)
+00017ea6 pen_save_position long pen_save_position(void)
+00017f1e pen_restore void pen_restore(void)
+00017f2e pen_return_to_saved void pen_return_to_saved(void)
+00017fac select_pen void select_pen(int pen)
+00018020 apply_pen_params void apply_pen_params(void)
+000180b2 apply_force void apply_force(void)
+000180ec set_force_level void set_force_level(char level)
+000181da force_level_value int force_level_value(char level)
+0001820a force_hold_level int force_hold_level(void)
+00018236 clear_tool_offset long clear_tool_offset(void)
+00018262 gin_pen_state long gin_pen_state(void)
+0001829e set_speed void set_speed(int speed)
+00018316 set_force void set_force(int force)
+000183c0 set_cutter_offset void set_cutter_offset(int offset)
+00018440 set_cutter_offset_q void set_cutter_offset_q(int q)
+000184a4 set_blade_rotation void set_blade_rotation(long angle100)
+0001850a set_FE void set_FE(int on)
+00018598 set_FF void set_FF(long ab)
+0001860e select_pen_wrap void select_pen_wrap(int pen)
+0001863e xform_orientation void xform_orientation(void *x, void *y)
+000186e6 xform_rotate void xform_rotate(void *x, void *y)
+00018864 xform_factor void xform_factor(void *x, void *y)
+00018930 xform_device_offset void xform_device_offset(void *x, void *y)
+000189ea xform_device_offset_wrap void xform_device_offset_wrap(void *x, void *y)
+00018a12 xform_window_origin void xform_window_origin(void *x, void *y)
+00018a78 xform_user_offset void xform_user_offset(void *x, void *y)
+00018ae0 device_to_logical long device_to_logical(void)
+00018e44 sync_user_pos void sync_user_pos(void)
+00018f0e sync_device_pos void sync_device_pos(void)
+00018f86 xform_call_long void xform_call_long(void *fn, long *x, long *y)
+0001900c window_reset void window_reset(void)
+000190bc plot_state_reset void plot_state_reset(void)
+0001919a set_factor void set_factor(long p, long q, long r)
+00019444 update_window void update_window(void)
+00019518 device_to_user_pos void device_to_user_pos(long *x, long *y)
+00019758 svc_c_motion_param void svc_c_motion_param(void)
+00019764 svc_h_speed_profile long svc_h_speed_profile(void)
+00019780 motion_build_profile long motion_build_profile(unsigned long speeds)
+00019acc motion_drain void motion_drain(void)
+00019b9c motion_line_to int motion_line_to(long x, long y, int pen_down)
+00019f8c motion_plan_segment unsigned long motion_plan_segment(long x, long y, int max_angle)
+0001af64 motion_init void motion_init(void)
+0001b162 motion_start_next unsigned long motion_start_next(void)
+0001bba6 atan_tenths int atan_tenths(long dy, long dx)
+0001bc6a timer_x_isr void timer_x_isr(void)
+0001bcc4 timer_y_isr void timer_y_isr(void)
+0001bd1e jog_x_step void jog_x_step(void)
+0001bf32 jog_y_step void jog_y_step(void)
+0001c146 regmark_clip_plot
+0001c242 regmark_area_outcode int regmark_area_outcode(long *p)
+0001c2d6 regmark_clip_segment
+0001c39a regmark_clip_x void regmark_clip_x(long *p, long *q, long x)
+0001c414 regmark_clip_y void regmark_clip_y(long *p, long *q, long y)
+0001c492 device_plot_noclip
+0001c4ba device_plot_origin void device_plot_origin(void)
+0001c4d4 device_plot_raw
+0001c572 plot_device void plot_device(long x, long y, int pen)
+0001c608 device_plot
+0001c678 device_plot_nocal
+0001c6c4 regmark_transform
+0001c824 apply_origin_offsets
+0001c918 apply_regmark_and_cal
+0001c9c0 apply_orientation
+0001caca machine_clip_plot
+0001cbc6 machine_outcode int machine_outcode(long *p)
+0001cc6c machine_clip_segment
+0001cd30 machine_clip_x void machine_clip_x(long *p, long *q, long x)
+0001cdaa machine_clip_y void machine_clip_y(long *p, long *q, long y)
+0001ce28 track_feed_min_and_queue void track_feed_min_and_queue(long x, long y, int pen)
+0001ce76 user_to_motor_point void user_to_motor_point(long *x, long *y)
+0001d00a move_to_machine_origin void move_to_machine_origin(void)
+0001d052 machine_origin_point
+0001d0bc queue_point void queue_point(long x, long y, int pen)
+0001d10c queue_segment void queue_segment(long x, long y, int pen)
+0001d31a queue_segment_now void queue_segment_now(long x, long y, int pen)
+0001d3c2 sub_home_offset void sub_home_offset(long *x, long *y)
+0001d3fe motion_emit void motion_emit(long x, long y, int pen)
+0001d4aa motion_line void motion_line(long x, long y, int pen)
+0001d4f6 motion_line_wait_set void motion_line_wait_set(long x, long y, int pen)
+0001d550 motion_line_wait void motion_line_wait(long x, long y, int pen)
+0001d582 motion_move_steps void motion_move_steps(long x, long y, int pen)
+0001d5e0 motion_get_pos_wait void motion_get_pos_wait(long *xy)
+0001d5fe motion_get_pos void motion_get_pos(long *xy)
+0001d698 svc_param_b620 void svc_param_b620(void)
+0001d6ec nop_1d6ec void nop_1d6ec(void)
+0001d6f8 tool_set void tool_set(int down)
+0001d7ac motor_run_continuous
+0001da92 flush_deferred_segment void flush_deferred_segment(void)
+0001dacc set_carriage_origin long set_carriage_origin(long x, long y)
+0001db52 wait_motion_done void wait_motion_done(void)
+0001db80 plot_to void plot_to(long x, long y, int pen)
+0001dba8 set_line_type_raw void set_line_type_raw(int lt)
+0001dbc0 set_line_type void set_line_type(int type, long pitch)
+0001dc18 dash_restart void dash_restart(void)
+0001dc5e dash_next void dash_next(void)
+0001dc9e dash_select_pattern
+0001dd5a dash_next_element void dash_next_element(void)
+0001de20 user_dash_restart
+0001de48 user_dash_next
+0001deb6 seg_length long seg_length(long x, long y)
+0001df5e plot_linetype void plot_linetype(long x, long y, int pen)
+0001e23e plot_transform void plot_transform(long x, long y, int pen)
+0001e792 nop_1e792 void nop_1e792(void)
+0001e7a8 window_outcode int window_outcode(long *pt)
+0001e86a rotate_point void rotate_point(long *x, long *y)
+0001e9a6 clip_isect_xmax long clip_isect_xmax(long x1, long y1, long x2, long y2)
+0001e9fc clip_isect_xmin long clip_isect_xmin(long x1, long y1, long x2, long y2)
+0001ea52 clip_isect_ymax long clip_isect_ymax(long x1, long y1, long x2, long y2)
+0001eaa8 clip_isect_ymin long clip_isect_ymin(long x1, long y1, long x2, long y2)
+0001eafe plot_solid void plot_solid(long x, long y, int pen)
+0001eb2c plot_raw void plot_raw(long x, long y, int pen)
+0001eb52 set_pos_and_plot void set_pos_and_plot(long x, long y, int pen)
+0001eb88 plot_clip_poly void plot_clip_poly(long x, long y, int pen)
+0001ed42 jog_read_keys int jog_read_keys(int *st)
+0001edd6 jog_with_keys void jog_with_keys(void)
+0001f0ec jog_axis_ramp
+0001f3ea dround
+0001f458 sci0_init void sci0_init(void)
+0001f4a4 sci0_rxi_isr void sci0_rxi_isr(void)
+0001f592 sci0_eri_isr void sci0_eri_isr(void)
+0001f5c6 sci0_txi_isr void sci0_txi_isr(void)
+0001f61c sci0_tei_isr void sci0_tei_isr(void)
+0001f62c nop_1f62c void nop_1f62c(void)
+0001f638 nop_1f638 void nop_1f638(void)
+0001f644 save_return_addr
+0001f656 record_stack_ptr void record_stack_ptr(void)
+0001f660 nop_1f660 void nop_1f660(void)
+0001f66c usb_tx_idle void usb_tx_idle(void)
+0001f6be nop_1f6be void nop_1f6be(void)
+0001f6cc cmd_TB void cmd_TB(void)
+0001f79c regmark_set_orientation void regmark_set_orientation(char landscape)
+0001f8aa cmd_TB50_orientation void cmd_TB50_orientation(void)
+0001f90a cmd_TB98_query void cmd_TB98_query(void)
+0001f930 regmark_enable char regmark_enable(int on)
+0001f956 cmd_TB51_mark_length void cmd_TB51_mark_length(void)
+0001f9a0 cmd_TB52_mark_type void cmd_TB52_mark_type(void)
+0001f9ee cmd_TB53_mark_width void cmd_TB53_mark_width(void)
+0001fa30 cmd_TB54_mark_offset void cmd_TB54_mark_offset(void)
+0001fa6c cmd_TB55_flag void cmd_TB55_flag(void)
+0001fa9c cmd_TB70_calibrate void cmd_TB70_calibrate(void)
+0001fab4 cmd_TB71_get_calibration void cmd_TB71_get_calibration(void)
+0001faf8 cmd_TB72_set_calibration void cmd_TB72_set_calibration(void)
+0001fb80 cmd_TB2x_search_manual void cmd_TB2x_search_manual(int type)
+0001fbe6 cmd_TB12x_search_auto void cmd_TB12x_search_auto(int type)
+0001fc4c regmark_calibrate int regmark_calibrate(void)
+0001ff2a regmark_find_and_mark
+000201f8 cmd_FN_orientation void cmd_FN_orientation(void)
+00020268 set_orientation void set_orientation(char landscape)
+0002032e set_user_line_type void set_user_line_type(int n)
+00020478 load_line_patterns void load_line_patterns(int n, void *unused)
+000204ce load_line_pattern void load_line_pattern(int idx, unsigned int *src)
+0002060a nop_2060a void nop_2060a(void)
+00020616 regmark_init void regmark_init(void)
+000206d6 regmark_load_calibration void regmark_load_calibration(void)
+0002078a sensor_on void sensor_on(void)
+000207bc sensor_off void sensor_off(void)
+000207d0 sensor_filter_init
+000208d0 sensor_filter_step
+00020a08 scan_record_edge
+00020a90 scan_check_limits
+00020d6a sensor_scan_axis
+0002114c regmark_locate_x
+0002135c regmark_locate_y
+00021546 move_clamped_wait int move_clamped_wait(long x, long y, int pen)
+00021620 sensor_scan_diag
+0002195c sensor_init void sensor_init(void)
+000219a0 sensor_pot_shift
+000219fa sensor_pot_step void sensor_pot_step(void)
+00021a26 sensor_autocal_gain int sensor_autocal_gain(int blink_forever)
+00021af8 svc_n_threshold void svc_n_threshold(void)
+00021b22 svc_a void svc_a(void)
+00021b96 svc_t_sensor void svc_t_sensor(void)
+00021c40 sensor_reply_adc void sensor_reply_adc(void)
+00021cb6 sensor_measure_reply void sensor_measure_reply(void)
+00021cd6 sensor_trace_start void sensor_trace_start(void)
+00021d42 sensor_trace_read void sensor_trace_read(void)
+00021dfa sensor_trace_scan
+000220b2 usb_isr void usb_isr(void)
+000221e0 usb_ep_read_to_ring
+000222b0 usb_ep_write_from_ring
+00022386 ring_copy
+000223f4 usb_bus_reset_handler void usb_bus_reset_handler(void)
+0002288c usb_suspend_handler void usb_suspend_handler(void)
+000228c0 usb_resume_handler void usb_resume_handler(void)
+0002292e be_bytes_to_ulong unsigned long be_bytes_to_ulong(unsigned char *p, char n)
+00022986 le_bytes_to_ulong unsigned long le_bytes_to_ulong(unsigned char *p, char n)
+00022a66 __dsub
+00022a8a __dadd
+00022c6a __fsub
+00022c74 __fadd
+00022e16 __bitfield_helper
+00022eee __ddiv
+00023052 __divmodsi4 long __divmodsi4(long a, long b)
+00023078 __udivmodsi4 long __udivmodsi4(long a, long b)
+000230b4 __dtof
+00023174 __dtol
+000231f6 __deq
+00023202 __ftod
+00023276 __ftol
+000232d8 __dgt
+000232e4 __itod
+00023316 __itof
+00023338 __dle
+00023348 __dlt
+00023358 __ltod
+0002339e __ltof
+000234a0 __dmul
+000236ac __fmul
+0002381e __mulsi3 long __mulsi3(long a, long b)
+00023836 __dcopy void __dcopy(void *src, void *dst)
+00023854 __movblk void __movblk(void *src, void *dst, unsigned long n)
+000238bc __dne
+000238ca __dneg
+000238ec _INITSCT
+00023948 atan
+00023a26 atan2
+00023b3c ceil
+00023c1a cos
+00023cf8 cosf
+00023d9c sin
+00023e7a sinf
+00023f1e sqrt
+00023ffc sqrtf
+000240a0 __dcmp
+0002414c __xd_unpack
+00024208 __xf_unpack
+0002427a __xd_pack
+0002436c __xf_pack
+00024434 __xd_sqrt
+000245d6 __xf_sqrt
+000246ce __xd_atan
+00024e46 __xd_ceil
+00024f02 __xd_cos
+0002509e __xf_cos
+00025228 __xd_sin
+000253de __xf_sin
+00025582 __xd_atan2
+0002564a __xd_sub
+00025656 __xd_add
+0002583e __xf_add
+0002599e __xd_atan2_helper
+00025ade __xd_eq
+00025aea __xd_reduce_a
+00025bf0 __xf_reduce
+00025cd8 __xd_gt
+00025ce4 __xd_reduce_b
+00025dbe __xd_mul
+00025f4c __xd_trunc
+00025fe8 __xd_classify
+0002601e __xf_classify
+0002604c __xd_poly_a
+000260c6 __xf_poly_a
+0002613e __xd_poly_b
+000261ec __xf_poly_b
+00026290 __xd_poly_c
+0002633e __xd_cmp
+000263d2 __xf_mul
+000264c0 __xd_muladd
+00026548 __xf_muladd
+00028cec fw_version_string char[10]
+00ffb000 usb_setup_pkt
+00ffb06a rm_yx double
+00ffb072 rm_xx double
+00ffb07a rm_yy double
+00ffb082 rm_xy double
+00ffb092 rm_sx double
+00ffb09a rm_sy double
+00ffb0aa regmark_active char
+00ffb0ab rm_scale_on char
+00ffb0ae regmark_marks
+00ffb0e8 workbuf_ptrs
+00ffb104 workbuf_sizes
+00ffb120 rot_enabled int
+00ffb122 cut_force int
+00ffb16e dump_term1 char
+00ffb16f dump_term2 char
+00ffb170 dump_x long
+00ffb174 dump_y long
+00ffb178 dump_active char
+00ffb179 dump_text
+00ffb184 font_width long
+00ffb188 font_height long
+00ffb18c font_line_pitch long
+00ffb190 font_char_pitch long
+00ffb1a0 font_id short
+00ffb22c last_cmd short
+00ffb22e service_mode char
+00ffb24a distcorr_x double
+00ffb252 distcorr_y double
+00ffb262 steps_per_unit int
+00ffb282 err_mask_long long
+00ffb284 error_mask short
+00ffb286 error_status byte
+00ffb288 cutoff_radius long
+00ffb28c cutoff_min_angle long
+00ffb290 cutoff_angle_prev long
+00ffb294 cutoff_angle long
+00ffb2a8 cutoff_tip_x long
+00ffb2ac cutoff_tip_y long
+00ffb2b2 seg_merge_dist long
+00ffb2ba overcut_len short
+00ffb2bc fk_flag byte
+00ffb2bd cutoff_mode char
+00ffb2be pen_params_dirty byte
+00ffb2bf overcut_pending char
+00ffb2c2 blade_init_active char
+00ffb2d6 rx_buf_base pointer
+00ffb2da rx_buf_size long
+00ffb2de rx_wr_ptr pointer
+00ffb2e2 rx_rd_ptr pointer
+00ffb2e6 rx_count long
+00ffb2ea tx_len int
+00ffb2ec usb_tx_remaining short
+00ffb2ee usb_tx_offset short
+00ffb2f3 tx_buf
+00ffb357 tx_busy char
+00ffb359 term1 char
+00ffb35a term2 char
+00ffb35e rx_starved char
+00ffb360 num_frac1 int
+00ffb362 num_frac2 int
+00ffb36a distcorr_inv_x double
+00ffb372 distcorr_inv_y double
+00ffb37c delay_counter short
+00ffb397 usb_suspended char
+00ffb39c line_pitch_arg long
+00ffb3a0 line_type_arg int
+00ffb3a2 axis_type int
+00ffb3aa chart_feed_len long
+00ffb3af track_enhance_off char
+00ffb3b0 feed_total long
+00ffb3b4 motor_y_bias long
+00ffb3b8 media_mode char
+00ffb3b9 ur_set char
+00ffb400 landscape char
+00ffb414 cur_pen int
+00ffb416 pen_speed int[8]
+00ffb436 pen_force int[8]
+00ffb446 pen_cutter_offset int[8]
+00ffb456 pen_cutter_q int[8]
+00ffb466 pen_blade_rot long[8]
+00ffb486 pen_FE int[8]
+00ffb496 pen_FF_a int[8]
+00ffb4a6 pen_FF_b int[8]
+00ffb4c8 media_type char
+00ffb4d4 factor_p long
+00ffb4d8 factor_q long
+00ffb4dc factor_r long
+00ffb4e0 offset_x long
+00ffb4e4 offset_y long
+00ffb4e8 origin_x long
+00ffb4ec origin_y long
+00ffb4f0 regmark_off_x long
+00ffb4f4 regmark_off_y long
+00ffb4f8 orient_off_x long
+00ffb4fc orient_off_y long
+00ffb504 rot_cx long
+00ffb508 rot_cy long
+00ffb50c page_length long
+00ffb510 page_width long
+00ffb524 mach_xmin long
+00ffb528 mach_ymin long
+00ffb52c mach_xmax long
+00ffb530 mach_ymax long
+00ffb534 mach_last_x long
+00ffb538 mach_last_y long
+00ffb53c dev_x long
+00ffb540 dev_y long
+00ffb554 clip_xmin long
+00ffb558 clip_ymin long
+00ffb55c clip_xmax long
+00ffb560 clip_ymax long
+00ffb564 win_ll_x long
+00ffb568 win_ll_y long
+00ffb56c win_ur_x long
+00ffb570 win_ur_y long
+00ffb584 cur_x long
+00ffb588 cur_y long
+00ffb5a4 factor_unity int
+00ffb5b2 rot_sin float
+00ffb5b6 rot_cos float
+00ffb5c6 orient_flags int
+00ffb5c8 mach_last_outcode int
+00ffb5ca cur_outcode int
+00ffb5de port600010_shadow int
+00ffb5f0 jog_speed_x int
+00ffb5f2 jog_speed_y int
+00ffbbd6 jog_dir_x char
+00ffbbd7 jog_dir_y char
+00ffbc20 rm_area_xmin long
+00ffbc24 rm_area_ymin long
+00ffbc28 rm_area_xmax long
+00ffbc2c rm_area_ymax long
+00ffbc30 rm_last_x long
+00ffbc34 rm_last_y long
+00ffbc38 rm_last_outcode int
+00ffbc3a feed_min_x long
+00ffbc3e motor_target_x long
+00ffbc42 motor_target_y long
+00ffbc46 tool_state int
+00ffbc4a pending_up_x long
+00ffbc4e pending_up_y long
+00ffbc54 deferred_x long
+00ffbc58 deferred_y long
+00ffbc64 deferred_pen int
+00ffbc66 tool_force_applied int
+00ffbc68 pending_up char
+00ffbc72 line_pitch long
+00ffbc84 line_type int
+00ffbc86 user_lt_n int
+00ffbc8a user_lt_a long
+00ffbc8e user_lt_b long
+00ffbc92 user_lt_c long
+00ffbefa travel_max_x long
+00ffbefe travel_max_y long
+00ffbf0f reply_via_sci char
+00ffbf11 sci_esc_state char
+00ffbf14 motor_busy_x int
+00ffbf26 motor_pos_x long
+00ffbf58 motor_busy_y int
+00ffbf6a motor_pos_y long
+00ffc100 regmark_cfg int
+00ffc11a sensor_scan_speed int
+00ffc11c scan_off_x long
+00ffc120 scan_off_y long
+00ffc124 sensor_gain_x int
+00ffc126 sensor_gain_y int
+00ffc128 sensor_baseline int
+00ffc222 regmark_scan_mode char
+00ffc223 regmark_length char
+00ffc224 regmark_width char
+00ffc225 regmark_result char
+00ffc226 cancel_request char
+00ffc228 sensor_trace_len int
+00ffc22a sensor_trace_rd int
+00ffc22c sensor_threshold int
+00ffc22e libc_errno int
+00ffc230 dump_reply_tab
+00ffc2da demo_mode char
+00ffc2ee usb_cfg_pending char
+00ffc394 home_off_x long
+00ffc398 home_off_y long
+00ffc422 deferred_valid char
+00ffc424 jog_keys char
+00ffc43e usb_ep0_state short
+00ffc4a2 usb_ctl_ptr long
+00ffc4a6 usb_ctl_buf long
+00ffc4ae usb_ctl_end long
+00ffc800 workbuf
+00ffcf00 sensor_trace int

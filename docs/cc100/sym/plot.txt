@@ -1,0 +1,108 @@
+# Plot / geometry symbols (fork B). Format: addr name [prototype | type]
+00011a36 read_number long read_number(void)
+00011b72 read_int long read_int(void)
+00011bc6 read_coord long read_coord(void)
+00011d50 read_angle long read_angle(void)
+00013ab2 read_point void read_point(long *x, long *y)
+0000cb3a end_of_params int end_of_params(void)
+0000d412 skip_command void skip_command(void)
+0000806a read_opt_angle long read_opt_angle(void)
+00013ada plot_abs void plot_abs(int pen)
+00013b16 plot_rel void plot_rel(int pen)
+00013bca cmd_D void cmd_D(void)
+00013be8 cmd_E void cmd_E(void)
+00013d3e cmd_M void cmd_M(void)
+00013d50 cmd_O void cmd_O(void)
+00013b7e cmd_B void cmd_B(void)
+00013c68 cmd_L void cmd_L(void)
+00013c22 cmd_H void cmd_H(void)
+00013c58 cmd_J void cmd_J(void)
+00013eb4 cmd_X void cmd_X(void)
+00013d62 axis_draw_rel void axis_draw_rel(long d, long t)
+00013dc2 axis_tick_exact void axis_tick_exact(long x0, long y0, long q, int n, int r)
+0001112c cmd_clip void cmd_clip(void)
+000110ba clip_reset void clip_reset(void)
+00011102 clip_begin void clip_begin(void)
+000075e2 cmd_rotate void cmd_rotate(void)
+00007522 cmd_factor void cmd_factor(void)
+0001919a set_factor void set_factor(long p, long q, long r)
+00017838 cmd_offset void cmd_offset(void)
+000177da cmd_lower_left void cmd_lower_left(void)
+0001777c cmd_upper_right void cmd_upper_right(void)
+000131f2 set_lower_left void set_lower_left(long x, long y)
+0001321e set_upper_right int set_upper_right(long x, long y)
+00019444 update_window void update_window(void)
+000100e2 angle_to_sincos void angle_to_sincos(long centideg, float *sincos)
+00008c36 cmd_W void cmd_W(void)
+0000828e cmd_WP void cmd_WP(void)
+00008d14 cmd_rel_circle void cmd_rel_circle(void)
+000081f8 cmd_ellipse void cmd_ellipse(void)
+00008cf8 cmd_Y void cmd_Y(void)
+00008df8 cmd_rel_curve void cmd_rel_curve(void)
+0000808c curve_cmd void curve_cmd(int relative, long x0, long y0)
+00009992 spline_feed void spline_feed(int op, long x, long y)
+000071d6 cmd_BZ void cmd_BZ(void)
+00006cda bezier_draw void bezier_draw(int a, long nseg, double x1, double y1, double x2, double y2, double x3, double y3, double x4, double y4)
+00008e22 arc_prepare int arc_prepare(void *arc)
+00009070 arc_draw void arc_draw(void *arc, char flag)
+000092e8 ellipse_draw void ellipse_draw(void *ell)
+0001db80 plot_to void plot_to(long x, long y, int pen)
+0001df5e plot_linetype void plot_linetype(long x, long y, int pen)
+0001dbc0 set_line_type void set_line_type(int type, long pitch)
+0002032e set_user_line_type void set_user_line_type(int n)
+00020478 load_line_patterns void load_line_patterns(int n, void *unused)
+000204ce load_line_pattern void load_line_pattern(int idx, unsigned int *src)
+0001dc18 dash_restart void dash_restart(void)
+0001dc5e dash_next void dash_next(void)
+0001deb6 seg_length long seg_length(long x, long y)
+00010180 hypot_l long hypot_l(long dx, long dy)
+00016130 muldiv long muldiv(long a, long b, long c)
+0001eafe plot_solid void plot_solid(long x, long y, int pen)
+0001eb52 set_pos_and_plot void set_pos_and_plot(long x, long y, int pen)
+0001eb88 plot_clip_poly void plot_clip_poly(long x, long y, int pen)
+0001e23e plot_transform void plot_transform(long x, long y, int pen)
+0001e7a8 window_outcode int window_outcode(long *p)
+0001e86a rotate_point void rotate_point(long *x, long *y)
+00018e44 sync_user_pos void sync_user_pos(void)
+00018f0e sync_device_pos void sync_device_pos(void)
+000190bc plot_state_reset void plot_state_reset(void)
+0001900c window_reset void window_reset(void)
+0001c572 plot_device void plot_device(long x, long y, int pen)
+00ffb584 cur_x long
+00ffb588 cur_y long
+00ffb53c dev_x long
+00ffb540 dev_y long
+00ffb39c line_pitch_arg long
+00ffb3a0 line_type_arg int
+00ffbc84 line_type int
+00ffbc72 line_pitch long
+00ffbc86 user_lt_n int
+00ffbc8a user_lt_a long
+00ffbc8e user_lt_b long
+00ffbc92 user_lt_c long
+00ffb4d4 factor_p long
+00ffb4d8 factor_q long
+00ffb4dc factor_r long
+00ffb5a4 factor_unity int
+00ffb4e0 offset_x long
+00ffb4e4 offset_y long
+00ffb504 rot_cx long
+00ffb508 rot_cy long
+00ffb120 rot_enabled int
+00ffb5b2 rot_sin float
+00ffb5b6 rot_cos float
+00ffb564 win_ll_x long
+00ffb568 win_ll_y long
+00ffb56c win_ur_x long
+00ffb570 win_ur_y long
+00ffb554 clip_xmin long
+00ffb558 clip_ymin long
+00ffb55c clip_xmax long
+00ffb560 clip_ymax long
+00ffb5c6 orient_flags int
+00ffb3b9 ur_set char
+00ffb3a2 axis_type int
+00ffb262 steps_per_unit int
+00ffb360 num_frac1 int
+00ffb362 num_frac2 int
+00ffb3b0 feed_total long

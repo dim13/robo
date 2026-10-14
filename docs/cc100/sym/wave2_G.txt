@@ -1,0 +1,237 @@
+# Wave 2, range 0x1c000-0x26fff: device/motion layer, sensor, USB helpers, runtime library
+# --- device coordinate pipeline (below plot_device 0x1c572)
+0001c146 regmark_clip_plot
+0001c242 regmark_area_outcode int regmark_area_outcode(long *p)
+0001c2d6 regmark_clip_segment
+0001c39a regmark_clip_x void regmark_clip_x(long *p, long *q, long x)
+0001c414 regmark_clip_y void regmark_clip_y(long *p, long *q, long y)
+0001c492 device_plot_noclip
+0001c4ba device_plot_origin void device_plot_origin(void)
+0001c4d4 device_plot_raw
+0001c608 device_plot
+0001c678 device_plot_nocal
+0001c6c4 regmark_transform
+0001c824 apply_origin_offsets
+0001c918 apply_regmark_and_cal
+0001c9c0 apply_orientation
+0001caca machine_clip_plot
+0001cbc6 machine_outcode int machine_outcode(long *p)
+0001cc6c machine_clip_segment
+0001cd30 machine_clip_x void machine_clip_x(long *p, long *q, long x)
+0001cdaa machine_clip_y void machine_clip_y(long *p, long *q, long y)
+0001ce28 track_feed_min_and_queue void track_feed_min_and_queue(long x, long y, int pen)
+0001ce76 user_to_motor_point void user_to_motor_point(long *x, long *y)
+0001d00a move_to_machine_origin void move_to_machine_origin(void)
+0001d052 machine_origin_point
+0001d0bc queue_point void queue_point(long x, long y, int pen)
+0001d10c queue_segment void queue_segment(long x, long y, int pen)
+0001d31a queue_segment_now void queue_segment_now(long x, long y, int pen)
+0001d3c2 sub_home_offset void sub_home_offset(long *x, long *y)
+0001d3fe motion_emit void motion_emit(long x, long y, int pen)
+0001d4aa motion_line void motion_line(long x, long y, int pen)
+0001d4f6 motion_line_wait_set void motion_line_wait_set(long x, long y, int pen)
+0001d550 motion_line_wait void motion_line_wait(long x, long y, int pen)
+0001d582 motion_move_steps void motion_move_steps(long x, long y, int pen)
+0001d5e0 motion_get_pos_wait void motion_get_pos_wait(long *xy)
+0001d5fe motion_get_pos void motion_get_pos(long *xy)
+0001d698 svc_param_b620 void svc_param_b620(void)
+0001d6ec nop_1d6ec void nop_1d6ec(void)
+0001d6f8 tool_set void tool_set(int down)
+0001d7ac motor_run_continuous
+0001da92 flush_deferred_segment void flush_deferred_segment(void)
+0001db52 wait_motion_done void wait_motion_done(void)
+0001dba8 set_line_type_raw void set_line_type_raw(int lt)
+0001dc9e dash_select_pattern
+0001dd5a dash_next_element void dash_next_element(void)
+0001de20 user_dash_restart
+0001de48 user_dash_next
+0001e792 nop_1e792 void nop_1e792(void)
+0001e9a6 clip_isect_xmax long clip_isect_xmax(long x1, long y1, long x2, long y2)
+0001e9fc clip_isect_xmin long clip_isect_xmin(long x1, long y1, long x2, long y2)
+0001ea52 clip_isect_ymax long clip_isect_ymax(long x1, long y1, long x2, long y2)
+0001eaa8 clip_isect_ymin long clip_isect_ymin(long x1, long y1, long x2, long y2)
+0001eb2c plot_raw void plot_raw(long x, long y, int pen)
+0001ed42 jog_read_keys int jog_read_keys(int *st)
+0001edd6 jog_with_keys void jog_with_keys(void)
+0001f0ec jog_axis_ramp
+0001f3ea dround
+0001f458 sci0_init void sci0_init(void)
+0001f61c sci0_tei_isr void sci0_tei_isr(void)
+0001f62c nop_1f62c void nop_1f62c(void)
+0001f638 nop_1f638 void nop_1f638(void)
+0001f644 save_return_addr
+0001f656 record_stack_ptr void record_stack_ptr(void)
+0001f660 nop_1f660 void nop_1f660(void)
+0001f66c usb_tx_idle void usb_tx_idle(void)
+0001f6be nop_1f6be void nop_1f6be(void)
+# --- registration-mark sensor
+0001ff2a regmark_find_and_mark
+0002060a nop_2060a void nop_2060a(void)
+0002078a sensor_on void sensor_on(void)
+000207bc sensor_off void sensor_off(void)
+000207d0 sensor_filter_init
+000208d0 sensor_filter_step
+00020a08 scan_record_edge
+00020a90 scan_check_limits
+00020d6a sensor_scan_axis
+0002114c regmark_locate_x
+0002135c regmark_locate_y
+00021546 move_clamped_wait int move_clamped_wait(long x, long y, int pen)
+00021620 sensor_scan_diag
+0002195c sensor_init void sensor_init(void)
+000219a0 sensor_pot_shift
+000219fa sensor_pot_step void sensor_pot_step(void)
+00021a26 sensor_autocal_gain int sensor_autocal_gain(int blink_forever)
+00021c40 sensor_reply_adc void sensor_reply_adc(void)
+00021cb6 sensor_measure_reply void sensor_measure_reply(void)
+00021cd6 sensor_trace_start void sensor_trace_start(void)
+00021d42 sensor_trace_read void sensor_trace_read(void)
+00021dfa sensor_trace_scan
+# --- USB helpers
+000221e0 usb_ep_read_to_ring
+000222b0 usb_ep_write_from_ring
+00022386 ring_copy
+000223f4 usb_bus_reset_handler void usb_bus_reset_handler(void)
+0002288c usb_suspend_handler void usb_suspend_handler(void)
+000228c0 usb_resume_handler void usb_resume_handler(void)
+0002292e be_bytes_to_ulong unsigned long be_bytes_to_ulong(unsigned char *p, char n)
+00022986 le_bytes_to_ulong unsigned long le_bytes_to_ulong(unsigned char *p, char n)
+# --- runtime library (Renesas H8S C runtime; doubles passed by pointer: er0 = result, er1/er2 = operands)
+00022a66 __dsub
+00022a8a __dadd
+00022c6a __fsub
+00022c74 __fadd
+00022e16 __bitfield_helper
+00022eee __ddiv
+000230b4 __dtof
+00023174 __dtol
+000231f6 __deq
+00023202 __ftod
+00023276 __ftol
+000232d8 __dgt
+000232e4 __itod
+00023316 __itof
+00023338 __dle
+00023348 __dlt
+00023358 __ltod
+0002339e __ltof
+000234a0 __dmul
+000236ac __fmul
+000238bc __dne
+000238ca __dneg
+000238ec _INITSCT
+00023948 atan
+00023a26 atan2
+00023b3c ceil
+00023c1a cos
+00023cf8 cosf
+00023d9c sin
+00023e7a sinf
+00023f1e sqrt
+00023ffc sqrtf
+000240a0 __dcmp
+0002414c __xd_unpack
+00024208 __xf_unpack
+0002427a __xd_pack
+0002436c __xf_pack
+00024434 __xd_sqrt
+000245d6 __xf_sqrt
+000246ce __xd_atan
+00024e46 __xd_ceil
+00024f02 __xd_cos
+0002509e __xf_cos
+00025228 __xd_sin
+000253de __xf_sin
+00025582 __xd_atan2
+0002564a __xd_sub
+00025656 __xd_add
+0002583e __xf_add
+0002599e __xd_atan2_helper
+00025ade __xd_eq
+00025aea __xd_reduce_a
+00025bf0 __xf_reduce
+00025cd8 __xd_gt
+00025ce4 __xd_reduce_b
+00025dbe __xd_mul
+00025f4c __xd_trunc
+00025fe8 __xd_classify
+0002601e __xf_classify
+0002604c __xd_poly_a
+000260c6 __xf_poly_a
+0002613e __xd_poly_b
+000261ec __xf_poly_b
+00026290 __xd_poly_c
+0002633e __xd_cmp
+000263d2 __xf_mul
+000264c0 __xd_muladd
+00026548 __xf_muladd
+# --- RAM globals used by this layer
+00ffb06a rm_yx double
+00ffb072 rm_xx double
+00ffb07a rm_yy double
+00ffb082 rm_xy double
+00ffb092 rm_sx double
+00ffb09a rm_sy double
+00ffb0ab rm_scale_on char
+00ffb2a8 last_queued_x long
+00ffb2ac last_queued_y long
+00ffb2b2 seg_merge_dist long
+00ffb3b4 motor_y_bias long
+00ffb4e8 origin_x long
+00ffb4ec origin_y long
+00ffb4f0 cal_off_x long
+00ffb4f4 cal_off_y long
+00ffb4f8 orient_off_x long
+00ffb4fc orient_off_y long
+00ffb524 mach_xmin long
+00ffb528 mach_ymin long
+00ffb52c mach_xmax long
+00ffb530 mach_ymax long
+00ffb534 mach_last_x long
+00ffb538 mach_last_y long
+00ffb5c8 mach_last_outcode int
+00ffb5de port600010_shadow int
+00ffb5f0 jog_speed_x int
+00ffb5f2 jog_speed_y int
+00ffbbd6 jog_dir_x char
+00ffbbd7 jog_dir_y char
+00ffbc20 rm_area_xmin long
+00ffbc24 rm_area_ymin long
+00ffbc28 rm_area_xmax long
+00ffbc2c rm_area_ymax long
+00ffbc30 rm_last_x long
+00ffbc34 rm_last_y long
+00ffbc38 rm_last_outcode int
+00ffbc3a feed_min_x long
+00ffbc3e motor_target_x long
+00ffbc42 motor_target_y long
+00ffbc46 tool_state int
+00ffbc4a pending_up_x long
+00ffbc4e pending_up_y long
+00ffbc54 deferred_x long
+00ffbc58 deferred_y long
+00ffbc64 deferred_pen int
+00ffbc66 tool_force_applied int
+00ffbc68 pending_up char
+00ffbefa travel_max_x long
+00ffbefe travel_max_y long
+00ffbf14 motor_busy_x int
+00ffbf26 motor_pos_x long
+00ffbf58 motor_busy_y int
+00ffbf6a motor_pos_y long
+00ffc11a sensor_scan_speed int
+00ffc11c scan_off_x long
+00ffc120 scan_off_y long
+00ffc124 sensor_gain_x int
+00ffc126 sensor_gain_y int
+00ffc128 sensor_baseline int
+00ffc222 regmark_scan_mode char
+00ffc228 sensor_trace_len int
+00ffc22a sensor_trace_rd int
+00ffc22c sensor_threshold int
+00ffc22e libc_errno int
+00ffc2ee usb_cfg_pending char
+00ffc394 home_off_x long
+00ffc398 home_off_y long
+00ffc422 deferred_valid char
+00ffcf00 sensor_trace int

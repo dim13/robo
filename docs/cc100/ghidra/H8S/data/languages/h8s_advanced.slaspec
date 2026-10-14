@@ -1,0 +1,4 @@
+@define ADDRSIZE "4"
+@define ADDRDIFF "1"
+@include "h8_300h.sinc"
+@include "h8s.sinc"

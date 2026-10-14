@@ -1,0 +1,99 @@
+# Macros
+
+macro pushcall(addr) {
+	push(addr, $(ADDRSIZE));
+}
+macro popcall(dest)  {
+	pop(dest, $(ADDRSIZE));
+}
+macro pushtrap(addr) {
+@ifndef ADDRDIFF
+	push(addr, $(ADDRSIZE) - 1);
+	push8(ccr);
+@else
+	push(addr, $(ADDRSIZE));
+	push8(ccr);
+	push8(ccr);
+@endif
+}
+macro poptrap(addr) {
+	pop8(ccr);
+@ifndef ADDRDIFF
+	pop(addr, $(ADDRSIZE) - 1);
+@else
+	skip(1);
+	pop(addr, $(ADDRSIZE));
+@endif
+}
+
+
+# Meanings
+
+CC_HI: "a"  is nib_hi=0b0000 { local c:1 = 1; export c; }
+CC_HI: "n"  is nib_hi=0b0001 { local c:1 = 0; export c; }
+CC_HI: "hi" is nib_hi=0b0010 { local c:1 = !$(C) && !$(Z); export c; }
+CC_HI: "ls" is nib_hi=0b0011 { local c:1 = $(C) || $(Z); export c; }
+CC_HI: "cc" is nib_hi=0b0100 { local c:1 = !$(C); export c; }
+CC_HI: "cs" is nib_hi=0b0101 { local c:1 = $(C); export c; }
+CC_HI: "ne" is nib_hi=0b0110 { local c:1 = !$(Z); export c; }
+CC_HI: "eq" is nib_hi=0b0111 { local c:1 = $(Z); export c; }
+CC_HI: "vc" is nib_hi=0b1000 { local c:1 = !$(V); export c; }
+CC_HI: "vs" is nib_hi=0b1001 { local c:1 = $(V); export c; }
+CC_HI: "pl" is nib_hi=0b1010 { local c:1 = !$(N); export c; }
+CC_HI: "mi" is nib_hi=0b1011 { local c:1 = $(N); export c; }
+CC_HI: "ge" is nib_hi=0b1100 { local c:1 = $(N) == $(V); export c; }
+CC_HI: "lt" is nib_hi=0b1101 { local c:1 = $(N) != $(V); export c; }
+CC_HI: "gt" is nib_hi=0b1110 { local c:1 = !$(Z) && ($(N) == $(V)); export c; }
+CC_HI: "le" is nib_hi=0b1111 { local c:1 = $(Z) || ($(N) != $(V)); export c; }
+
+
+# Instructions
+
+:b^CC_HI RELPTR8 is op_lo=0x4 & CC_HI; RELPTR8 {
+	if (CC_HI)
+		goto RELPTR8;
+}
+
+:bsr RELPTR8 is op=0x55; RELPTR8 {
+	pushcall(&:$(ADDRSIZE) inst_next);
+	call RELPTR8;
+}
+
+:jmp RSADDR is op=0x59; RSADDR & nib_hi=0 {
+	goto [RSADDR];
+}
+
+:jmp DEST16 is op=0x5A; op=0x00; DEST16 {
+	goto DEST16;
+}
+
+:jmp INDADDR8 is op=0x5B; INDADDR8 {
+	goto [INDADDR8];
+}
+
+:jsr RSPTR is op=0x5D; RSPTR & nib_hi=0 {
+	pushcall(&:$(ADDRSIZE) inst_next);
+	call [RSPTR];
+}
+
+:jsr DEST16 is op=0x5E; op=0x00; DEST16 {
+	pushcall(&:$(ADDRSIZE) inst_next);
+	call DEST16;
+}
+
+:jsr INDADDR8 is op=0x5F; INDADDR8 {
+	pushcall(&:$(ADDRSIZE) inst_next);
+	call [INDADDR8];
+}
+
+:rte is op16=0x5670 {
+	local addr:$(ADDRSIZE);
+	poptrap(addr);
+	return [addr];
+}
+
+:rts is op16=0x5470 {
+	local addr:$(ADDRSIZE);
+	popcall(addr);
+	return [addr];
+}
