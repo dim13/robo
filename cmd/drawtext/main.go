@@ -6,6 +6,7 @@ import (
 	"os"
 
 	"github.com/dim13/robo"
+	"github.com/dim13/robo/usb"
 )
 
 var scale = flag.Float64("scale", 1.0, "font scale")
@@ -13,7 +14,7 @@ var scale = flag.Float64("scale", 1.0, "font scale")
 func main() {
 	flag.Parse()
 
-	dev, err := robo.Open()
+	dev, err := usb.Open()
 	if err != nil {
 		log.Fatal(err)
 	}

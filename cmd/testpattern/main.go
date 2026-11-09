@@ -4,10 +4,11 @@ import (
 	"log"
 
 	"github.com/dim13/robo"
+	"github.com/dim13/robo/usb"
 )
 
 func main() {
-	dev, err := robo.Open()
+	dev, err := usb.Open()
 	if err != nil {
 		log.Fatal(err)
 	}

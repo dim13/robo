@@ -10,6 +10,7 @@ import (
 	"os"
 
 	"github.com/dim13/robo"
+	"github.com/dim13/robo/usb"
 	"rsc.io/pdf"
 )
 
@@ -162,7 +163,7 @@ func main() {
 		return
 	}
 
-	dev, err := robo.Open()
+	dev, err := usb.Open()
 	if err != nil {
 		log.Fatal("open: ", err)
 	}

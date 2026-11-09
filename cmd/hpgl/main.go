@@ -14,6 +14,7 @@ import (
 
 	"github.com/dim13/robo"
 	"github.com/dim13/robo/hershey"
+	"github.com/dim13/robo/usb"
 )
 
 const (
@@ -280,7 +281,7 @@ func main() {
 		p = plot(w, b)
 		w.Flush()
 	} else {
-		dev, err := robo.Open()
+		dev, err := usb.Open()
 		if err != nil {
 			log.Fatal("open: ", err)
 		}

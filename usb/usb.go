@@ -1,4 +1,6 @@
-package robo
+// Package usb opens a Craft ROBO through libusb (gousb). Package robo
+// itself needs only an io.ReadWriter; this is one way to get it.
+package usb
 
 import (
 	"bufio"
@@ -8,7 +10,7 @@ import (
 	"github.com/google/gousb"
 )
 
-type USB struct {
+type Device struct {
 	ctx  *gousb.Context
 	dev  *gousb.Device
 	intf *gousb.Interface
@@ -29,38 +31,38 @@ const (
 
 var ErrNotFound = errors.New("device not found")
 
-func Open() (USB, error) {
+func Open() (*Device, error) {
 	ctx := gousb.NewContext()
 	dev, err := ctx.OpenDeviceWithVIDPID(graphtec, craftrobo)
 	if err != nil {
 		ctx.Close()
-		return USB{}, err
+		return nil, err
 	}
 	if dev == nil {
 		ctx.Close()
-		return USB{}, ErrNotFound
+		return nil, ErrNotFound
 	}
 	intf, done, err := dev.DefaultInterface()
 	if err != nil {
 		dev.Close()
 		ctx.Close()
-		return USB{}, err
+		return nil, err
 	}
 	in, err := intf.InEndpoint(2)
 	if err != nil {
 		done()
 		dev.Close()
 		ctx.Close()
-		return USB{}, err
+		return nil, err
 	}
 	out, err := intf.OutEndpoint(1)
 	if err != nil {
 		done()
 		dev.Close()
 		ctx.Close()
-		return USB{}, err
+		return nil, err
 	}
-	return USB{
+	return &Device{
 		ctx:    ctx,
 		dev:    dev,
 		intf:   intf,
@@ -70,7 +72,7 @@ func Open() (USB, error) {
 	}, nil
 }
 
-func (d USB) Close() error {
+func (d *Device) Close() error {
 	d.done()
 	d.dev.Close()
 	d.ctx.Close()
