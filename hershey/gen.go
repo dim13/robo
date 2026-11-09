@@ -261,6 +261,9 @@ func main() {
 		if code < 128 || unicode.Is(unicode.Mn, rune(code)) {
 			continue // combining marks need placement over the base glyph
 		}
+		if code > 99999 {
+			continue // JHF has five digits for the glyph number
+		}
 		if h, ok := best[code]; !ok || rank(hid) < rank(h) || rank(hid) == rank(h) && hid < h {
 			best[code] = hid
 		}

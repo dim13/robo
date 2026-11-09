@@ -29,7 +29,7 @@ func TestParse(t *testing.T) {
 }
 
 func TestEmbedded(t *testing.T) {
-	if got, want := len(font), 276; got != want {
+	if got, want := len(font), 329; got != want {
 		t.Errorf("got %d glyphs, want %d", got, want)
 	}
 }
